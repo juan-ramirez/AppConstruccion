@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:background="#B3000000"
+    android:padding="6dip" >
+
+    <TextView
+        android:id="@+id/txtViewMenuPpalOpcion"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:tag="opcion"
+        android:text="Example application"
+        android:textColor="#FFF"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/txtViewMenuPpalOpcion"
+        android:layout_centerVertical="true"
+        android:text="Eliminar" />
+
+</RelativeLayout>
