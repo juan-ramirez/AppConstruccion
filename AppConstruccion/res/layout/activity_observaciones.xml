@@ -11,11 +11,30 @@
         android:layout_marginTop="40dp"
         android:layout_toRightOf="@+id/textViewObservacionesTipo" />
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/img_obs" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:padding="15dp"
+        android:text="Tomar Foto"
+        android:textSize="35sp" />
+
     <TextView
         android:id="@+id/textViewObservacionesTipo"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/imageView1"
         android:layout_alignTop="@+id/spinnerObservaciones"
         android:text="Tipo de Observación"
         android:textAppearance="?android:attr/textAppearanceLarge" />
