@@ -19,8 +19,6 @@
             android:layout_width="400dp"
             android:layout_height="60dp"
             android:text="Usuario" >
-
-            <requestFocus />
         </EditText>
 
         <EditText
@@ -39,6 +37,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="89dp"
         android:background="#B3FFFFFF"
+        android:onClick="doLogin"
         android:text="Acceder" />
 
 </RelativeLayout>
