@@ -1,43 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/login"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="172dp"
         android:background="#B3FFFFFF"
         android:orientation="vertical" >
 
         <EditText
-            android:id="@+id/editTextLoginUsuario"
+            android:id="@+id/editTextUsuariosNombre"
             android:layout_width="400dp"
             android:layout_height="60dp"
-            android:hint="Usuario" >
+            android:hint="Escriba el nombre de usuario" >
+
+            <requestFocus />
         </EditText>
 
         <EditText
-            android:id="@+id/editTextLoginPassword"
+            android:id="@+id/editTextUsuariosPassword"
             android:layout_width="400dp"
             android:layout_height="60dp"
-            android:inputType="textPassword"
-            android:hint="Contraseña" />
+            android:hint="Escriba la contraseña"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/editTextUsuariosPasswordConfirmar"
+            android:layout_width="400dp"
+            android:layout_height="60dp"
+            android:hint="Confirme la contraseña"
+            android:inputType="textPassword" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/buttonLoginAcceder"
+        android:id="@+id/buttonUsuariosCrear"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="89dp"
-        android:background="#B3FFFFFF"
-        android:onClick="doLogin"
-        android:text="Acceder" />
+        android:layout_marginTop="75dp"
+        android:background="#4D000000"
+        android:text="Crear" />
 
 </RelativeLayout>
