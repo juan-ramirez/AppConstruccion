@@ -29,8 +29,20 @@
             android:parentActivityName="com.movilapps.appconstruccion.MainActivity"
             android:screenOrientation="portrait" >
         </activity>
-         <activity
+        <activity
             android:name="com.movilapps.appconstruccion.FormularioActivity"
+            android:label="Proyectos"
+            android:parentActivityName="com.movilapps.appconstruccion.MainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.movilapps.appconstruccion.CrearModificarUsuarioActivity"
+            android:label="Proyectos"
+            android:parentActivityName="com.movilapps.appconstruccion.AdministrarUsuariosActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.movilapps.appconstruccion.AdministrarUsuariosActivity"
             android:label="Proyectos"
             android:parentActivityName="com.movilapps.appconstruccion.MainActivity"
             android:screenOrientation="portrait" >

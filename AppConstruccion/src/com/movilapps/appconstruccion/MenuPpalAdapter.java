@@ -2,6 +2,7 @@ package com.movilapps.appconstruccion;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MenuPpalAdapter extends ArrayAdapter<String> {
 
@@ -30,13 +32,30 @@ public class MenuPpalAdapter extends ArrayAdapter<String> {
 				R.layout.row_layout_adapter_proyectos_formularios, parent,
 				false);
 
-		Button buttonEliminar = (Button) rowView.findViewById(R.id.buttonEliminar);
+		final int pos = position;
+
+		Button buttonEliminar = (Button) rowView
+				.findViewById(R.id.buttonEliminar);
 
 		TextView txtViewMenuPpalOpcion = (TextView) rowView
 				.findViewById(R.id.txtViewMenuPpalOpcion);
 
 		txtViewMenuPpalOpcion.setText(values.get(position));
 		buttonEliminar.setText("Eliminar");
+
+		buttonEliminar.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// REMOVE THE ACTION FROM THE ADAPTER'S ARRAYLIST
+				values.remove(pos);
+				notifyDataSetChanged();
+				Activity activity = (Activity) context;
+
+				Toast.makeText(context, activity.getTitle(), Toast.LENGTH_SHORT)
+						.show();
+			}
+		});
 
 		return rowView;
 	}

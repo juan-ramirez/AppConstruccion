@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
 			tag = "Formularios";
 			setTitle(tag);
 			inicializarFormularios();
-			
+
 			actionBar.setDisplayHomeAsUpEnabled(true);
 
 		} else {
@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
 		ListView listViewMenu = (ListView) findViewById(R.id.listViewProyectos_Formularios);
 		MenuPpalAdapter adapter = new MenuPpalAdapter(this, arrayListMenu);
 		listViewMenu.setAdapter(adapter);
-		
+
 		if (!esProyecto) {
 			listViewMenu.setOnItemClickListener(new OnItemClickListener() {
 
@@ -56,10 +56,10 @@ public class MainActivity extends Activity {
 					Intent generalIntent = new Intent(getApplicationContext(),
 							MainActivity.class);
 					generalIntent.putExtra("esProyecto", true);
-					startActivity(generalIntent);					
+					startActivity(generalIntent);
 				}
 			});
-		}else{
+		} else {
 			listViewMenu.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 						int position, long id) {
 					Intent generalIntent = new Intent(getApplicationContext(),
 							FormularioActivity.class);
-					startActivity(generalIntent);					
+					startActivity(generalIntent);
 				}
 			});
 		}
@@ -118,6 +118,15 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+
+		Bundle bundle = getIntent().getExtras();		
+			
+			if (bundle != null) {
+				String result = bundle.getString("perfil","empty");
+				if (!result.equals("administrador")) {
+					menu.findItem(R.id.action_settings).setVisible(false);
+				}
+			}
 		return true;
 	}
 
@@ -126,7 +135,9 @@ public class MainActivity extends Activity {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
 		case R.id.action_settings:
-			popMessage("Settings");
+			Intent intent = new Intent(getApplicationContext(),
+					AdministrarUsuariosActivity.class);
+			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

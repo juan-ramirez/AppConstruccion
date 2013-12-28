@@ -12,7 +12,7 @@
         android:layout_marginTop="172dp"
         android:background="#B3FFFFFF"
         android:orientation="vertical" >
-        
+
         <EditText
             android:id="@+id/editTextUsuariosPasswordOld"
             android:layout_width="400dp"
@@ -43,6 +43,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="75dp"
         android:background="#4D000000"
+        android:onClick="modificarUsuario"
         android:text="Modificar" />
 
     <TextView
@@ -52,8 +53,8 @@
         android:layout_alignLeft="@+id/linearLayout1"
         android:layout_alignParentTop="true"
         android:layout_marginTop="79dp"
-        android:text="Nombre de Usuario" 
-        android:textSize="28sp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="Nombre de Usuario"
+        android:textSize="28sp" />
 
 </RelativeLayout>
