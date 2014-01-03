@@ -6,7 +6,7 @@ public class DatoFormularioFactory {
 
 	public int tipo;
 	public String titulo;
-	public String tipoDato;
+	public int tipoDato;
 	public ArrayList<String> listaSpinner;
 
 	public DatoFormularioFactory(int tipo, String titulo) {
@@ -15,7 +15,7 @@ public class DatoFormularioFactory {
 		this.titulo = titulo;
 	}
 
-	public DatoFormularioFactory(int tipo, String titulo, String tipoDato) {
+	public DatoFormularioFactory(int tipo, String titulo, int tipoDato) {
 		super();
 		this.tipo = tipo;
 		this.titulo = titulo;

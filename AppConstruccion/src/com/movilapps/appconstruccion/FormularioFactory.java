@@ -5,9 +5,35 @@ import java.util.ArrayList;
 public class FormularioFactory {
 
 	private ArrayList<DatoFormularioFactory> formulario;
-
+	private ArrayList<String> cumple_nocumple;
+	private ArrayList<String> cumple_nocumple_noaplica;
+	
+	public final int TIPO_1 = 1;
+	public final int TIPO_2 = 2;
+	public final int TIPO_3 = 3;
+	public final int TIPO_4 = 4;
+	public final int TIPO_5 = 5;
+	public final int TITULO = 6;
+	
+	public final int ALFANUMERICO = 1;
+	public final int ALFABETICO = 2;
+	public final int NUMERICO = 3;
+	public final int DECIMAL = 4;
+	
 	public FormularioFactory() {
-		super();
+		inicializarListas();
+	}
+
+	private void inicializarListas() {
+		cumple_nocumple = new ArrayList<String>();		
+		cumple_nocumple.add("Cumple");
+		cumple_nocumple.add("No cumple");
+		
+		cumple_nocumple_noaplica= new ArrayList<String>();
+		cumple_nocumple_noaplica.add("Cumple");
+		cumple_nocumple_noaplica.add("No cumple");
+		cumple_nocumple_noaplica.add("No Aplica");
+		
 	}
 
 	public ArrayList<DatoFormularioFactory> getFormulario(int tipo) {
@@ -39,18 +65,23 @@ public class FormularioFactory {
 		
 	}
 
-	private ArrayList<DatoFormularioFactory> getf1() {
+	private ArrayList<DatoFormularioFactory> getf2() {
 		
-		formulario.add(new DatoFormularioFactory(5,"Fecha"));
-		formulario.add(new DatoFormularioFactory(5,"Fecha"));
-		formulario.add(new DatoFormularioFactory(5,"Fecha"));
-		formulario.add(new DatoFormularioFactory(5,"Fecha"));
-		formulario.add(new DatoFormularioFactory(5,"Fecha"));
-		formulario.add(new DatoFormularioFactory(5,"Fecha"));
-		formulario.add(new DatoFormularioFactory(5,"Fecha"));
-		formulario.add(new DatoFormularioFactory(5,"Fecha"));
+		formulario.add(new DatoFormularioFactory(TIPO_5,"Fecha"));
+		formulario.add(new DatoFormularioFactory(TIPO_1,"Tipo de concreto(PSI)",NUMERICO));
+		formulario.add(new DatoFormularioFactory(TITULO,"Preparación"));
+		formulario.add(new DatoFormularioFactory(TIPO_3,"N° Mixer",ALFANUMERICO));
+		formulario.add(new DatoFormularioFactory(TIPO_3,"N° Tanda de Mezclado",NUMERICO));
+		formulario.add(new DatoFormularioFactory(TIPO_2,"Hora carga"));
+		formulario.add(new DatoFormularioFactory(TIPO_2,"Hora descarga"));
+		formulario.add(new DatoFormularioFactory(TITULO,"Asentamiento (CM)"));
+		formulario.add(new DatoFormularioFactory(TIPO_1,"N° Mixer",NUMERICO));
+		formulario.add(new DatoFormularioFactory(TIPO_1,"N° Mixer",NUMERICO));
+		
 		
 		return formulario;
 	}
 
+	
+	
 }
