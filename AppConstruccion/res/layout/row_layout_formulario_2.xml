@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/textViewFormulariosSpinner"
+        android:id="@+id/textViewFormulariosTimePicker"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -21,6 +21,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="76dp"
         android:layout_marginTop="27dp"
-        android:layout_toRightOf="@+id/textViewFormulariosSpinner" />
+        android:layout_toRightOf="@+id/textViewFormulariosTimePicker" />
   
 </RelativeLayout>

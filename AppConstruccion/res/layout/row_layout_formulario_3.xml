@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/textViewFormulariosSpinner"
+        android:id="@+id/textViewFormulariosCheckbox"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,58 +15,29 @@
         android:textSize="28sp" />
 
     <EditText
-        android:id="@+id/editTextFormulariosAlfaCheckbox"
+        android:id="@+id/editTextFormulariosCheckbox"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textViewFormulariosSpinner"
+        android:layout_alignBottom="@+id/textViewFormulariosCheckbox"
         android:layout_marginLeft="18dp"
-        android:layout_toRightOf="@+id/textViewFormulariosSpinner"
+        android:layout_toRightOf="@+id/textViewFormulariosCheckbox"
         android:ems="10" >
 
     </EditText>
 
     <CheckBox
-        android:id="@+id/checkBoxFormulariosAlfa"
+        android:id="@+id/checkBoxFormularios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/editTextFormulariosAlfaCheckbox"
-        android:layout_below="@+id/editTextFormulariosAlfaCheckbox"
+        android:layout_alignRight="@+id/editTextFormulariosCheckbox"
+        android:layout_below="@+id/editTextFormulariosCheckbox"
         android:layout_marginRight="38dp"
         android:layout_marginTop="27dp"
         android:text="CheckBox"
         android:textSize="28sp" />
 
-    <EditText
-        android:id="@+id/editTextFormulariosNumericoCheckbox"
-        android:layout_width="340dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textViewFormulariosNumericoCheckbox"
-        android:layout_marginLeft="18dp"
-        android:layout_toRightOf="@+id/textViewFormulariosNumericoCheckbox"
-        android:ems="10"
-        android:inputType="number" >
+  
 
-    </EditText>
-
-    <CheckBox
-        android:id="@+id/checkBoxFormulariosNumerico"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/editTextFormulariosNumericoCheckbox"
-        android:layout_below="@+id/editTextFormulariosNumericoCheckbox"
-        android:layout_marginRight="38dp"
-        android:layout_marginTop="27dp"
-        android:text="CheckBox"
-        android:textSize="28sp" />
-
-    <TextView
-        android:id="@+id/textViewFormulariosNumericoCheckbox"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/checkBoxFormulariosAlfa"
-        android:layout_marginTop="80dp"
-        android:layout_toLeftOf="@+id/editTextFormulariosAlfaCheckbox"
-        android:text="TextView"
-        android:textSize="28sp" />
+    
   
 </RelativeLayout>
