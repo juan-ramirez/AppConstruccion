@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 public class FormularioFactory {
 
-	private ArrayList<Dato> formulario;
+	private ArrayList<DatoFormularioFactory> formulario;
 
 	public FormularioFactory() {
 		super();
 	}
 
-	public ArrayList<Dato> getFormulario(int tipo) {
-		formulario = new ArrayList<Dato>();
+	public ArrayList<DatoFormularioFactory> getFormulario(int tipo) {
+		formulario = new ArrayList<DatoFormularioFactory>();
 		switch (tipo) {
 		case 1:
 			return getf1();
@@ -39,37 +39,18 @@ public class FormularioFactory {
 		
 	}
 
-	private ArrayList<Dato> getf1() {
+	private ArrayList<DatoFormularioFactory> getf1() {
 		
-		formulario.add(new Dato(5,"Fecha"));
-		formulario.add(new Dato(5,"Fecha"));
-		formulario.add(new Dato(5,"Fecha"));
-		formulario.add(new Dato(5,"Fecha"));
-		formulario.add(new Dato(5,"Fecha"));
-		formulario.add(new Dato(5,"Fecha"));
-		formulario.add(new Dato(5,"Fecha"));
-		formulario.add(new Dato(5,"Fecha"));
+		formulario.add(new DatoFormularioFactory(5,"Fecha"));
+		formulario.add(new DatoFormularioFactory(5,"Fecha"));
+		formulario.add(new DatoFormularioFactory(5,"Fecha"));
+		formulario.add(new DatoFormularioFactory(5,"Fecha"));
+		formulario.add(new DatoFormularioFactory(5,"Fecha"));
+		formulario.add(new DatoFormularioFactory(5,"Fecha"));
+		formulario.add(new DatoFormularioFactory(5,"Fecha"));
+		formulario.add(new DatoFormularioFactory(5,"Fecha"));
 		
 		return formulario;
 	}
 
-	static class Dato {
-		public int tipo;
-		public String titulo;
-
-		public Dato(int tipo, String titulo) {
-			super();
-			this.tipo = tipo;
-			this.titulo = titulo;
-		}
-
-		public int getTipo() {
-			return tipo;
-		}
-
-		public String getTitulo() {
-			return titulo;
-		}
-
-	}
 }
