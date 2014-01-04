@@ -188,7 +188,7 @@ private ArrayList<DatoFormularioFactory> getf3() {
 		formulario.add(new DatoFormularioFactory(TIPO_4,"Limpieza de fondo",cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4,"Protección ",cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4,"Sistema de drenaje",bomba_noaplica));
-		formulario.add(new DatoFormularioFactory(TIPO_4,"Solado de Protección",cumple_nocumple));
+		formulario.add(new DatoFormularioFactory(TIPO_4,"Solado de Protección",cumple_nocumple_noaplica));
 		
 		
 		
