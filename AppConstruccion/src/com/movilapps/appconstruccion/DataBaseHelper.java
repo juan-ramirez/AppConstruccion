@@ -33,7 +33,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 		super(context, DB_NAME, null, 1);
 		this.myContext = context;
-		DB_PATH = myContext.getFilesDir().getPath();
+		DB_PATH = myContext.getFilesDir().getParent().concat("/databases/");
 	}
 
 	/**

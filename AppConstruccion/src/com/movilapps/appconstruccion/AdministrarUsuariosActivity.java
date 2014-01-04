@@ -3,7 +3,6 @@ package com.movilapps.appconstruccion;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,8 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 public class AdministrarUsuariosActivity extends Activity {
 
@@ -57,7 +56,7 @@ public class AdministrarUsuariosActivity extends Activity {
 
 		arrayListMenu = new ArrayList<String>();
 
-		String query = "select * from usuarios ";
+		String query = "select * from usuarios where not nombre_usuario = 'admin' ";
 		Cursor c = database.rawQuery(query, null);
 		c.moveToFirst();
 		if (c.getCount() > 0) {
@@ -72,7 +71,8 @@ public class AdministrarUsuariosActivity extends Activity {
 
 	private void inicializarObjetos() {
 		listViewMenu = (ListView) findViewById(R.id.listViewProyectos_Formularios);
-		MenuPpalAdapter adapter = new MenuPpalAdapter(this, arrayListMenu);
+		MenuPpalAdapter adapter = new MenuPpalAdapter(this, arrayListMenu,
+				"Usuarios");
 		listViewMenu.setAdapter(adapter);
 
 		listViewMenu.setOnItemClickListener(new OnItemClickListener() {
@@ -81,7 +81,7 @@ public class AdministrarUsuariosActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				usuarioModificar = arrayListMenu.get(position);
-				iniciarCrearModificar(true,usuarioModificar);
+				iniciarCrearModificar(true, usuarioModificar);
 			}
 		});
 	}
@@ -106,10 +106,16 @@ public class AdministrarUsuariosActivity extends Activity {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
 		case R.id.action_new:
-			iniciarCrearModificar(false,null);			
+			iniciarCrearModificar(false, null);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	protected void onStop() {
+		database.close();
+		super.onStop();
 	}
 }

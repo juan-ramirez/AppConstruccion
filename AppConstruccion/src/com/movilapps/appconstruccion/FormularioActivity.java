@@ -8,19 +8,21 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
-public class FormularioActivity extends Activity {
+public class FormularioActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(true);
@@ -41,6 +43,9 @@ public class FormularioActivity extends Activity {
 						new TabListener<ExampleFragmentTwo>(this,
 								"Observaciones", ExampleFragmentTwo.class));
 		actionBar.addTab(tab);
+		ExampleFragment fragment = (ExampleFragment) getFragmentManager()
+				.findFragmentByTag("Formulario");
+		
 	}
 
 	@Override
@@ -93,14 +98,16 @@ public class FormularioActivity extends Activity {
 				ft.add(android.R.id.content, mFragment, mTag);
 			} else {
 				// If it exists, simply attach it in order to show it
-				ft.attach(mFragment);
+				// ft.attach(mFragment);
+				ft.show(mFragment);
 			}
 		}
 
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 			if (mFragment != null) {
 				// Detach the fragment, because another one is being attached
-				ft.detach(mFragment);
+				// ft.detach(mFragment);
+				ft.hide(mFragment);
 			}
 		}
 
@@ -115,10 +122,11 @@ public class FormularioActivity extends Activity {
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			// Inflate the layout for this fragment
-			View rootView = inflater.inflate(R.layout.activity_main_proyectos_formularios,
-					container, false);
+			View rootView = inflater.inflate(
+					R.layout.activity_main_proyectos_formularios, container,
+					false);
 			ArrayList<String> arrayListMenu = new ArrayList<String>();
-			
+
 			arrayListMenu.add("Elemento 1");
 			arrayListMenu.add("Elemento 2");
 			arrayListMenu.add("Elemento 3");
@@ -131,11 +139,33 @@ public class FormularioActivity extends Activity {
 			arrayListMenu.add("Elemento 5");
 			arrayListMenu.add("Elemento 1");
 			arrayListMenu.add("Elemento 2");
-			
-			ListView listViewMenu = (ListView) rootView.findViewById(R.id.listViewProyectos_Formularios);
-			FormulariosAdapter adapter = new FormulariosAdapter(getActivity(), arrayListMenu);
+			arrayListMenu.add("Elemento 3");
+			arrayListMenu.add("Elemento 4");
+			arrayListMenu.add("Elemento 5");
+			arrayListMenu.add("Elemento 1");
+			arrayListMenu.add("Elemento 2");
+			arrayListMenu.add("Elemento 3");
+			arrayListMenu.add("Elemento 4");
+			arrayListMenu.add("Elemento 5");
+			arrayListMenu.add("Elemento 1");
+			arrayListMenu.add("Elemento 2");
+			arrayListMenu.add("Elemento 3");
+			arrayListMenu.add("Elemento 4");
+			arrayListMenu.add("Elemento 5");
+			arrayListMenu.add("Elemento 1");
+			arrayListMenu.add("Elemento 2");
+			arrayListMenu.add("Elemento 3");
+			arrayListMenu.add("Elemento 4");
+			arrayListMenu.add("Elemento 5");
+			arrayListMenu.add("Elemento 1");
+			arrayListMenu.add("Elemento 2");
+
+			ListView listViewMenu = (ListView) rootView
+					.findViewById(R.id.listViewProyectos_Formularios);
+			FormulariosAdapter adapter = new FormulariosAdapter(getActivity(),
+					arrayListMenu);
 			listViewMenu.setAdapter(adapter);
-			
+			Log.e("ERROR: ", "Reinstanciado");
 			return rootView;
 		}
 
@@ -150,11 +180,11 @@ public class FormularioActivity extends Activity {
 
 			View rootView = inflater.inflate(R.layout.activity_observaciones,
 					container, false);
-			
-			
+			Log.e("ERROR: ", "Reinstanciado");
 
 			return rootView;
 		}
+
 	}
 
 }
