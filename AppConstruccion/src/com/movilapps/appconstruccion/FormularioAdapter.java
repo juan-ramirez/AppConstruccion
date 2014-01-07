@@ -3,10 +3,12 @@ package com.movilapps.appconstruccion;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.sax.RootElement;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 public class FormularioAdapter extends ArrayAdapter<DatoFormularioFactory> {
 
@@ -55,6 +57,9 @@ public class FormularioAdapter extends ArrayAdapter<DatoFormularioFactory> {
 					parent, false);
 			break;
 		}
+		
+		TextView textViewFormularios = (TextView)rowView.findViewById(R.id.textViewFormularios);
+		textViewFormularios.setText(values.get(position).getTitulo());
 
 		return rowView;
 	}
