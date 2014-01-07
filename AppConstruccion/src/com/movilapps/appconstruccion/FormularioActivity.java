@@ -2,6 +2,7 @@ package com.movilapps.appconstruccion;
 
 import java.util.ArrayList;
 
+import android.R.array;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
@@ -121,51 +122,28 @@ public class FormularioActivity extends FragmentActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
+			
+			FormularioFactory formularioFactorty = new FormularioFactory();
 			// Inflate the layout for this fragment
 			View rootView = inflater.inflate(
 					R.layout.activity_main_proyectos_formularios, container,
 					false);
-			ArrayList<String> arrayListMenu = new ArrayList<String>();
 
-			arrayListMenu.add("Elemento 1");
-			arrayListMenu.add("Elemento 2");
-			arrayListMenu.add("Elemento 3");
-			arrayListMenu.add("Elemento 4");
-			arrayListMenu.add("Elemento 5");
-			arrayListMenu.add("Elemento 1");
-			arrayListMenu.add("Elemento 2");
-			arrayListMenu.add("Elemento 3");
-			arrayListMenu.add("Elemento 4");
-			arrayListMenu.add("Elemento 5");
-			arrayListMenu.add("Elemento 1");
-			arrayListMenu.add("Elemento 2");
-			arrayListMenu.add("Elemento 3");
-			arrayListMenu.add("Elemento 4");
-			arrayListMenu.add("Elemento 5");
-			arrayListMenu.add("Elemento 1");
-			arrayListMenu.add("Elemento 2");
-			arrayListMenu.add("Elemento 3");
-			arrayListMenu.add("Elemento 4");
-			arrayListMenu.add("Elemento 5");
-			arrayListMenu.add("Elemento 1");
-			arrayListMenu.add("Elemento 2");
-			arrayListMenu.add("Elemento 3");
-			arrayListMenu.add("Elemento 4");
-			arrayListMenu.add("Elemento 5");
-			arrayListMenu.add("Elemento 1");
-			arrayListMenu.add("Elemento 2");
-			arrayListMenu.add("Elemento 3");
-			arrayListMenu.add("Elemento 4");
-			arrayListMenu.add("Elemento 5");
-			arrayListMenu.add("Elemento 1");
-			arrayListMenu.add("Elemento 2");
+			ArrayList<DatoFormularioFactory> arrayListMenu = new ArrayList<DatoFormularioFactory>();
+
+			arrayListMenu = formularioFactorty.getFormulario(1);
 
 			ListView listViewMenu = (ListView) rootView
 					.findViewById(R.id.listViewProyectos_Formularios);
-			FormulariosAdapter adapter = new FormulariosAdapter(getActivity(),
+			
+
+			FormularioAdapter adapter = new FormularioAdapter(getActivity(),
 					arrayListMenu);
 			listViewMenu.setAdapter(adapter);
+			
 			Log.e("ERROR: ", "Reinstanciado");
+			
+			
 			return rootView;
 		}
 

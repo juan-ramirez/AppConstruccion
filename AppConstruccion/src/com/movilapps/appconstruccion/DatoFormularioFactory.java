@@ -38,4 +38,8 @@ public class DatoFormularioFactory {
 		return titulo;
 	}
 
+	public int getTipoDato() {
+		return tipoDato;
+	}
+
 }
