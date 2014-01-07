@@ -131,17 +131,7 @@ public class MainActivity extends Activity {
 
 	public void inicializarFormularios() {
 
-		String query = "select * from proyectos";
-		Cursor c = database.rawQuery(query, null);
-		c.moveToFirst();
-		if (c.getCount() > 0) {
-			while (c.isAfterLast() == false) {
-				arrayListMenu.add(c.getString(c
-						.getColumnIndex("nombre_proyecto")));
-				c.moveToNext();
-			}
-
-		}
+		
 
 	}
 
@@ -262,12 +252,6 @@ public class MainActivity extends Activity {
 	public void popMessage(String text) {
 		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT)
 				.show();
-	}
-
-	@Override
-	protected void onStop() {
-		database.close();
-		super.onStop();
 	}
 
 }

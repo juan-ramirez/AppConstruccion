@@ -92,6 +92,7 @@ public class AdministrarUsuariosActivity extends Activity {
 		generalIntent.putExtra("isModificar", isModificar);
 		generalIntent.putExtra("usuarioNombre", usuarioNombre);
 		startActivity(generalIntent);
+		finish();
 	}
 
 	@Override
