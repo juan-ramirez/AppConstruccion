@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
         <activity
-            android:name="com.movilapps.appconstruccion.FormularioActivity"
+            android:name="com.movilapps.appconstruccion.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -37,6 +37,12 @@
         </activity>
         <activity
             android:name="com.movilapps.appconstruccion.AdministrarUsuariosActivity"
+            android:label="Proyectos"
+            android:parentActivityName="com.movilapps.appconstruccion.MainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.movilapps.appconstruccion.FormularioActivity"
             android:label="Proyectos"
             android:parentActivityName="com.movilapps.appconstruccion.MainActivity"
             android:screenOrientation="portrait" >

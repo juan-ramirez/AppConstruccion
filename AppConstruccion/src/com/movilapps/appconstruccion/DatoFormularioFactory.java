@@ -30,6 +30,10 @@ public class DatoFormularioFactory {
 		this.listaSpinner = listaSpinner;
 	}
 
+	public ArrayList<String> getListaSpinner() {
+		return listaSpinner;
+	}
+
 	public int getTipo() {
 		return tipo;
 	}

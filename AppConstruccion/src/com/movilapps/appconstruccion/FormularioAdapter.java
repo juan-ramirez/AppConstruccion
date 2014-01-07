@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class FormularioAdapter extends ArrayAdapter<DatoFormularioFactory> {
@@ -34,6 +36,8 @@ public class FormularioAdapter extends ArrayAdapter<DatoFormularioFactory> {
 		case 1:
 			rowView = inflater.inflate(R.layout.row_layout_formulario_1,
 					parent, false);
+			EditText editTextFormularios = (EditText) rowView
+					.findViewById(R.id.editTextFormularios);
 			break;
 		case 2:
 			rowView = inflater.inflate(R.layout.row_layout_formulario_2,
@@ -46,6 +50,13 @@ public class FormularioAdapter extends ArrayAdapter<DatoFormularioFactory> {
 		case 4:
 			rowView = inflater.inflate(R.layout.row_layout_formulario_4,
 					parent, false);
+			Spinner spinnerFormularios = (Spinner) rowView
+					.findViewById(R.id.spinnerFormularios);
+			ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+					context, android.R.layout.simple_spinner_dropdown_item,
+					values.get(position).getListaSpinner());
+			spinnerFormularios.setAdapter(spinnerArrayAdapter);
+			
 			break;
 		case 5:
 			rowView = inflater.inflate(R.layout.row_layout_formulario_5,
@@ -57,8 +68,9 @@ public class FormularioAdapter extends ArrayAdapter<DatoFormularioFactory> {
 					parent, false);
 			break;
 		}
-		
-		TextView textViewFormularios = (TextView)rowView.findViewById(R.id.textViewFormularios);
+
+		TextView textViewFormularios = (TextView) rowView
+				.findViewById(R.id.textViewFormularios);
 		textViewFormularios.setText(values.get(position).getTitulo());
 
 		return rowView;

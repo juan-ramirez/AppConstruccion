@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
 	private boolean esProyecto;
 	private ListView listViewMenu;
 	MenuPpalAdapter adapter;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 
 		String tag = "";
 		ActionBar actionBar = getActionBar();
-		
+
 		if (esProyecto) {
 			String proyecto = intent.getStringExtra("nombreProyecto");
 			tag = "Formularios - " + proyecto;
@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
 			actionBar.setDisplayHomeAsUpEnabled(false);
 
 			adapter = new MenuPpalAdapter(this, arrayListMenu, "Proyectos");
-			
+
 		}
 
 		listViewMenu = (ListView) findViewById(R.id.listViewProyectos_Formularios);
@@ -76,7 +76,8 @@ public class MainActivity extends Activity {
 					Intent generalIntent = new Intent(getApplicationContext(),
 							MainActivity.class);
 					generalIntent.putExtra("esProyecto", true);
-					generalIntent.putExtra("nombreProyecto", arrayListMenu.get(position));
+					generalIntent.putExtra("nombreProyecto",
+							arrayListMenu.get(position));
 					startActivity(generalIntent);
 				}
 			});
@@ -94,7 +95,7 @@ public class MainActivity extends Activity {
 		}
 
 	}
-	
+
 	public void inicializarBD() {
 
 		DataBaseHelper dbHelper = new DataBaseHelper(this);
@@ -124,8 +125,7 @@ public class MainActivity extends Activity {
 				c.moveToNext();
 			}
 
-		}	
-		
+		}
 
 	}
 
@@ -173,7 +173,7 @@ public class MainActivity extends Activity {
 		case R.id.action_new:
 			if (esProyecto) {
 				showMessageFormularios();
-			}else{
+			} else {
 				showMessageProyectos();
 			}
 			return true;
@@ -181,35 +181,46 @@ public class MainActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	private void showMessageFormularios() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setTitle("Nuevo formulario");
 		alert.setMessage("Por favor escoja uno de los formularios");
-		
+
 		final Spinner input = new Spinner(this);
 		ArrayAdapter<String> spinnerArrayAdapter;
 		ArrayList<String> spinnerArray = new ArrayList<String>();
-		
+
 		spinnerArray.add("1");
 		spinnerArray.add("2");
 		spinnerArray.add("3");
-		spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerArray);
-		input.setAdapter(spinnerArrayAdapter);		
+		spinnerArray.add("4");
+		spinnerArray.add("5");
+		spinnerArray.add("6");
+		spinnerArray.add("7");
+		spinnerArray.add("8");
+		spinnerArray.add("9");
 		
+		spinnerArrayAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_dropdown_item, spinnerArray);
+		input.setAdapter(spinnerArrayAdapter);
+
 		alert.setView(input);
-		
-		alert.setPositiveButton("Ok",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
-						popMessage("Formulario creado exitosamente");
-					}
-				});
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+
+				Intent generalIntent = new Intent(getApplicationContext(),
+						FormularioActivity.class);
+				generalIntent.putExtra("numeroFormulario",
+						(input.getSelectedItemPosition() + 1));
+				startActivity(generalIntent);
+
+			}
+		});
 		alert.setNegativeButton("Cancel",
 				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
+					public void onClick(DialogInterface dialog, int whichButton) {
 
 					}
 				});
@@ -223,39 +234,36 @@ public class MainActivity extends Activity {
 
 		final EditText input = new EditText(this);
 		alert.setView(input);
-		
-		alert.setPositiveButton("Ok",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
-						String text = input.getEditableText().toString();
-						almacenarDatos(text);
-						arrayListMenu.add(text);
-						adapter.notifyDataSetChanged();
-						popMessage("Proyecto creado exitosamente");
-					}
-				});
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String text = input.getEditableText().toString();
+				almacenarDatos(text);
+				arrayListMenu.add(text);
+				adapter.notifyDataSetChanged();
+				popMessage("Proyecto creado exitosamente");
+			}
+		});
 		alert.setNegativeButton("Cancel",
 				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
+					public void onClick(DialogInterface dialog, int whichButton) {
 
 					}
 				});
 		alert.show();
 	}
-	
+
 	private void almacenarDatos(String proyecto) {
 
 		String query = "insert into proyectos values ('" + proyecto + "')";
 		database.execSQL(query);
 	}
-	
+
 	public void popMessage(String text) {
 		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT)
 				.show();
 	}
-	
+
 	@Override
 	protected void onStop() {
 		database.close();

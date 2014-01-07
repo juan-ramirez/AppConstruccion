@@ -1,5 +1,6 @@
 package com.movilapps.appconstruccion;
 
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
 import android.R.array;
@@ -8,6 +9,7 @@ import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -20,14 +22,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class FormularioActivity extends FragmentActivity {
-
+	Intent generalIntent;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(true);
-		setTitle("Formulario 1");
+		
+		generalIntent = getIntent();
+		
+		setTitle("Formulario " + generalIntent.getIntExtra("numeroFormulario", 1));
 
 		Tab tab = actionBar
 				.newTab()
@@ -131,7 +136,7 @@ public class FormularioActivity extends FragmentActivity {
 
 			ArrayList<DatoFormularioFactory> arrayListMenu = new ArrayList<DatoFormularioFactory>();
 
-			arrayListMenu = formularioFactorty.getFormulario(1);
+			arrayListMenu = formularioFactorty.getFormulario(getActivity().getIntent().getIntExtra("numeroFormulario", 1));
 
 			ListView listViewMenu = (ListView) rootView
 					.findViewById(R.id.listViewProyectos_Formularios);
