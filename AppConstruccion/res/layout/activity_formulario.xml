@@ -1,52 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-    
-
-    <TabHost
-        android:id="@android:id/tabhost"
+    <ScrollView
+        android:id="@+id/scrollViewFormulario"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_height="match_parent" >
 
         <LinearLayout
+            android:id="@+id/linearLayoutFormulario"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
-
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-            </TabWidget>
-
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <LinearLayout
-                    android:id="@+id/tabFormulario"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" 
-                    android:orientation="vertical" >
-                    
-                    
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tabObservaciones"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" 
-                    android:orientation="vertical" >
-                </LinearLayout>
-
-               
-            </FrameLayout>
         </LinearLayout>
-    </TabHost>
+    </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

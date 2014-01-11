@@ -1,9 +1,7 @@
 package com.movilapps.appconstruccion;
 
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
-import android.R.array;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
@@ -18,21 +16,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 public class FormularioActivity extends FragmentActivity {
 	Intent generalIntent;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(true);
-		
+
 		generalIntent = getIntent();
-		
-		setTitle("Formulario " + generalIntent.getIntExtra("numeroFormulario", 1));
+
+		setTitle("Formulario "
+				+ generalIntent.getIntExtra("numeroFormulario", 1));
 
 		Tab tab = actionBar
 				.newTab()
@@ -51,7 +50,7 @@ public class FormularioActivity extends FragmentActivity {
 		actionBar.addTab(tab);
 		ExampleFragment fragment = (ExampleFragment) getFragmentManager()
 				.findFragmentByTag("Formulario");
-		
+
 	}
 
 	@Override
@@ -127,31 +126,38 @@ public class FormularioActivity extends FragmentActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			
-			FormularioFactory formularioFactorty = new FormularioFactory();
+
+			FormularioFactory mFormularioFactory = new FormularioFactory();
+
+			int numeroFormulario = getActivity().getIntent().getIntExtra(
+					"numeroFormulario", 1);
+
+			ArrayList<DatoFormularioFactory> arrayListFormulario = mFormularioFactory
+					.getFormulario(numeroFormulario);
+
 			// Inflate the layout for this fragment
-			View rootView = inflater.inflate(
-					R.layout.activity_main_proyectos_formularios, container,
-					false);
+			View rootView = inflater.inflate(R.layout.activity_formulario,
+					container, false);
 
-			ArrayList<DatoFormularioFactory> arrayListMenu = new ArrayList<DatoFormularioFactory>();
+			LinearLayout formulario = (LinearLayout) rootView
+					.findViewById(R.id.linearLayoutFormulario);
 
-			arrayListMenu = formularioFactorty.getFormulario(getActivity().getIntent().getIntExtra("numeroFormulario", 1));
+			FormularioViewGenerator mFormularioViewGenerator = new FormularioViewGenerator(
+					inflater, container, getActivity(), arrayListFormulario);
 
-			ListView listViewMenu = (ListView) rootView
-					.findViewById(R.id.listViewProyectos_Formularios);
-			
+			ArrayList<View> arrayListElementosFormulario = mFormularioViewGenerator
+					.generarFormulario();
 
-			FormularioAdapter adapter = new FormularioAdapter(getActivity(),
-					arrayListMenu);
-			listViewMenu.setAdapter(adapter);
-			
+			for (int i = 0; i < arrayListElementosFormulario.size(); i++) {
+				formulario.addView(arrayListElementosFormulario.get(i),
+						LinearLayout.LayoutParams.MATCH_PARENT,
+						LinearLayout.LayoutParams.WRAP_CONTENT);
+			}
+
 			Log.e("ERROR: ", "Reinstanciado");
-			
-			
+
 			return rootView;
 		}
-
 	}
 
 	public static class ExampleFragmentTwo extends Fragment {

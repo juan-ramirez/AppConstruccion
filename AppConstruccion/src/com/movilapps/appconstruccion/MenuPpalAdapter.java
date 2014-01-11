@@ -101,8 +101,7 @@ public class MenuPpalAdapter extends ArrayAdapter<String> {
 									int whichButton) {
 								if (from.equals("Usuarios")) {
 									eliminarUsuario();
-								}else if (from.equals("Proyectos")) {
-									eliminarProyecto();
+								
 								}else if (from.equals("Formularios")) {
 								}
 							}
@@ -125,16 +124,6 @@ public class MenuPpalAdapter extends ArrayAdapter<String> {
 				values.remove(pos);
 				notifyDataSetChanged();
 				Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT)
-						.show();
-			}
-
-			private void eliminarProyecto() {
-				String query = "delete from proyectos where nombre_proyecto = '"
-						+ values.get(pos) + "'";
-				database.execSQL(query);
-				values.remove(pos);
-				notifyDataSetChanged();
-				Toast.makeText(context, "Proyecto eliminado", Toast.LENGTH_SHORT)
 						.show();
 			}
 		});
