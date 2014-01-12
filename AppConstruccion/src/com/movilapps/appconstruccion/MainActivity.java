@@ -128,15 +128,15 @@ public class MainActivity extends Activity {
 		ArrayAdapter<String> spinnerArrayAdapter;
 		ArrayList<String> spinnerArray = new ArrayList<String>();
 
-		spinnerArray.add("1");
-		spinnerArray.add("2");
-		spinnerArray.add("3");
-		spinnerArray.add("4");
-		spinnerArray.add("5");
-		spinnerArray.add("6");
-		spinnerArray.add("7");
-		spinnerArray.add("8");
-		spinnerArray.add("9");
+		spinnerArray.add("EMPAQUE Y ROTULADO DE CEMENTO");
+		spinnerArray.add("EVALUACIÓN CONCRETO");
+		spinnerArray.add("VERIFICACIÓN CONDICIONES DE CIMENTACIÓN");
+		spinnerArray.add("MEZCLA, TRANSPORTE, COLOCACIÓN Y CURADO DE CONCRETOS");
+		spinnerArray.add("CONSTRUCCIÓN Y RETIRO DE FORMALETAS, OBRA FALSA");
+		spinnerArray.add("COLOCACIÓN ACERO DE REFUERZO");
+		spinnerArray.add("ACEPTACIÓN DE ELEMENTOS VACIADOS");
+		spinnerArray.add("REQUISITOS DE EJECUCIÓN - MUROS Y ELEMENTOS DE MAMPOSTERÍA");
+		spinnerArray.add("LIBERACIÓN DE ELEMENTOS");
 
 		spinnerArrayAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_dropdown_item, spinnerArray);

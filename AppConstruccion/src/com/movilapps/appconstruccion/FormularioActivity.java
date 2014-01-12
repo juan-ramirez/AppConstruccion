@@ -16,10 +16,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TimePicker;
 
 public class FormularioActivity extends FragmentActivity {
 	Intent generalIntent;
+	static ArrayList<View> arrayListElementosFormulario;
+	static ArrayList<DatoFormularioFactory> arrayListFormulario;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +69,40 @@ public class FormularioActivity extends FragmentActivity {
 		case android.R.id.home:
 			finish();
 			return (true);
+		case R.id.action_save:
+			recogerDatos();
 		}
 
 		return (super.onOptionsItemSelected(item));
+	}
+
+	private void recogerDatos() {
+		ArrayList<String> datos = new ArrayList<String>();
+
+		for (int i = 0; i < arrayListFormulario.size(); i++) {
+			View elemento = arrayListElementosFormulario.get(i);
+			switch (arrayListFormulario.get(i).getTipo()) {
+			case 1:
+				EditText editTextFormularios = (EditText) elemento
+				.findViewById(R.id.editTextFormularios);
+				datos.add(editTextFormularios.getText().toString());
+				break;
+			case 2:
+				TimePicker timePickerFormularios = (TimePicker) elemento
+						.findViewById(R.id.timePickerFormularios);
+				datos.add(timePickerFormularios.getCurrentHour() + ":" + timePickerFormularios.getCurrentMinute());
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			default:
+				break;
+			}
+		}
+
 	}
 
 	public static class TabListener<T extends Fragment> implements
@@ -132,7 +167,7 @@ public class FormularioActivity extends FragmentActivity {
 			int numeroFormulario = getActivity().getIntent().getIntExtra(
 					"numeroFormulario", 1);
 
-			ArrayList<DatoFormularioFactory> arrayListFormulario = mFormularioFactory
+			arrayListFormulario = mFormularioFactory
 					.getFormulario(numeroFormulario);
 
 			// Inflate the layout for this fragment
@@ -145,7 +180,7 @@ public class FormularioActivity extends FragmentActivity {
 			FormularioViewGenerator mFormularioViewGenerator = new FormularioViewGenerator(
 					inflater, container, getActivity(), arrayListFormulario);
 
-			ArrayList<View> arrayListElementosFormulario = mFormularioViewGenerator
+			arrayListElementosFormulario = mFormularioViewGenerator
 					.generarFormulario();
 
 			for (int i = 0; i < arrayListElementosFormulario.size(); i++) {
