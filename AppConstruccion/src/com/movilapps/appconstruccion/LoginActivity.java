@@ -88,8 +88,8 @@ public class LoginActivity extends Activity {
 	}
 
 	private void obtenerCredenciales() {
-		usuario = editTextLoginUsuario.getText().toString();
-		password = editTextLoginPassword.getText().toString();
+		usuario = editTextLoginUsuario.getText().toString().trim();
+		password = editTextLoginPassword.getText().toString().trim();
 	}
 
 	private boolean validarCredenciales() {
