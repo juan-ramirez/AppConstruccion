@@ -99,6 +99,10 @@ public class FormularioFactory {
 
 	public ArrayList<DatoFormularioFactory> getFormulario(int tipo) {
 		formulario = new ArrayList<DatoFormularioFactory>();
+		formulario.add(new DatoFormularioFactory(TIPO_1, "Proyecto",
+				ALFANUMERICO));
+		formulario.add(new DatoFormularioFactory(TIPO_1, "Revisó", ALFABETICO));
+		formulario.add(new DatoFormularioFactory(TIPO_1, "Aprobó", ALFABETICO));
 		switch (tipo) {
 		case 1:
 			return getf1();
@@ -164,8 +168,8 @@ public class FormularioFactory {
 		formulario.add(new DatoFormularioFactory(TIPO_2, "Hora carga"));
 		formulario.add(new DatoFormularioFactory(TIPO_2, "Hora descarga"));
 		formulario.add(new DatoFormularioFactory(TITULO, "Asentamiento (CM)"));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "N° Mixer", NUMERICO));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "N° Mixer", NUMERICO));
+		formulario.add(new DatoFormularioFactory(TIPO_1, "Teórico", NUMERICO));
+		formulario.add(new DatoFormularioFactory(TIPO_1, "Real", NUMERICO));
 
 		return formulario;
 	}

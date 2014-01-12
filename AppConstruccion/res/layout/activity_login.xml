@@ -18,15 +18,17 @@
             android:id="@+id/editTextLoginUsuario"
             android:layout_width="400dp"
             android:layout_height="60dp"
-            android:hint="Usuario" >
+            android:hint="Usuario"
+            android:singleLine="true" >
         </EditText>
 
         <EditText
             android:id="@+id/editTextLoginPassword"
             android:layout_width="400dp"
             android:layout_height="60dp"
+            android:hint="Contraseña"
             android:inputType="textPassword"
-            android:hint="Contraseña" />
+            android:singleLine="true" />
     </LinearLayout>
 
     <Button
