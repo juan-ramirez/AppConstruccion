@@ -15,7 +15,7 @@
         android:textSize="18sp" />
 
     <TimePicker
-        android:id="@+id/datePicker1"
+        android:id="@+id/timePickerFormularios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />

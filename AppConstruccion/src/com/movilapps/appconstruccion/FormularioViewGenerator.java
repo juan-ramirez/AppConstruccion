@@ -52,18 +52,19 @@ public class FormularioViewGenerator {
 			EditText editTextFormularios = (EditText) rowView
 					.findViewById(R.id.editTextFormularios);
 			editTextFormularios.setSingleLine();
-			
+
 			switch (arrayListFormulario.get(position).getTipoDato()) {
 			case 1:
 				editTextFormularios.setInputType(InputType.TYPE_CLASS_TEXT);
 				break;
 			case 3:
+
 				editTextFormularios
 						.setRawInputType(InputType.TYPE_CLASS_NUMBER);
 				break;
 			case 4:
-				editTextFormularios
-						.setRawInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
+				editTextFormularios.setRawInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL);
 				break;
 			}
 			break;
@@ -74,36 +75,39 @@ public class FormularioViewGenerator {
 		case 3:
 			rowView = inflater.inflate(R.layout.row_layout_formulario_3,
 					container, false);
-			
+
 			final EditText editTextFormulariosCheckbox = (EditText) rowView
 					.findViewById(R.id.editTextFormulariosCheckbox);
-			editTextFormulariosCheckbox.setSingleLine();		
-			
+			editTextFormulariosCheckbox.setSingleLine();
+
 			switch (arrayListFormulario.get(position).getTipoDato()) {
 			case 1:
-				editTextFormulariosCheckbox.setInputType(InputType.TYPE_CLASS_TEXT);
+				editTextFormulariosCheckbox
+						.setInputType(InputType.TYPE_CLASS_TEXT);
 				break;
 			case 3:
 				editTextFormulariosCheckbox
 						.setRawInputType(InputType.TYPE_CLASS_NUMBER);
 				break;
 			}
-			
-			CheckBox checkBoxFormularios  = (CheckBox) rowView
+
+			CheckBox checkBoxFormularios = (CheckBox) rowView
 					.findViewById(R.id.checkBoxFormularios);
-			
-			checkBoxFormularios.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-				
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					if (isChecked) {
-						editTextFormulariosCheckbox.setEnabled(false);
-					}else{
-						editTextFormulariosCheckbox.setEnabled(true);
-					}					
-				}
-			});
-			
+
+			checkBoxFormularios
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							if (isChecked) {
+								editTextFormulariosCheckbox.setEnabled(false);
+							} else {
+								editTextFormulariosCheckbox.setEnabled(true);
+							}
+						}
+					});
+
 			break;
 		case 4:
 			rowView = inflater.inflate(R.layout.row_layout_formulario_4,
@@ -133,8 +137,6 @@ public class FormularioViewGenerator {
 		textViewFormularios.setText(arrayListFormulario.get(position)
 				.getTitulo());
 
-		
-		
 		return rowView;
 	}
 

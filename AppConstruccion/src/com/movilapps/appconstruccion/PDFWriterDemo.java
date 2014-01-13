@@ -62,7 +62,7 @@ public class PDFWriterDemo extends Activity {
 			Log.d("ERROR", " - IO");
 		}
 
-		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.TIMES_ROMAN);
+		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA);
 		mPDFWriter.addRawContent("1 0 0 rg\n");
 		mPDFWriter.addTextAsHex(70, 50, 12,
 				"68656c6c6f20776f726c6420286173206865782921");
@@ -127,12 +127,12 @@ public class PDFWriterDemo extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		String pdfcontent = generateHelloWorldPDF();
-		outputToScreen(R.id.text, pdfcontent);
 		try {
 			outputToFile("helloworld.pdf", pdfcontent, "ISO-8859-1");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		outputToScreen(R.id.text, pdfcontent);
 	}
 }

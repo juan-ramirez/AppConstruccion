@@ -3,11 +3,14 @@ package com.movilapps.appconstruccion;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,7 +36,6 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_proyectos_formularios);
-
 		
 		inicializarBD();
 		arrayListMenu = new ArrayList<String>();
@@ -167,6 +169,25 @@ public class MainActivity extends Activity {
 	public void popMessage(String text) {
 		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT)
 				.show();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+
+		SharedPreferences mPrefs = getSharedPreferences("my_prefs", MODE_PRIVATE);
+		Gson gson = new Gson();
+		String json = mPrefs.getString("MyObject", "NO");
+
+		ArrayList<String> obj = gson.fromJson(json, ArrayList.class);
+		
+		if(json.equals("NO")){
+			Toast.makeText(this, "NO Encontrado", Toast.LENGTH_SHORT).show();			
+		}else{
+			Toast.makeText(this, obj.get(0), Toast.LENGTH_SHORT).show();
+		}
+		
 	}
 
 }

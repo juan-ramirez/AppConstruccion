@@ -25,7 +25,6 @@
         android:layout_marginBottom="2dp"
         android:layout_marginLeft="18dp"
         android:layout_toRightOf="@+id/textViewFormularios"
-        android:digits="abcdefghijklmnopqrstuvwxyzñáéíóúÁÉÍÓÚ"
         android:ems="10"
         android:focusable="true" >
     </EditText>
