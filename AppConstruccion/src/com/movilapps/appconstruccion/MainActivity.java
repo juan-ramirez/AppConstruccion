@@ -182,14 +182,6 @@ public class MainActivity extends Activity {
 		String json = mPrefs.getString("MyObject", "");
 
 		
-		
-		if(json.equals("")){
-			Toast.makeText(this, "NO Encontrado", Toast.LENGTH_SHORT).show();			
-		}else{
-			ArrayList<String> obj = gson.fromJson(json, ArrayList.class);
-			Toast.makeText(this, obj.get(0), Toast.LENGTH_SHORT).show();
-		}
-		
 	}
 
 }

@@ -66,7 +66,6 @@ public class PDFWriterFormulario {
 		String s = Normalizer.normalize(mPDFWriter.asString(),
 				Normalizer.Form.NFD);
 		s = s.replaceAll("[^\\p{ASCII}]", "");
-		Log.e("PDF", s);
 		return s;
 	}
 
@@ -87,10 +86,10 @@ public class PDFWriterFormulario {
 				pdfFile.close();
 
 			} catch (FileNotFoundException e) {
-				Log.d("ERROR", " - IO");
+				Log.e("ERROR", " - IO");
 			}
 		} catch (IOException e) {
-			Log.d("ERROR", " - IO");
+			Log.e("ERROR", " - IO");
 		}
 	}
 

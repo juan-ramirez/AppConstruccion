@@ -118,7 +118,7 @@ public class FormularioActivity extends FragmentActivity {
 		case R.id.action_email:
 			datosPDF = new ArrayList<String>();
 			Log.e("Vacíos", String.valueOf(recogerDatos()));
-			if (recogerDatos()) {
+			if (!recogerDatos()) {
 				String date = now();
 				String fileName = generalIntent
 						.getStringExtra("nombreFormulario")
