@@ -53,6 +53,12 @@ public class FormularioActivity extends FragmentActivity {
 	static ArrayList<DatoFormularioFactory> arrayListFormulario;
 	ArrayList<String> datosPDF;
 
+	private static ImageView foto1;
+	private static ImageView foto2;
+	private static EditText evidenciaEscrita;
+	public static boolean isFoto1Default = true;
+	public static boolean isFoto2Default = true;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -324,11 +330,8 @@ public class FormularioActivity extends FragmentActivity {
 	public static class ExampleFragmentTwo extends Fragment {
 
 		private static final int MAX_IMAGE_DIMENSION = 250;
-		private ImageView foto1;
-		private ImageView foto2;
 		private Bitmap fotoBitmapFinal;
 		private Spinner spinnerObservaciones;
-		private EditText evidenciaEscrita;
 		public View lastContextMenuButton;
 
 		@Override
@@ -421,6 +424,7 @@ public class FormularioActivity extends FragmentActivity {
 						e.printStackTrace();
 					}
 					foto1.setImageBitmap(fotoBitmapFinal);
+					isFoto1Default = false;
 				}
 
 				break;
@@ -435,12 +439,15 @@ public class FormularioActivity extends FragmentActivity {
 						e.printStackTrace();
 					}
 					foto1.setImageBitmap(fotoBitmapFinal);
+					isFoto1Default = false;
 				}
 				break;
 			case 2:// Toma foto
 				if (resultCode == RESULT_OK) {
-					fotoBitmapFinal = (Bitmap) imageReturnedIntent.getExtras().get("data");
+					fotoBitmapFinal = (Bitmap) imageReturnedIntent.getExtras()
+							.get("data");
 					foto2.setImageBitmap(fotoBitmapFinal);
+					isFoto2Default = false;
 				}
 
 				break;
@@ -455,6 +462,7 @@ public class FormularioActivity extends FragmentActivity {
 						e.printStackTrace();
 					}
 					foto2.setImageBitmap(fotoBitmapFinal);
+					isFoto2Default = false;
 
 				}
 				break;
@@ -602,8 +610,10 @@ public class FormularioActivity extends FragmentActivity {
 		private void eliminarFoto(View v) {
 			if (v == foto1) {
 				foto1.setImageResource(R.drawable.ic_launcher);
+				isFoto1Default = true;
 			} else if (v == foto2) {
 				foto2.setImageResource(R.drawable.ic_launcher);
+				isFoto2Default = true;
 			}
 		}
 
