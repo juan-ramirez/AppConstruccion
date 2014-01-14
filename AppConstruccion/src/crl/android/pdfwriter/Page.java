@@ -22,7 +22,7 @@ public class Page {
 		mIndirectObject = mDocument.newIndirectObject();
 		mPageFonts = new ArrayList<IndirectObject>();
 		mXObjects = new ArrayList<XObjectImage>();
-		setFont(StandardFonts.SUBTYPE, StandardFonts.TIMES_ROMAN, StandardFonts.WIN_ANSI_ENCODING);
+		setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, "ISO-8859-1");
 		mPageContents = mDocument.newIndirectObject();
 		mDocument.includeIndirectObject(mPageContents);
 	}

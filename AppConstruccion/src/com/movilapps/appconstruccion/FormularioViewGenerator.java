@@ -14,6 +14,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 public class FormularioViewGenerator {
 
@@ -71,6 +72,10 @@ public class FormularioViewGenerator {
 		case 2:
 			rowView = inflater.inflate(R.layout.row_layout_formulario_2,
 					container, false);
+			TimePicker timePickerFormularios = (TimePicker) rowView
+					.findViewById(R.id.timePickerFormularios);
+			timePickerFormularios.setIs24HourView(true);
+
 			break;
 		case 3:
 			rowView = inflater.inflate(R.layout.row_layout_formulario_3,

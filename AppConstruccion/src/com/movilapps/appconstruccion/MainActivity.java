@@ -153,6 +153,7 @@ public class MainActivity extends Activity {
 						FormularioActivity.class);
 				generalIntent.putExtra("numeroFormulario",
 						(input.getSelectedItemPosition() + 1));
+				generalIntent.putExtra("nombreFormulario", input.getSelectedItem().toString());
 				startActivity(generalIntent);
 
 			}
@@ -178,13 +179,14 @@ public class MainActivity extends Activity {
 
 		SharedPreferences mPrefs = getSharedPreferences("my_prefs", MODE_PRIVATE);
 		Gson gson = new Gson();
-		String json = mPrefs.getString("MyObject", "NO");
+		String json = mPrefs.getString("MyObject", "");
 
-		ArrayList<String> obj = gson.fromJson(json, ArrayList.class);
 		
-		if(json.equals("NO")){
+		
+		if(json.equals("")){
 			Toast.makeText(this, "NO Encontrado", Toast.LENGTH_SHORT).show();			
 		}else{
+			ArrayList<String> obj = gson.fromJson(json, ArrayList.class);
 			Toast.makeText(this, obj.get(0), Toast.LENGTH_SHORT).show();
 		}
 		

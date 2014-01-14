@@ -9,34 +9,50 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="40dp"
-        android:layout_toRightOf="@+id/textViewObservacionesTipo" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="500dp"
-        android:layout_height="500dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/img_obs" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="42dp"
-        android:padding="15dp"
-        android:text="Tomar Foto"
-        android:textSize="35sp" />
+        android:layout_toRightOf="@+id/textViewObservacionesTipo"
+ />
 
     <TextView
         android:id="@+id/textViewObservacionesTipo"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imageView1"
+        android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/spinnerObservaciones"
         android:text="Tipo de Observación"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/editTextObservaciones"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/spinnerObservaciones"
+        android:layout_marginTop="22dp"
+        android:ems="10"
+        android:inputType="textMultiLine" 
+        >
+
+        
+    </EditText>
+
+    <ImageView
+        android:id="@+id/imageViewObservaciones1"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignRight="@+id/textViewObservacionesTipo"
+        android:layout_below="@+id/editTextObservaciones"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="53dp"
+        android:src="@drawable/ic_launcher" />
+
+    <ImageView
+        android:id="@+id/imageViewObservaciones2"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/imageViewObservaciones1"
+        android:layout_marginRight="23dp"
+        android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>
