@@ -55,7 +55,7 @@ public class PDFWriterFormulario {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-				
+
 		// Fecha
 		mPDFWriter.addText(PaperSize.LETTER_WIDTH - 220,
 				PaperSize.LETTER_HEIGHT - 100, 16, now());
@@ -105,43 +105,47 @@ public class PDFWriterFormulario {
 					+ Integer.toString(pageCount));
 		}
 
-		
-		//Imagenes Evidencia Fotografica
+		// Imagenes Evidencia Fotografica
 		if (pic1 == null) {
 			Log.e("PIC1", "NULL ---");
-		}else{
+		} else {
 			mPDFWriter.newPage();
-			mPDFWriter.addText(MARGIN_LEFT, PaperSize.LETTER_HEIGHT-100, 14, "Anexo Fotografico 1");
-			mPDFWriter.addImage(centrar(PaperSize.LETTER_WIDTH, pic1.getWidth()), centrar(PaperSize.LETTER_HEIGHT, pic1.getHeight()),
-							pic1, Transformation.DEGREES_0_ROTATION);
+			mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
+					PaperSize.LETTER_HEIGHT - 120);
+			mPDFWriter.addText(MARGIN_LEFT, PaperSize.LETTER_HEIGHT - 100, 14,
+					"Anexo Fotografico 1");
+			mPDFWriter.addImage(
+					centrar(PaperSize.LETTER_WIDTH, pic1.getWidth()),
+					centrar(PaperSize.LETTER_HEIGHT, pic1.getHeight()), pic1,
+					Transformation.DEGREES_0_ROTATION);
 		}
 		if (pic2 == null) {
 			Log.e("PIC1", "NULL ---");
-		}else{
+		} else {
 			mPDFWriter.newPage();
-			mPDFWriter.addText(MARGIN_LEFT, PaperSize.LETTER_HEIGHT-100, 14, "Anexo Fotografico 2");
-			mPDFWriter.addImage(centrar(PaperSize.LETTER_WIDTH, pic2.getWidth()), centrar(PaperSize.LETTER_HEIGHT, pic2.getHeight()),
-							pic2, Transformation.DEGREES_0_ROTATION);	
+			mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
+					PaperSize.LETTER_HEIGHT - 120);
+			mPDFWriter.addText(MARGIN_LEFT, PaperSize.LETTER_HEIGHT - 100, 14,
+					"Anexo Fotografico 2");
+			mPDFWriter.addImage(
+					centrar(PaperSize.LETTER_WIDTH, pic2.getWidth()),
+					centrar(PaperSize.LETTER_HEIGHT, pic2.getHeight()), pic2,
+					Transformation.DEGREES_0_ROTATION);
 		}
-		
-		
+
 		// String s = mPDFWriter.asString();
 		String s = Normalizer.normalize(mPDFWriter.asString(),
 				Normalizer.Form.NFD);
 		s = s.replaceAll("[^\\p{ASCII}]", "");
 		return s;
-		
 
-	
 	}
 
-	private static int centrar(int tamañoPapel, int tamañoImagen){
-		int margen = (tamañoPapel - tamañoImagen)/2; 
+	private static int centrar(int tamañoPapel, int tamañoImagen) {
+		int margen = (tamañoPapel - tamañoImagen) / 2;
 		return margen;
 	}
-	
-	
-	
+
 	public static String now() {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");

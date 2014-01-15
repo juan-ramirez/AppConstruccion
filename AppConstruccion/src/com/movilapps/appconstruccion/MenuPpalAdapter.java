@@ -3,11 +3,16 @@ package com.movilapps.appconstruccion;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +94,6 @@ public class MenuPpalAdapter extends ArrayAdapter<String> {
 
 			}
 
-
 			private void showMessage() {
 				AlertDialog.Builder alert = new AlertDialog.Builder(context);
 				alert.setTitle("Confirmar");
@@ -101,10 +105,12 @@ public class MenuPpalAdapter extends ArrayAdapter<String> {
 									int whichButton) {
 								if (from.equals("Usuarios")) {
 									eliminarUsuario();
-								
-								}else if (from.equals("Formularios")) {
+
+								} else if (from.equals("Formularios")) {
+									eliminarFormulario();
 								}
 							}
+
 						});
 				alert.setNegativeButton("Cancel",
 						new DialogInterface.OnClickListener() {
@@ -115,7 +121,6 @@ public class MenuPpalAdapter extends ArrayAdapter<String> {
 						});
 				alert.show();
 			}
-			
 
 			private void eliminarUsuario() {
 				String query = "delete from usuarios where nombre_usuario = '"
@@ -126,6 +131,36 @@ public class MenuPpalAdapter extends ArrayAdapter<String> {
 				Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT)
 						.show();
 			}
+
+			@SuppressWarnings("unchecked")
+			private void eliminarFormulario() {
+				SharedPreferences mPrefs = context.getSharedPreferences(
+						"my_prefs", Context.MODE_PRIVATE);
+				Gson gson = new Gson();
+				String jsonFormularios = mPrefs.getString("Formularios", "");
+
+				ArrayList<ArrayList<String>> formularios = gson.fromJson(
+						jsonFormularios, ArrayList.class);
+
+				for (int i = 0; i < formularios.size(); i++) {
+					if (values.get(pos).equals(formularios.get(i).get(0))) {
+						formularios.remove(i);
+						values.remove(pos);
+					}
+				}
+
+				Editor prefsEditor = mPrefs.edit();
+				String json = gson.toJson(formularios);
+
+				Log.e("JSON: ", json);
+
+				prefsEditor.putString("Formularios", json);
+				Log.e("Commited: ", String.valueOf(prefsEditor.commit()));
+				notifyDataSetChanged();
+				Toast.makeText(context, "Formulario eliminado",
+						Toast.LENGTH_SHORT).show();
+			}
+
 		});
 
 		return rowView;

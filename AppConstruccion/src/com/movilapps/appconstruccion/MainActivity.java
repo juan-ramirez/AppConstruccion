@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,7 +62,7 @@ public class MainActivity extends Activity {
 				generalIntent.putExtra("numeroFormulario", numeroFormulario);
 
 				String form = formularios.get(position).get(0);
-				String nombreFormulario = form.substring(0, form.length() - 23);
+				String nombreFormulario = form.substring(0, form.length() - 22);
 				generalIntent.putExtra("nombreFormulario", nombreFormulario);
 
 				startActivity(generalIntent);
