@@ -163,7 +163,7 @@ public class FormularioFactory {
 
 		formulario.add(new DatoFormularioFactory(TIPO_5, "Fecha"));
 		formulario.add(new DatoFormularioFactory(TIPO_1,
-				"Tipo de concreto(PSI)", NUMERICO));
+				"Tipo de concreto (PSI)", NUMERICO));
 		formulario.add(new DatoFormularioFactory(TITULO, "Preparación"));
 		formulario.add(new DatoFormularioFactory(TIPO_3, "N° Mixer",
 				ALFANUMERICO));
@@ -228,7 +228,7 @@ public class FormularioFactory {
 		formulario
 				.add(new DatoFormularioFactory(TIPO_1, "Plano", ALFANUMERICO));
 		formulario.add(new DatoFormularioFactory(TITULO,
-				"Resistencia del concreto"));
+				"Resistencia del concreto (Mpa)"));
 		formulario.add(new DatoFormularioFactory(TIPO_1, "f'c", NUMERICO));
 		formulario
 				.add(new DatoFormularioFactory(TITULO, "Diseño de la Mezcla"));
@@ -243,12 +243,12 @@ public class FormularioFactory {
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Medio de Compactación", vibrador));
 		formulario.add(new DatoFormularioFactory(TIPO_1,
-				"Tiempo de mezcla y colocación(MIN) ", NUMERICO));
+				"Tiempo entre mezcla y colocación(MIN) ", NUMERICO));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Homogeneidad de morteros y concretos en estado fresco",
 				cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
-				"Def de juntas en constr y prep de las superficies",
+				"Definición de juntas en construcción y preparación de las superficies",
 				cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Provisiones para el vaciado según el clima", aplica_noaplica));
@@ -302,7 +302,7 @@ public class FormularioFactory {
 				.add(new DatoFormularioFactory(TIPO_1, "Plano", ALFANUMERICO));
 		formulario.add(new DatoFormularioFactory(TIPO_1, "Ejes", ALFANUMERICO));
 
-		formulario.add(new DatoFormularioFactory(TITULO, "Grado (Fy)"));
+		formulario.add(new DatoFormularioFactory(TITULO, "Grado (Mpa)"));
 		formulario.add(new DatoFormularioFactory(TIPO_1, "Barras", NUMERICO));
 		formulario.add(new DatoFormularioFactory(TIPO_1, "Mallas", NUMERICO));
 
@@ -321,9 +321,9 @@ public class FormularioFactory {
 				NUMERICO));
 
 		formulario.add(new DatoFormularioFactory(TIPO_4,
-				"Empalmes(Traslapos conexiones)", cumple_nocumple));
+				"Empalmes (Traslapos conexiones)", cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
-				"Estribos Disposicion y cantidad", cumple_nocumple));
+				"Estribos Disposición y cantidad", cumple_nocumple));
 		formulario
 				.add(new DatoFormularioFactory(
 						TIPO_4,
@@ -357,7 +357,7 @@ public class FormularioFactory {
 		formulario.add(new DatoFormularioFactory(TIPO_1, "Ejes", ALFANUMERICO));
 
 		formulario.add(new DatoFormularioFactory(TIPO_4,
-				"Alineacion del elemento vaciado", cumple_nocumple));
+				"Alineación del elemento vaciado", cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Plomo del elemento vaciado", cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
@@ -365,7 +365,7 @@ public class FormularioFactory {
 		formulario
 				.add(new DatoFormularioFactory(
 						TIPO_4,
-						"Ubicación de refuerzo para anclaje de muros u otros elm estrc.",
+						"Ubicación de refuerzo para anclaje de muros u otros elementos estructurales",
 						cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Reparación de defectos estructurales", requiere_norequiere));
@@ -417,7 +417,7 @@ public class FormularioFactory {
 		formulario.add(new DatoFormularioFactory(TIPO_1, "Altura de Inyección",
 				ALFANUMERICO));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
-				"Colocación de ductos y tub embebidas",
+				"Colocación de ductos y tuberías embebidas",
 				cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Juntas de control",
 				cumple_nocumple_noaplica));
@@ -449,7 +449,7 @@ public class FormularioFactory {
 				cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Aseo",
 				cumple_nocumple));
-
+		formulario.add(new DatoFormularioFactory(TITULO, "Firma constructor"));
 		return formulario;
 	}
 

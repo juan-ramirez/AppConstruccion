@@ -75,25 +75,49 @@ public class PDFWriterFormulario {
 		mPDFWriter.addText(MARGIN_LEFT, 570, 18, "Para: Obra");
 		mPDFWriter.addText(MARGIN_LEFT, 545, 18, "Asunto: Observaciones obra");
 
+		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA_BOLD,
+				"ISO-8859-1");
+
+		String[] form = datos.get(0).split(" ");
+		String primero = "";
+		String segundo = "";
+		for (int i = 0; i < form.length; i++) {
+			if (i < 6) {
+				primero += form[i] + " ";
+			} else {
+				segundo += form[i] + " ";
+			}
+
+		}
+		primero = primero.trim();
+		segundo = segundo.trim();
+
+		if (form.length > 5) {
+			mPDFWriter.addText(MARGIN_LEFT, 435, 15, primero);
+			mPDFWriter.addText(MARGIN_LEFT, 415, 15, segundo);
+		} else {
+			mPDFWriter.addText(MARGIN_LEFT, 435, 15, datos.get(0));
+		}
+
 		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA,
 				"ISO-8859-1");
 
-		int top = 430;
-		mPDFWriter.addText(MARGIN_LEFT, 515, 15, datos.get(0));
-		mPDFWriter.addText(MARGIN_LEFT, 490, 15, datos.get(1));
-		mPDFWriter.addText(MARGIN_LEFT, 465, 15, datos.get(2));
+		int top = 410;
+		mPDFWriter.addText(MARGIN_LEFT, 515, 15, datos.get(1));
+		mPDFWriter.addText(MARGIN_LEFT, 490, 15, datos.get(2));
+		mPDFWriter.addText(MARGIN_LEFT, 465, 15, datos.get(3));
 
 		int j = 0;
 
-		for (int i = 3; i < datos.size(); i++) {
+		for (int i = 4; i < datos.size(); i++) {
 			if (i == 16) {
 				mPDFWriter.newPage();
-				top = PaperSize.LETTER_HEIGHT - 200;
-				j = 13;
+				top = PaperSize.LETTER_HEIGHT - 100;
+				j = 12;
 				mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
 						PaperSize.LETTER_HEIGHT - 120);
 			}
-			Log.e("TOP", "" + (top - (i - (j + 3)) * 25));
+			Log.e("TOP", "" + (top - (i - (j + 4)) * 25));
 			mPDFWriter.addText(MARGIN_LEFT, (top - (i - (j + 3)) * 25), 14,
 					datos.get(i));
 		}

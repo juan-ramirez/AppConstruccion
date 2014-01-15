@@ -2,6 +2,7 @@ package com.movilapps.appconstruccion;
 
 import java.util.ArrayList;
 
+import android.R.array;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,7 +65,7 @@ public class MainActivity extends Activity {
 
 				String form = formularios.get(position).get(0);
 				String nombreFormulario = form.substring(0, form.length() - 22);
-				generalIntent.putExtra("nombreFormulario", nombreFormulario);			
+				generalIntent.putExtra("nombreFormulario", nombreFormulario);
 
 				startActivity(generalIntent);
 			}
@@ -115,17 +117,17 @@ public class MainActivity extends Activity {
 		ArrayAdapter<String> spinnerArrayAdapter;
 		ArrayList<String> spinnerArray = new ArrayList<String>();
 
-		spinnerArray.add("EMPAQUE Y ROTULADO DE CEMENTO");
-		spinnerArray.add("EVALUACIÓN CONCRETO");
-		spinnerArray.add("VERIFICACIÓN CONDICIONES DE CIMENTACIÓN");
+		spinnerArray.add("EMPAQUE Y ROTULADO DE CEMENTO - FST001");
+		spinnerArray.add("EVALUACIÓN CONCRETO - FST002");
+		spinnerArray.add("VERIFICACIÓN CONDICIONES DE CIMENTACIÓN - FST003");
 		spinnerArray
-				.add("MEZCLA, TRANSPORTE, COLOCACIÓN Y CURADO DE CONCRETOS");
-		spinnerArray.add("CONSTRUCCIÓN Y RETIRO DE FORMALETAS, OBRA FALSA");
-		spinnerArray.add("COLOCACIÓN ACERO DE REFUERZO");
-		spinnerArray.add("ACEPTACIÓN DE ELEMENTOS VACIADOS");
+				.add("MEZCLA, TRANSPORTE, COLOCACIÓN Y CURADO DE CONCRETOS - FST004");
+		spinnerArray.add("CONSTRUCCIÓN Y RETIRO DE FORMALETAS, OBRA FALSA - FST005");
+		spinnerArray.add("COLOCACIÓN ACERO DE REFUERZO - FST006");
+		spinnerArray.add("ACEPTACIÓN DE ELEMENTOS VACIADOS - FST007");
 		spinnerArray
-				.add("REQUISITOS DE EJECUCIÓN - MUROS Y ELEMENTOS DE MAMPOSTERÍA");
-		spinnerArray.add("LIBERACIÓN DE ELEMENTOS");
+				.add("REQUISITOS DE EJECUCIÓN - MUROS Y ELEMENTOS DE MAMPOSTERÍA - FST008");
+		spinnerArray.add("LIBERACIÓN DE ELEMENTOS - FST009");
 
 		spinnerArrayAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_dropdown_item, spinnerArray);
@@ -165,6 +167,8 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		Log.e("RESUMED", "Resumed!!!!");
+		arrayListMenu.clear();
 
 		SharedPreferences mPrefs = getSharedPreferences("my_prefs",
 				MODE_PRIVATE);
