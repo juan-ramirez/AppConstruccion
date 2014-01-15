@@ -109,7 +109,7 @@ public class FormularioActivity extends FragmentActivity {
 			return (true);
 		case R.id.action_save:
 			datosPDF = new ArrayList<String>();
-			
+
 			String nombreFormulario = generalIntent
 					.getStringExtra("nombreFormulario") + " " + now();
 
@@ -122,7 +122,7 @@ public class FormularioActivity extends FragmentActivity {
 			ArrayList<ArrayList<String>> formularios = null;
 			Gson gson = new Gson();
 
-			Log.e("Vacíos", String.valueOf(recogerDatos(true)));
+			recogerDatos(true);
 
 			SharedPreferences mPrefs = getSharedPreferences("my_prefs",
 					MODE_PRIVATE);
@@ -133,6 +133,9 @@ public class FormularioActivity extends FragmentActivity {
 				formularios = new ArrayList<ArrayList<String>>();
 			} else {
 				formularios = gson.fromJson(jsonFormularios, ArrayList.class);
+				ArrayList<String> elemento = generalIntent
+						.getStringArrayListExtra("formulario");
+				Log.e("ELIMINAR", "" + formularios.remove(elemento));
 			}
 
 			formularios.add(datosPDF);
@@ -149,6 +152,10 @@ public class FormularioActivity extends FragmentActivity {
 			return (true);
 		case R.id.action_email:
 			datosPDF = new ArrayList<String>();
+			String nombreFormularioEmail = generalIntent
+					.getStringExtra("nombreFormulario");
+			datosPDF.add(nombreFormularioEmail);
+			
 			if (!recogerDatos(false)) {
 
 				if (evidenciaEscrita == null) {
@@ -462,12 +469,8 @@ public class FormularioActivity extends FragmentActivity {
 			if (esCargar) {
 				ArrayList<String> form = getActivity().getIntent()
 						.getStringArrayListExtra("formulario");
-				Log.e("FORM", form.get(0));
-				Log.e("FORM", form.get(1));
 				cargarDatos(form);
 			}
-
-			Log.e("ERROR: ", "Reinstanciado");
 
 			return rootView;
 		}
@@ -533,8 +536,6 @@ public class FormularioActivity extends FragmentActivity {
 					DatePicker datePickerFecha = (DatePicker) elemento
 							.findViewById(R.id.datePickerFecha);
 
-					Log.e("DATE", form.get(i + 2));
-
 					String[] date = form.get(i + 2).split("-");
 
 					int day = Integer.parseInt(date[0]);
@@ -564,8 +565,6 @@ public class FormularioActivity extends FragmentActivity {
 
 			View rootView = inflater.inflate(R.layout.activity_observaciones,
 					container, false);
-			Log.e("ERROR: ", "Reinstanciado");
-
 			inicializarSpinner(rootView);
 			inicializarObjetos(rootView);
 
