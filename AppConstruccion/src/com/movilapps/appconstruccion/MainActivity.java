@@ -1,9 +1,6 @@
 package com.movilapps.appconstruccion;
 
-import java.io.IOException;
 import java.util.ArrayList;
-
-import com.google.gson.Gson;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -11,10 +8,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,25 +20,24 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 public class MainActivity extends Activity {
 
 	private ArrayList<String> arrayListMenu;
-	private SQLiteDatabase database;
 	private ListView listViewMenu;
 	MenuPpalAdapter adapter;
+	private ArrayList<ArrayList<String>> formularios = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_proyectos_formularios);
-		
-		inicializarBD();
-		arrayListMenu = new ArrayList<String>();
 
+		arrayListMenu = new ArrayList<String>();
 		ActionBar actionBar = getActionBar();
 
 		setTitle("Formularios");
-		inicializarFormularios();
 
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -60,29 +54,21 @@ public class MainActivity extends Activity {
 					int position, long id) {
 				Intent generalIntent = new Intent(getApplicationContext(),
 						FormularioActivity.class);
+				generalIntent.putExtra("esCargar", true);
+				generalIntent.putStringArrayListExtra("formulario",
+						formularios.get(position));
+
+				int numeroFormulario = Integer.valueOf(formularios
+						.get(position).get(1));
+				generalIntent.putExtra("numeroFormulario", numeroFormulario);
+
+				String form = formularios.get(position).get(0);
+				String nombreFormulario = form.substring(0, form.length() - 23);
+				generalIntent.putExtra("nombreFormulario", nombreFormulario);
+
 				startActivity(generalIntent);
 			}
 		});
-
-	}
-
-	public void inicializarBD() {
-
-		DataBaseHelper dbHelper = new DataBaseHelper(this);
-
-		try {
-			dbHelper.createDataBase();
-		} catch (IOException ioe) {
-			throw new Error("Unable to create database");
-		}
-		try {
-			dbHelper.openDataBase();
-		} catch (SQLException sqle) {
-			throw sqle;
-		}
-		database = dbHelper.myDataBase;
-	}
-	public void inicializarFormularios() {
 
 	}
 
@@ -133,11 +119,13 @@ public class MainActivity extends Activity {
 		spinnerArray.add("EMPAQUE Y ROTULADO DE CEMENTO");
 		spinnerArray.add("EVALUACIÓN CONCRETO");
 		spinnerArray.add("VERIFICACIÓN CONDICIONES DE CIMENTACIÓN");
-		spinnerArray.add("MEZCLA, TRANSPORTE, COLOCACIÓN Y CURADO DE CONCRETOS");
+		spinnerArray
+				.add("MEZCLA, TRANSPORTE, COLOCACIÓN Y CURADO DE CONCRETOS");
 		spinnerArray.add("CONSTRUCCIÓN Y RETIRO DE FORMALETAS, OBRA FALSA");
 		spinnerArray.add("COLOCACIÓN ACERO DE REFUERZO");
 		spinnerArray.add("ACEPTACIÓN DE ELEMENTOS VACIADOS");
-		spinnerArray.add("REQUISITOS DE EJECUCIÓN - MUROS Y ELEMENTOS DE MAMPOSTERÍA");
+		spinnerArray
+				.add("REQUISITOS DE EJECUCIÓN - MUROS Y ELEMENTOS DE MAMPOSTERÍA");
 		spinnerArray.add("LIBERACIÓN DE ELEMENTOS");
 
 		spinnerArrayAdapter = new ArrayAdapter<String>(this,
@@ -153,7 +141,8 @@ public class MainActivity extends Activity {
 						FormularioActivity.class);
 				generalIntent.putExtra("numeroFormulario",
 						(input.getSelectedItemPosition() + 1));
-				generalIntent.putExtra("nombreFormulario", input.getSelectedItem().toString());
+				generalIntent.putExtra("nombreFormulario", input
+						.getSelectedItem().toString());
 				startActivity(generalIntent);
 
 			}
@@ -172,16 +161,33 @@ public class MainActivity extends Activity {
 				.show();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 
-		SharedPreferences mPrefs = getSharedPreferences("my_prefs", MODE_PRIVATE);
+		SharedPreferences mPrefs = getSharedPreferences("my_prefs",
+				MODE_PRIVATE);
 		Gson gson = new Gson();
-		String json = mPrefs.getString("MyObject", "");
+		String jsonFormularios = mPrefs.getString("Formularios", "");
 
-		
+		if (jsonFormularios.equals("")) {
+			Toast.makeText(this, "No encontrado", Toast.LENGTH_SHORT).show();
+			formularios = new ArrayList<ArrayList<String>>();
+		} else {
+			formularios = gson.fromJson(jsonFormularios, ArrayList.class);
+		}
+
+		for (int i = 0; i < formularios.size(); i++) {
+			String element = formularios.get(i).get(0);
+			if (!arrayListMenu.contains(element)) {
+				arrayListMenu.add(element);
+			}
+
+		}
+		adapter.notifyDataSetChanged();
+
 	}
 
 }

@@ -18,6 +18,7 @@ public class FormularioFactory {
 	private ArrayList<String> si_no;
 	private ArrayList<String> I_II_III_IV;
 	private ArrayList<String> cemex_holcim_argos;
+	private ArrayList<String> vibrador;
 
 	public final int TIPO_1 = 1;
 	public final int TIPO_2 = 2;
@@ -94,6 +95,9 @@ public class FormularioFactory {
 		cemex_holcim_argos.add("Cemex");
 		cemex_holcim_argos.add("Holcim");
 		cemex_holcim_argos.add("Argos");
+
+		vibrador = new ArrayList<String>();
+		vibrador.add("vibrador");
 
 	}
 
@@ -237,7 +241,7 @@ public class FormularioFactory {
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Medio de Colocación",
 				tolva_tuberia_coche));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
-				"Medio de Compactación", 1));
+				"Medio de Compactación", vibrador));
 		formulario.add(new DatoFormularioFactory(TIPO_1,
 				"Tiempo de mezcla y colocación(MIN) ", NUMERICO));
 		formulario.add(new DatoFormularioFactory(TIPO_4,

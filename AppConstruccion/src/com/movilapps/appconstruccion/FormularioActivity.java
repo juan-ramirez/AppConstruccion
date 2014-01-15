@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -62,6 +61,7 @@ public class FormularioActivity extends FragmentActivity {
 	private static EditText evidenciaEscrita = null;
 	public static boolean isFoto1Default = true;
 	public static boolean isFoto2Default = true;
+	public static boolean esCargar = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,8 @@ public class FormularioActivity extends FragmentActivity {
 		actionBar.setDisplayShowTitleEnabled(true);
 
 		generalIntent = getIntent();
+
+		esCargar = generalIntent.getBooleanExtra("esCargar", false);
 
 		setTitle(generalIntent.getStringExtra("nombreFormulario"));
 
@@ -99,6 +101,7 @@ public class FormularioActivity extends FragmentActivity {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
@@ -106,22 +109,47 @@ public class FormularioActivity extends FragmentActivity {
 			return (true);
 		case R.id.action_save:
 			datosPDF = new ArrayList<String>();
-			Log.e("Vacíos", String.valueOf(recogerDatos()));
+			
+			String nombreFormulario = generalIntent
+					.getStringExtra("nombreFormulario") + " " + now();
+
+			datosPDF.add(nombreFormulario);
+
+			int numeroFormulario = generalIntent.getIntExtra(
+					"numeroFormulario", 1);
+			datosPDF.add("" + numeroFormulario);
+
+			ArrayList<ArrayList<String>> formularios = null;
+			Gson gson = new Gson();
+
+			Log.e("Vacíos", String.valueOf(recogerDatos(true)));
 
 			SharedPreferences mPrefs = getSharedPreferences("my_prefs",
 					MODE_PRIVATE);
-			Editor prefsEditor = mPrefs.edit();
 
-			Gson gson = new Gson();
-			String json = gson.toJson(datosPDF);
+			String jsonFormularios = mPrefs.getString("Formularios", "");
+
+			if (jsonFormularios.equals("")) {
+				formularios = new ArrayList<ArrayList<String>>();
+			} else {
+				formularios = gson.fromJson(jsonFormularios, ArrayList.class);
+			}
+
+			formularios.add(datosPDF);
+
+			Editor prefsEditor = mPrefs.edit();
+			String json = gson.toJson(formularios);
+
 			Log.e("JSON: ", json);
-			prefsEditor.putString("MyObject", json);
+
+			prefsEditor.putString("Formularios", json);
 			Log.e("Commited: ", String.valueOf(prefsEditor.commit()));
+			finish();
 
 			return (true);
 		case R.id.action_email:
 			datosPDF = new ArrayList<String>();
-			if (!recogerDatos()) {
+			if (!recogerDatos(false)) {
 
 				if (evidenciaEscrita == null) {
 					showMessage();
@@ -226,28 +254,7 @@ public class FormularioActivity extends FragmentActivity {
 
 	}
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		if (requestCode == 1) {
-			if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-				Toast.makeText(this, "Mail sent.", Toast.LENGTH_SHORT).show();
-				Log.e("EMAIL", "SENT!");
-
-			} else if (requestCode == 1
-					&& resultCode == Activity.RESULT_CANCELED) {
-				Toast.makeText(this, "Mail canceled.", Toast.LENGTH_SHORT)
-						.show();
-
-			} else {
-				Toast.makeText(this, "Plz try again.", Toast.LENGTH_SHORT)
-						.show();
-
-			}
-
-		}
-	}
-
-	private boolean recogerDatos() {
+	private boolean recogerDatos(boolean isTemporal) {
 
 		for (int i = 0; i < arrayListFormulario.size(); i++) {
 
@@ -261,18 +268,34 @@ public class FormularioActivity extends FragmentActivity {
 
 				String texto = editTextFormularios.getText().toString().trim();
 				if (texto.equals("")) {
-					return true;
+					if (isTemporal) {
+						datosPDF.add("EMPTY");
+					} else {
+						return true;
+					}
+
+				} else {
+					if (isTemporal) {
+						datosPDF.add(texto);
+					} else {
+						datosPDF.add(titulo + " : " + texto);
+					}
 				}
 
-				datosPDF.add(titulo + " : " + texto);
 				break;
 			case 2:
 				TimePicker timePickerFormularios = (TimePicker) elemento
 						.findViewById(R.id.timePickerFormularios);
 
-				datosPDF.add(titulo + " : "
-						+ timePickerFormularios.getCurrentHour() + ":"
-						+ timePickerFormularios.getCurrentMinute());
+				String time = timePickerFormularios.getCurrentHour() + ":"
+						+ timePickerFormularios.getCurrentMinute();
+
+				if (isTemporal) {
+					datosPDF.add(time);
+				} else {
+					datosPDF.add(titulo + " : " + time);
+				}
+
 				break;
 			case 3:
 				CheckBox checkBoxFormularios = (CheckBox) elemento
@@ -282,14 +305,28 @@ public class FormularioActivity extends FragmentActivity {
 						.findViewById(R.id.editTextFormulariosCheckbox);
 
 				if (checkBoxFormularios.isChecked()) {
-					datosPDF.add(titulo + ": No aplica");
+
+					if (isTemporal) {
+						datosPDF.add("No aplica");
+					} else {
+						datosPDF.add(titulo + ": No aplica");
+					}
 				} else {
 					String textoEdit = editTextFormulariosCheckbox.getText()
 							.toString().trim();
 					if (textoEdit.equals("")) {
-						return true;
+						if (isTemporal) {
+							datosPDF.add("EMPTY");
+						} else {
+							return true;
+						}
+					} else {
+						if (isTemporal) {
+							datosPDF.add(textoEdit);
+						} else {
+							datosPDF.add(titulo + " : " + textoEdit);
+						}
 					}
-					datosPDF.add(titulo + " : " + textoEdit);
 				}
 				break;
 			case 4:
@@ -297,8 +334,14 @@ public class FormularioActivity extends FragmentActivity {
 				Spinner spinnerFormularios = (Spinner) elemento
 						.findViewById(R.id.spinnerFormularios);
 
-				datosPDF.add(titulo + " : "
-						+ spinnerFormularios.getSelectedItem().toString());
+				if (isTemporal) {
+					datosPDF.add(spinnerFormularios.getSelectedItem()
+							.toString());
+				} else {
+					datosPDF.add(titulo + " : "
+							+ spinnerFormularios.getSelectedItem().toString());
+				}
+
 				break;
 			case 5:
 				DatePicker datePickerFecha = (DatePicker) elemento
@@ -314,10 +357,15 @@ public class FormularioActivity extends FragmentActivity {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 				String formatedDate = sdf.format(cal.getTime());
 
-				datosPDF.add(titulo + " : " + formatedDate);
+				if (isTemporal) {
+					datosPDF.add(formatedDate);
+				} else {
+					datosPDF.add(titulo + " : " + formatedDate);
+				}
 				break;
 			default:
 				datosPDF.add(titulo);
+
 				break;
 			}
 		}
@@ -411,9 +459,94 @@ public class FormularioActivity extends FragmentActivity {
 						LinearLayout.LayoutParams.WRAP_CONTENT);
 			}
 
+			if (esCargar) {
+				ArrayList<String> form = getActivity().getIntent()
+						.getStringArrayListExtra("formulario");
+				Log.e("FORM", form.get(0));
+				Log.e("FORM", form.get(1));
+				cargarDatos(form);
+			}
+
 			Log.e("ERROR: ", "Reinstanciado");
 
 			return rootView;
+		}
+
+		@SuppressWarnings("unchecked")
+		private void cargarDatos(ArrayList<String> form) {
+			for (int i = 0; i < arrayListFormulario.size(); i++) {
+
+				View elemento = arrayListElementosFormulario.get(i);
+
+				switch (arrayListFormulario.get(i).getTipo()) {
+				case 1:
+					EditText editTextFormularios = (EditText) elemento
+							.findViewById(R.id.editTextFormularios);
+
+					if (!form.get(i + 2).equals("EMPTY")) {
+						editTextFormularios.setText(form.get(i + 2));
+					}
+					break;
+				case 2:
+					TimePicker timePickerFormularios = (TimePicker) elemento
+							.findViewById(R.id.timePickerFormularios);
+
+					String[] time = form.get(i + 2).split(":");
+					timePickerFormularios.setCurrentHour(Integer
+							.parseInt(time[0]));
+					timePickerFormularios.setCurrentMinute(Integer
+							.parseInt(time[1]));
+
+					break;
+				case 3:
+					CheckBox checkBoxFormularios = (CheckBox) elemento
+							.findViewById(R.id.checkBoxFormularios);
+
+					EditText editTextFormulariosCheckbox = (EditText) elemento
+							.findViewById(R.id.editTextFormulariosCheckbox);
+
+					if (form.get(i + 2).equals("No aplica")) {
+						checkBoxFormularios.setChecked(true);
+					} else {
+						checkBoxFormularios.setChecked(false);
+						if (!form.get(i + 2).equals("EMPTY")) {
+							editTextFormulariosCheckbox
+									.setText(form.get(i + 2));
+						}
+					}
+
+					break;
+				case 4:
+
+					Spinner spinnerFormularios = (Spinner) elemento
+							.findViewById(R.id.spinnerFormularios);
+
+					ArrayAdapter<String> myAdap = (ArrayAdapter<String>) spinnerFormularios
+							.getAdapter();
+					int spinnerPosition = myAdap.getPosition(form.get(i + 2));
+
+					// set the default according to value
+					spinnerFormularios.setSelection(spinnerPosition);
+
+					break;
+				case 5:
+					DatePicker datePickerFecha = (DatePicker) elemento
+							.findViewById(R.id.datePickerFecha);
+
+					Log.e("DATE", form.get(i + 2));
+
+					String[] date = form.get(i + 2).split("-");
+
+					int day = Integer.parseInt(date[0]);
+					int month = Integer.parseInt(date[1]);
+					int year = Integer.parseInt(date[2]);
+
+					datePickerFecha.updateDate(year, month, day);
+					break;
+				default:
+					break;
+				}
+			}
 		}
 	}
 
