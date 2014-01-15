@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
 
 				String form = formularios.get(position).get(0);
 				String nombreFormulario = form.substring(0, form.length() - 22);
-				generalIntent.putExtra("nombreFormulario", nombreFormulario);
+				generalIntent.putExtra("nombreFormulario", nombreFormulario);			
 
 				startActivity(generalIntent);
 			}
@@ -172,7 +172,6 @@ public class MainActivity extends Activity {
 		String jsonFormularios = mPrefs.getString("Formularios", "");
 
 		if (jsonFormularios.equals("")) {
-			Toast.makeText(this, "No encontrado", Toast.LENGTH_SHORT).show();
 			formularios = new ArrayList<ArrayList<String>>();
 		} else {
 			formularios = gson.fromJson(jsonFormularios, ArrayList.class);
