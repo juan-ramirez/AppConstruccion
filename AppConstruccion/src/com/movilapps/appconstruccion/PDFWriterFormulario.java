@@ -120,7 +120,7 @@ public class PDFWriterFormulario {
 					Transformation.DEGREES_0_ROTATION);
 		}
 		if (pic2 == null) {
-			Log.e("PIC1", "NULL ---");
+			Log.e("PIC2", "NULL ---");
 		} else {
 			mPDFWriter.newPage();
 			mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,

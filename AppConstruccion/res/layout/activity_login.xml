@@ -19,7 +19,9 @@
             android:layout_width="400dp"
             android:layout_height="60dp"
             android:hint="Usuario"
-            android:singleLine="true" >
+            android:singleLine="true" 
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
         </EditText>
 
         <EditText
@@ -28,7 +30,9 @@
             android:layout_height="60dp"
             android:hint="Contraseña"
             android:inputType="textPassword"
-            android:singleLine="true" />
+            android:singleLine="true" 
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
     </LinearLayout>
 
     <Button
