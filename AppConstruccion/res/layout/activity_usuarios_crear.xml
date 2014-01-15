@@ -17,7 +17,8 @@
             android:id="@+id/editTextUsuariosNombre"
             android:layout_width="400dp"
             android:layout_height="60dp"
-            android:hint="Escriba el nombre de usuario" >
+            android:hint="Escriba el nombre de usuario"
+            android:singleLine="true"  >
 
             <requestFocus />
         </EditText>
