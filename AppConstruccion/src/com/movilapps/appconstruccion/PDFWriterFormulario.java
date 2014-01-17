@@ -22,6 +22,7 @@ import crl.android.pdfwriter.StandardFonts;
 import crl.android.pdfwriter.Transformation;
 
 public class PDFWriterFormulario {
+	final static int MARGIN_LEFT = 75;
 
 	public static void savePDF(ArrayList<String> datos, Bitmap pic1,
 			Bitmap pic2, String fileName, Context context)
@@ -39,12 +40,69 @@ public class PDFWriterFormulario {
 		}
 	}
 
+	public static void savePDF(ArrayList<String> datos, Bitmap pic,
+			String fileName, Context context)
+			throws UnsupportedEncodingException {
+
+		String pdfcontent = generatePDF(datos, pic, context);
+		try {
+			outputToFile(fileName, pdfcontent, "iso-8859-1");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private static String generatePDF(ArrayList<String> datos, Bitmap pic,
+			Context context) {
+		PDFWriter mPDFWriter = new PDFWriter(PaperSize.LETTER_WIDTH,
+				PaperSize.LETTER_HEIGHT);
+
+		AssetManager mngr = context.getAssets();
+		try {
+			// LOGO
+			Bitmap xoiPNG = BitmapFactory.decodeStream(mngr.open("kyjing.png"));
+			mPDFWriter.addImage(MARGIN_LEFT, PaperSize.LETTER_HEIGHT - 160,
+					xoiPNG, Transformation.DEGREES_0_ROTATION);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Fecha
+		mPDFWriter.addText(PaperSize.LETTER_WIDTH - 220,
+				PaperSize.LETTER_HEIGHT - 100, 16, now());
+		mPDFWriter.addText(PaperSize.LETTER_WIDTH - 220,
+				PaperSize.LETTER_HEIGHT - 120, 16, "MEMO EXPRES");
+
+		// CUADRICULA
+
+		mPDFWriter.addLine(60, PaperSize.LETTER_HEIGHT - 170,
+				PaperSize.LETTER_WIDTH - 60, PaperSize.LETTER_HEIGHT - 170);
+
+		mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
+				PaperSize.LETTER_HEIGHT - 120);
+
+		// CUADRICULA
+
+		mPDFWriter.addLine(60, PaperSize.LETTER_HEIGHT - 170,
+				PaperSize.LETTER_WIDTH - 60, PaperSize.LETTER_HEIGHT - 170);
+
+		mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
+				PaperSize.LETTER_HEIGHT - 120);
+
+		mPDFWriter.addLine(60, 530, PaperSize.LETTER_WIDTH - 60, 530);
+
+		mPDFWriter.addText(MARGIN_LEFT, 595, 18, "De: " + datos.get(0));
+		mPDFWriter.addText(MARGIN_LEFT, 570, 18, "Para: " + datos.get(1));
+		mPDFWriter.addText(MARGIN_LEFT, 545, 18, "Asunto: " + datos.get(2));
+
+		return mPDFWriter.asString();
+	}
+
 	private static String generatePDF(ArrayList<String> datos, Bitmap pic1,
 			Bitmap pic2, Context context) throws UnsupportedEncodingException {
 		PDFWriter mPDFWriter = new PDFWriter(PaperSize.LETTER_WIDTH,
 				PaperSize.LETTER_HEIGHT);
-
-		final int MARGIN_LEFT = 75;
 
 		AssetManager mngr = context.getAssets();
 		try {

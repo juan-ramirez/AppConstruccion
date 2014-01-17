@@ -2,7 +2,6 @@ package com.movilapps.appconstruccion;
 
 import java.util.ArrayList;
 
-import android.R.array;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -59,8 +58,8 @@ public class MainActivity extends Activity {
 				generalIntent.putStringArrayListExtra("formulario",
 						formularios.get(position));
 
-				int numeroFormulario = Integer.valueOf(formularios
-						.get(position).get(1));
+				int numeroFormulario = Integer.parseInt(formularios.get(
+						position).get(1));
 				generalIntent.putExtra("numeroFormulario", numeroFormulario);
 
 				String form = formularios.get(position).get(0);
@@ -122,12 +121,14 @@ public class MainActivity extends Activity {
 		spinnerArray.add("VERIFICACIÓN CONDICIONES DE CIMENTACIÓN - FST003");
 		spinnerArray
 				.add("MEZCLA, TRANSPORTE, COLOCACIÓN Y CURADO DE CONCRETOS - FST004");
-		spinnerArray.add("CONSTRUCCIÓN Y RETIRO DE FORMALETAS, OBRA FALSA - FST005");
+		spinnerArray
+				.add("CONSTRUCCIÓN Y RETIRO DE FORMALETAS, OBRA FALSA - FST005");
 		spinnerArray.add("COLOCACIÓN ACERO DE REFUERZO - FST006");
 		spinnerArray.add("ACEPTACIÓN DE ELEMENTOS VACIADOS - FST007");
 		spinnerArray
 				.add("REQUISITOS DE EJECUCIÓN - MUROS Y ELEMENTOS DE MAMPOSTERÍA - FST008");
 		spinnerArray.add("LIBERACIÓN DE ELEMENTOS - FST009");
+		spinnerArray.add("MEMO EXPRES");
 
 		spinnerArrayAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_dropdown_item, spinnerArray);
@@ -137,13 +138,20 @@ public class MainActivity extends Activity {
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
+				Intent generalIntent = null;
 
-				Intent generalIntent = new Intent(getApplicationContext(),
-						FormularioActivity.class);
-				generalIntent.putExtra("numeroFormulario",
-						(input.getSelectedItemPosition() + 1));
-				generalIntent.putExtra("nombreFormulario", input
-						.getSelectedItem().toString());
+				if (input.getSelectedItem().toString().equals("MEMO EXPRES")) {
+					generalIntent = new Intent(getApplicationContext(),
+							MemoExpressActivity.class);
+				} else {
+					generalIntent = new Intent(getApplicationContext(),
+							FormularioActivity.class);
+					generalIntent.putExtra("numeroFormulario",
+							(input.getSelectedItemPosition() + 1));
+					generalIntent.putExtra("nombreFormulario", input
+							.getSelectedItem().toString());
+
+				}
 				startActivity(generalIntent);
 
 			}

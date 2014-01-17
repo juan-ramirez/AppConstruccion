@@ -50,6 +50,12 @@
             android:parentActivityName="com.movilapps.appconstruccion.MainActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="com.movilapps.appconstruccion.MemoExpressActivity"
+            android:label="Proyectos"
+            android:parentActivityName="com.movilapps.appconstruccion.MainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
