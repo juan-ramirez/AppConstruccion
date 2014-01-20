@@ -96,7 +96,37 @@ public class PDFWriterFormulario {
 		mPDFWriter.addText(MARGIN_LEFT, 570, 18, "Para: " + datos.get(1));
 		mPDFWriter.addText(MARGIN_LEFT, 545, 18, "Asunto: " + datos.get(2));
 
-		return mPDFWriter.asString();
+		int top = 500;
+		Log.e("MEMO", datos.get(3));
+		if (datos.get(3).contains("\n")) {
+			String[] lines = datos.get(3).split("\n");
+			for (int i = 0; i < lines.length; i++) {
+				mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18, lines[i]);
+			}
+		} else {
+			mPDFWriter.addText(MARGIN_LEFT, 500, 18, datos.get(3));
+		}
+
+		// Imagenes Evidencia Fotografica
+		if (pic == null) {
+			Log.e("PIC1", "NULL ---");
+		} else {
+			mPDFWriter.newPage();
+			mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
+					PaperSize.LETTER_HEIGHT - 120);
+			mPDFWriter.addText(MARGIN_LEFT, PaperSize.LETTER_HEIGHT - 100, 14,
+					"Anexo Fotografico 1");
+			mPDFWriter.addImage(
+					centrar(PaperSize.LETTER_WIDTH, pic.getWidth()),
+					centrar(PaperSize.LETTER_HEIGHT, pic.getHeight()), pic,
+					Transformation.DEGREES_0_ROTATION);
+		}
+
+		String s = Normalizer.normalize(mPDFWriter.asString(),
+				Normalizer.Form.NFD);
+		s = s.replaceAll("[^\\p{ASCII}]", "");
+
+		return s;
 	}
 
 	private static String generatePDF(ArrayList<String> datos, Bitmap pic1,
