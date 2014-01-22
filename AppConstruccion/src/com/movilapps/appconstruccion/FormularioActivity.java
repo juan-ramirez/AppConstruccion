@@ -1,11 +1,14 @@
 package com.movilapps.appconstruccion;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -13,6 +16,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +29,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -36,6 +41,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -56,6 +62,8 @@ public class FormularioActivity extends FragmentActivity {
 	static ArrayList<DatoFormularioFactory> arrayListFormulario;
 	ArrayList<String> datosPDF;
 
+	private static Uri contentUri;
+	private static Bitmap fotoBitmapFinal;
 	private static ImageView foto1;
 	private static ImageView foto2;
 	private static EditText evidenciaEscrita = null;
@@ -155,7 +163,7 @@ public class FormularioActivity extends FragmentActivity {
 			String nombreFormularioEmail = generalIntent
 					.getStringExtra("nombreFormulario");
 			datosPDF.add(nombreFormularioEmail);
-			
+
 			if (!recogerDatos(false)) {
 
 				if (evidenciaEscrita == null) {
@@ -187,7 +195,7 @@ public class FormularioActivity extends FragmentActivity {
 						if (pic1 == null) {
 							Log.e("PIC1", "NULL");
 						}
-						enviarMail(pic1, pic2);
+						enviarMail(fotoBitmapFinal, pic2);
 
 					}
 				}
@@ -554,7 +562,6 @@ public class FormularioActivity extends FragmentActivity {
 	public static class ExampleFragmentTwo extends Fragment {
 
 		private static final int MAX_IMAGE_DIMENSION = 250;
-		private Bitmap fotoBitmapFinal;
 		private Spinner spinnerObservaciones;
 		public View lastContextMenuButton;
 
@@ -634,8 +641,27 @@ public class FormularioActivity extends FragmentActivity {
 			switch (requestCode) {
 			case 0:// Toma foto
 				if (resultCode == RESULT_OK) {
-					fotoBitmapFinal = (Bitmap) imageReturnedIntent.getExtras()
-							.get("data");
+					// fotoBitmapFinal = (Bitmap)
+					// imageReturnedIntent.getExtras().get("data");
+
+					getActivity().getContentResolver().notifyChange(contentUri,
+							null);
+					ContentResolver cr = getActivity().getContentResolver();
+
+					try {
+						fotoBitmapFinal = android.provider.MediaStore.Images.Media
+								.getBitmap(cr, contentUri);
+					} catch (Exception e) {
+						Toast.makeText(getActivity(), "Failed to load",
+								Toast.LENGTH_SHORT).show();
+						Log.e("ERROR", "Failed to load");
+					}
+					fotoBitmapFinal = Bitmap.createScaledBitmap(
+							fotoBitmapFinal, 400, 400, false);
+
+					Log.e("BITMAP", "SIZE:" + fotoBitmapFinal.getWidth()
+							+ " - " + fotoBitmapFinal.getHeight());
+
 					foto1.setImageBitmap(fotoBitmapFinal);
 					isFoto1Default = false;
 				}
@@ -659,6 +685,7 @@ public class FormularioActivity extends FragmentActivity {
 				if (resultCode == RESULT_OK) {
 					fotoBitmapFinal = (Bitmap) imageReturnedIntent.getExtras()
 							.get("data");
+
 					foto2.setImageBitmap(fotoBitmapFinal);
 					isFoto2Default = false;
 				}
@@ -797,7 +824,21 @@ public class FormularioActivity extends FragmentActivity {
 		private void tomarFoto(View v) {
 			if (v == foto1) {
 				Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				startActivityForResult(takePicture, 0);
+
+				// Create the File where the photo should go
+				File photoFile = null;
+				try {
+					photoFile = createImageFile();
+				} catch (IOException ex) {
+					Log.e("ERROR", "NOT CREATED");
+				}
+				// Continue only if the File was successfully created
+				if (photoFile != null) {
+					contentUri = Uri.fromFile(photoFile);
+					takePicture.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+					startActivityForResult(takePicture, 0);
+				}
+
 			} else if (v == foto2) {
 				Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 				startActivityForResult(takePicture, 2);
@@ -830,6 +871,25 @@ public class FormularioActivity extends FragmentActivity {
 			}
 		}
 
+	}
+
+	static String mCurrentPhotoPath;
+
+	private static File createImageFile() throws IOException {
+		// Create an image file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+				.format(new Date());
+		String imageFileName = "JPEG_" + timeStamp + "_";
+		File storageDir = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		File image = File.createTempFile(imageFileName, /* prefix */
+				".jpg", /* suffix */
+				storageDir /* directory */
+		);
+
+		// Save a file: path for use with ACTION_VIEW intents
+		mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+		return image;
 	}
 
 }

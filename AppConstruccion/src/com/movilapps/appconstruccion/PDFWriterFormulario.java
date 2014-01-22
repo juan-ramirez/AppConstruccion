@@ -137,9 +137,11 @@ public class PDFWriterFormulario {
 		AssetManager mngr = context.getAssets();
 		try {
 			// LOGO
-			Bitmap xoiPNG = BitmapFactory.decodeStream(mngr.open("kyjing.png"));
-			mPDFWriter.addImage(MARGIN_LEFT, PaperSize.LETTER_HEIGHT - 160,
-					xoiPNG, Transformation.DEGREES_0_ROTATION);
+			Bitmap xoiPNG = BitmapFactory.decodeStream(mngr.open("kyjing.jpg"));
+
+			mPDFWriter.addImageKeepRatio(MARGIN_LEFT,
+					PaperSize.LETTER_HEIGHT - 160, 220, 90, xoiPNG,
+					Transformation.DEGREES_0_ROTATION);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -169,6 +171,7 @@ public class PDFWriterFormulario {
 		String[] form = datos.get(0).split(" ");
 		String primero = "";
 		String segundo = "";
+
 		for (int i = 0; i < form.length; i++) {
 			if (i < 6) {
 				primero += form[i] + " ";
@@ -187,18 +190,18 @@ public class PDFWriterFormulario {
 			mPDFWriter.addText(MARGIN_LEFT, 435, 15, datos.get(0));
 		}
 
+		int top = 410;
+
 		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA,
 				"ISO-8859-1");
 
-		int top = 410;
 		mPDFWriter.addText(MARGIN_LEFT, 515, 15, datos.get(1));
 		mPDFWriter.addText(MARGIN_LEFT, 490, 15, datos.get(2));
 		mPDFWriter.addText(MARGIN_LEFT, 465, 15, datos.get(3));
 
 		int j = 0;
-		int limit = datos.size();
 
-		for (int i = 4; i < limit; i++) {
+		for (int i = 4; i < datos.size(); i++) {
 			if (i == 16) {
 				mPDFWriter.newPage();
 				top = PaperSize.LETTER_HEIGHT - 100;
@@ -207,19 +210,17 @@ public class PDFWriterFormulario {
 						PaperSize.LETTER_HEIGHT - 120);
 			}
 			String linea = datos.get(i);
-			if (linea.length() > 50) {
-				String[] lineas = linea.split("(?<=\\G.{50})");
-				lineas[0] += "-";
-				for (int k = 0; k < lineas.length; k++) {
-					mPDFWriter.addText(MARGIN_LEFT, (top - (i - (j + 3)) * 25),
-							14, lineas[k]);
-					i++;
-					limit++;
+			if (linea.length() > 71) {
+				ArrayList<String> lineas = splitLineas(linea);
+				datos.remove(i);
+				for (int k = 0; k < lineas.size(); k++) {
+					String elemento = lineas.get(k);
+					datos.add(i + k, elemento);
 				}
-			} else {
-				mPDFWriter.addText(MARGIN_LEFT, (top - (i - (j + 3)) * 25), 14,
-						datos.get(i));
 			}
+			mPDFWriter.addText(MARGIN_LEFT, (top - (i - (j + 3)) * 25), 14,
+					datos.get(i));
+
 		}
 
 		int pageCount = mPDFWriter.getPageCount();
@@ -238,10 +239,10 @@ public class PDFWriterFormulario {
 					PaperSize.LETTER_HEIGHT - 120);
 			mPDFWriter.addText(MARGIN_LEFT, PaperSize.LETTER_HEIGHT - 100, 14,
 					"Anexo Fotografico 1");
-			mPDFWriter.addImage(
+			mPDFWriter.addImageKeepRatio(
 					centrar(PaperSize.LETTER_WIDTH, pic1.getWidth()),
-					centrar(PaperSize.LETTER_HEIGHT, pic1.getHeight()), pic1,
-					Transformation.DEGREES_0_ROTATION);
+					centrar(PaperSize.LETTER_HEIGHT, pic1.getHeight()), 400,
+					400, pic1, Transformation.DEGREES_0_ROTATION);
 		}
 		if (pic2 == null) {
 			Log.e("PIC2", "NULL ---");
@@ -263,6 +264,17 @@ public class PDFWriterFormulario {
 		s = s.replaceAll("[^\\p{ASCII}]", "");
 		return s;
 
+	}
+
+	private static ArrayList<String> splitLineas(String text) {
+		ArrayList<String> strings = new ArrayList<String>();
+		int index = 0;
+		while (index < text.length()) {
+			strings.add(text.substring(index,
+					Math.min(index + 70, text.length())));
+			index += 70;
+		}
+		return strings;
 	}
 
 	private static int centrar(int tamañoPapel, int tamañoImagen) {
