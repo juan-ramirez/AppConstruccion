@@ -196,8 +196,9 @@ public class PDFWriterFormulario {
 		mPDFWriter.addText(MARGIN_LEFT, 465, 15, datos.get(3));
 
 		int j = 0;
+		int limit = datos.size();
 
-		for (int i = 4; i < datos.size(); i++) {
+		for (int i = 4; i < limit; i++) {
 			if (i == 16) {
 				mPDFWriter.newPage();
 				top = PaperSize.LETTER_HEIGHT - 100;
@@ -205,9 +206,20 @@ public class PDFWriterFormulario {
 				mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
 						PaperSize.LETTER_HEIGHT - 120);
 			}
-			Log.e("TOP", "" + (top - (i - (j + 4)) * 25));
-			mPDFWriter.addText(MARGIN_LEFT, (top - (i - (j + 3)) * 25), 14,
-					datos.get(i));
+			String linea = datos.get(i);
+			if (linea.length() > 50) {
+				String[] lineas = linea.split("(?<=\\G.{50})");
+				lineas[0] += "-";
+				for (int k = 0; k < lineas.length; k++) {
+					mPDFWriter.addText(MARGIN_LEFT, (top - (i - (j + 3)) * 25),
+							14, lineas[k]);
+					i++;
+					limit++;
+				}
+			} else {
+				mPDFWriter.addText(MARGIN_LEFT, (top - (i - (j + 3)) * 25), 14,
+						datos.get(i));
+			}
 		}
 
 		int pageCount = mPDFWriter.getPageCount();
