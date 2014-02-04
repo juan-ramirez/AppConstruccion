@@ -115,8 +115,6 @@ public class EnviarFormulariosActivity extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.action_email:
-			Log.e("<adapter", "" + adapter.getCount());
-			Log.e("<arrayListMenu", "" + arrayListMenu.size());
 			if (arrayListMenu.size() > 0) {
 				ArrayList<ArrayList<String>> enviar = new ArrayList<ArrayList<String>>();
 				Log.e("CHECKED", "" + Arrays.toString(adapter.getChecked()));
@@ -125,7 +123,6 @@ public class EnviarFormulariosActivity extends Activity {
 						enviar.add(datos.get(i));
 					}
 				}
-				Log.e("Enviar", "" + enviar.size());
 				if (enviar.size() == 0) {
 					Toast.makeText(this,
 							"No ha seleccionado ningún formulario",
@@ -156,8 +153,7 @@ public class EnviarFormulariosActivity extends Activity {
 		}
 		enviarPDfemail(fileName);
 		for (int i = 0; i < enviar.size(); i++) {
-			boolean eliminado = formularios.remove(enviar.get(i));
-			Log.e("Eliminado?", "" + eliminado);
+			formularios.remove(enviar.get(i));
 		}
 
 		SharedPreferences mPrefs = getSharedPreferences("my_prefs",

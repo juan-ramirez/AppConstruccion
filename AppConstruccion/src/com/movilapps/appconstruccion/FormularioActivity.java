@@ -159,12 +159,6 @@ public class FormularioActivity extends FragmentActivity {
 			formularios = new ArrayList<ArrayList<String>>();
 		} else {
 			formularios = gson.fromJson(jsonFormularios, ArrayList.class);
-			if (esCargar) {
-				ArrayList<String> elemento = generalIntent
-						.getStringArrayListExtra("formulario");
-				Log.e("ELIMINAR", "" + formularios.remove(elemento));
-			}
-
 		}
 
 		formularios.add(datosPDF);
@@ -239,11 +233,9 @@ public class FormularioActivity extends FragmentActivity {
 				String evidencia2 = "--2";
 				if (!isFoto1Default) {
 					evidencia1 = encodeTobase64(pic1);
-					Log.e("PIC1", "Existe");
 				}
 				if (!isFoto2Default) {
 					evidencia2 = encodeTobase64(pic2);
-					Log.e("PIC2", "Existe");
 				}
 				if (!texto.equals("")) {
 					datosPDF.add("Evidencia escrita: " + texto);
@@ -282,7 +274,6 @@ public class FormularioActivity extends FragmentActivity {
 				+ " " + date + ".pdf";
 		try {
 			if (pic1 == null) {
-				Log.e("PIC1", "NULL -- ");
 			}
 			PDFWriterFormulario.savePDF(datosPDF, pic1, pic2, fileName, this);
 		} catch (UnsupportedEncodingException e) {
@@ -490,6 +481,8 @@ public class FormularioActivity extends FragmentActivity {
 
 			pic1 = null;
 			pic2 = null;
+			isFoto1Default = true;
+			isFoto2Default = true;
 			FormularioFactory mFormularioFactory = new FormularioFactory();
 
 			int numeroFormulario = getActivity().getIntent().getIntExtra(
@@ -497,7 +490,6 @@ public class FormularioActivity extends FragmentActivity {
 
 			int reps = getActivity().getIntent().getIntExtra("reps", 1);
 
-			Log.e("REPS", "" + reps);
 			arrayListFormulario = mFormularioFactory.getFormulario(
 					numeroFormulario, reps);
 
@@ -606,9 +598,6 @@ public class FormularioActivity extends FragmentActivity {
 			String img1 = form.get(form.size() - 2);
 			String img2 = form.get(form.size() - 1);
 			String evidenciaEscritaForm = form.get(form.size() - 3);
-			Log.e("Evidencia 1", img1);
-			Log.e("Evidencia 2", img2);
-			Log.e("Evidencia 2", evidenciaEscritaForm);
 			if (!img1.equals("--1")) {
 				fotoBitmapFinal = decodeBase64(img1);
 				foto1.setImageBitmap(fotoBitmapFinal);
@@ -621,7 +610,6 @@ public class FormularioActivity extends FragmentActivity {
 			}
 			if (!evidenciaEscritaForm.equals("EMPTY")) {
 				evidenciaEscrita.setText(evidenciaEscritaForm);
-				Log.e("Evidencia 2", evidenciaEscritaForm);
 			}
 		}
 	}
@@ -721,11 +709,12 @@ public class FormularioActivity extends FragmentActivity {
 						Toast.makeText(getActivity(), "Failed to load",
 								Toast.LENGTH_SHORT).show();
 					}
+					pic1 = redimensionarImagen(fotoBitmapFinal);
 					fotoBitmapFinal = Bitmap.createScaledBitmap(
 							fotoBitmapFinal, 400, 400, false);
 
 					foto1.setImageBitmap(fotoBitmapFinal);
-					pic1 = fotoBitmapFinal;
+
 					isFoto1Default = false;
 				}
 
@@ -748,11 +737,12 @@ public class FormularioActivity extends FragmentActivity {
 					String picturePath = cursor.getString(columnIndex);
 					cursor.close();
 					fotoBitmapFinal = BitmapFactory.decodeFile(picturePath);
+					pic1 = redimensionarImagen(fotoBitmapFinal);
 					fotoBitmapFinal = Bitmap.createScaledBitmap(
 							fotoBitmapFinal, 400, 400, false);
 
 					foto1.setImageBitmap(fotoBitmapFinal);
-					pic1 = fotoBitmapFinal;
+
 					isFoto1Default = false;
 				}
 				break;
@@ -769,11 +759,11 @@ public class FormularioActivity extends FragmentActivity {
 						Toast.makeText(getActivity(), "Failed to load",
 								Toast.LENGTH_SHORT).show();
 					}
+					pic2 = redimensionarImagen(fotoBitmapFinal);
 					fotoBitmapFinal = Bitmap.createScaledBitmap(
 							fotoBitmapFinal, 400, 400, false);
 
 					foto2.setImageBitmap(fotoBitmapFinal);
-					pic2 = fotoBitmapFinal;
 					isFoto2Default = false;
 				}
 
@@ -790,16 +780,39 @@ public class FormularioActivity extends FragmentActivity {
 					String picturePath = cursor.getString(columnIndex);
 					cursor.close();
 					fotoBitmapFinal = BitmapFactory.decodeFile(picturePath);
+
+					pic2 = redimensionarImagen(fotoBitmapFinal);
 					fotoBitmapFinal = Bitmap.createScaledBitmap(
 							fotoBitmapFinal, 400, 400, false);
 
 					foto2.setImageBitmap(fotoBitmapFinal);
-					pic2 = fotoBitmapFinal;
 					isFoto2Default = false;
 
 				}
 				break;
 			}
+		}
+
+		private Bitmap redimensionarImagen(Bitmap fotoBitmapFinal) {
+
+			Bitmap result = null;
+			int height = fotoBitmapFinal.getHeight();
+			int width = fotoBitmapFinal.getWidth();
+			if (height > width) {
+				int widthFinal = (int) Math.floor((width * 400) / height);
+				result = Bitmap.createScaledBitmap(fotoBitmapFinal, widthFinal,
+						400, false);
+			} else if (width > height) {
+				int heightFinal = (int) Math.floor((height * 400) / width);
+				result = Bitmap.createScaledBitmap(fotoBitmapFinal, 400,
+						heightFinal, false);
+				Log.e("heightFinal", "" + heightFinal);
+			} else {
+				result = Bitmap.createScaledBitmap(fotoBitmapFinal, 400, 400,
+						false);
+			}
+
+			return result;
 		}
 
 		public static int getOrientation(Context context, Uri photoUri) {

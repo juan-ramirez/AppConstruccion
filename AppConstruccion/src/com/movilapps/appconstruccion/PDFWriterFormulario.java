@@ -48,7 +48,6 @@ public class PDFWriterFormulario {
 			throws UnsupportedEncodingException {
 		mPDFWriter = new PDFWriter(PaperSize.LETTER_WIDTH,
 				PaperSize.LETTER_HEIGHT);
-		Log.e("Formularios", "" + datos.size());
 		for (int i = 0; i < datos.size(); i++) {
 			Bitmap pic1 = null;
 			Bitmap pic2 = null;
@@ -68,12 +67,13 @@ public class PDFWriterFormulario {
 			generatePDF(formulario, pic1, pic2, context);
 		}
 
-		// String s = mPDFWriter.asString();
-		String s = Normalizer.normalize(mPDFWriter.asString(),
-				Normalizer.Form.NFD);
-		s = s.replaceAll("[^\\p{ASCII}]", "");
+		String s = mPDFWriter.asString();
+		/*
+		 * String s = Normalizer.normalize(mPDFWriter.asString(),
+		 * Normalizer.Form.NFD); s = s.replaceAll("[^\\p{ASCII}]", "");
+		 */
 		try {
-			outputToFile(fileName, s, "iso-8859-1");
+			outputToFile(fileName, s, "ISO-8859-1");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -111,12 +111,12 @@ public class PDFWriterFormulario {
 		mPDFWriter.addLine(60, 530, PaperSize.LETTER_WIDTH - 60, 530);
 		mPDFWriter.addLine(60, 455, PaperSize.LETTER_WIDTH - 60, 455);
 
+		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA_BOLD,
+				StandardFonts.WIN_ANSI_ENCODING);
+
 		mPDFWriter.addText(MARGIN_LEFT, 595, 18, "De: Interventoría");
 		mPDFWriter.addText(MARGIN_LEFT, 570, 18, "Para: Obra");
 		mPDFWriter.addText(MARGIN_LEFT, 545, 18, "Asunto: Observaciones obra");
-
-		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA_BOLD,
-				"ISO-8859-1");
 
 		String[] form = datos.get(0).split(" ");
 		String primero = "";
@@ -143,8 +143,7 @@ public class PDFWriterFormulario {
 		int top = 410;
 
 		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA,
-				"ISO-8859-1");
-
+				StandardFonts.WIN_ANSI_ENCODING);
 		mPDFWriter.addText(MARGIN_LEFT, 515, 15, datos.get(3));
 		mPDFWriter.addText(MARGIN_LEFT, 490, 15, datos.get(4));
 		mPDFWriter.addText(MARGIN_LEFT, 465, 15, datos.get(5));
@@ -183,6 +182,8 @@ public class PDFWriterFormulario {
 		if (datos.get(2).equals("9")) {
 			mPDFWriter.addLine(70, 120, 350, 120);
 		}
+		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA,
+				StandardFonts.WIN_ANSI_ENCODING);
 
 		boolean hasEvidenciaEscrita = false;
 		int sup = PaperSize.LETTER_HEIGHT - 100;
@@ -193,6 +194,9 @@ public class PDFWriterFormulario {
 			String evidencia = datos.get(datos.size() - 3);
 			if (!evidencia.equals("EMPTY")) {
 				mPDFWriter.newPage();
+				mPDFWriter.setFont(StandardFonts.SUBTYPE,
+						StandardFonts.HELVETICA,
+						StandardFonts.WIN_ANSI_ENCODING);
 				if (evidencia.contains("\n")) {
 					String[] lines = datos.get(datos.size() - 3).split("\n");
 					for (int i = 0; i < 3; i++) {
@@ -205,16 +209,19 @@ public class PDFWriterFormulario {
 				hasEvidenciaEscrita = true;
 			} else {
 				mPDFWriter.newPage();
+				mPDFWriter.setFont(StandardFonts.SUBTYPE,
+						StandardFonts.HELVETICA,
+						StandardFonts.WIN_ANSI_ENCODING);
 			}
 
 			mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
 					PaperSize.LETTER_HEIGHT - 120);
 			mPDFWriter
-					.addText(MARGIN_LEFT, sup - 80, 14, "Anexo Fotografico 1");
-			mPDFWriter.addImageKeepRatio(
+					.addText(MARGIN_LEFT, sup - 80, 14, "Anexo Fotográfico 1");
+			mPDFWriter.addImage(
 					centrar(PaperSize.LETTER_WIDTH, pic1.getWidth()),
-					centrar(PaperSize.LETTER_HEIGHT, pic1.getHeight()), 400,
-					400, pic1, Transformation.DEGREES_0_ROTATION);
+					centrar(PaperSize.LETTER_HEIGHT, pic1.getHeight()), pic1,
+					Transformation.DEGREES_0_ROTATION);
 		}
 		if (pic2 == null) {
 			Log.e("PIC2", "NULL ---");
@@ -223,6 +230,9 @@ public class PDFWriterFormulario {
 				String evidencia = datos.get(datos.size() - 3);
 				if (!evidencia.equals("EMPTY")) {
 					mPDFWriter.newPage();
+					mPDFWriter.setFont(StandardFonts.SUBTYPE,
+							StandardFonts.HELVETICA,
+							StandardFonts.WIN_ANSI_ENCODING);
 					if (evidencia.contains("\n")) {
 						String[] lines = datos.get(datos.size() - 3)
 								.split("\n");
@@ -237,15 +247,23 @@ public class PDFWriterFormulario {
 					hasEvidenciaEscrita = true;
 				} else {
 					mPDFWriter.newPage();
+					mPDFWriter.setFont(StandardFonts.SUBTYPE,
+							StandardFonts.HELVETICA,
+							StandardFonts.WIN_ANSI_ENCODING);
 				}
 			} else {
 				mPDFWriter.newPage();
+				mPDFWriter.setFont(StandardFonts.SUBTYPE,
+						StandardFonts.HELVETICA,
+						StandardFonts.WIN_ANSI_ENCODING);
 			}
 
 			mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
 					PaperSize.LETTER_HEIGHT - 120);
+			mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA,
+					StandardFonts.WIN_ANSI_ENCODING);
 			mPDFWriter
-					.addText(MARGIN_LEFT, sup - 80, 14, "Anexo Fotografico 2");
+					.addText(MARGIN_LEFT, sup - 80, 14, "Anexo Fotográfico 2");
 			mPDFWriter.addImage(
 					centrar(PaperSize.LETTER_WIDTH, pic2.getWidth()),
 					centrar(PaperSize.LETTER_HEIGHT, pic2.getHeight()), pic2,
@@ -256,6 +274,9 @@ public class PDFWriterFormulario {
 			String evidencia = datos.get(datos.size() - 3);
 			if (!evidencia.equals("EMPTY")) {
 				mPDFWriter.newPage();
+				mPDFWriter.setFont(StandardFonts.SUBTYPE,
+						StandardFonts.HELVETICA,
+						StandardFonts.WIN_ANSI_ENCODING);
 				mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
 						PaperSize.LETTER_HEIGHT - 120);
 				if (evidencia.contains("\n")) {
@@ -377,18 +398,23 @@ public class PDFWriterFormulario {
 
 		mPDFWriter.addLine(60, 530, PaperSize.LETTER_WIDTH - 60, 530);
 
-		mPDFWriter.addText(MARGIN_LEFT, 595, 18, "De: " + datos.get(0));
-		mPDFWriter.addText(MARGIN_LEFT, 570, 18, "Para: " + datos.get(1));
-		mPDFWriter.addText(MARGIN_LEFT, 545, 18, "Asunto: " + datos.get(2));
+		mPDFWriter.addText(MARGIN_LEFT, 595, 18, "De: " + datos.get(0),
+				StandardFonts.WIN_ANSI_ENCODING);
+		mPDFWriter.addText(MARGIN_LEFT, 570, 18, "Para: " + datos.get(1),
+				StandardFonts.WIN_ANSI_ENCODING);
+		mPDFWriter.addText(MARGIN_LEFT, 545, 18, "Asunto: " + datos.get(2),
+				StandardFonts.WIN_ANSI_ENCODING);
 
 		int top = 500;
 		if (datos.get(3).contains("\n")) {
 			String[] lines = datos.get(3).split("\n");
 			for (int i = 0; i < lines.length; i++) {
-				mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18, lines[i]);
+				mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18, lines[i],
+						StandardFonts.WIN_ANSI_ENCODING);
 			}
 		} else {
-			mPDFWriter.addText(MARGIN_LEFT, 500, 18, datos.get(3));
+			mPDFWriter.addText(MARGIN_LEFT, 500, 18, datos.get(3),
+					StandardFonts.WIN_ANSI_ENCODING);
 		}
 
 		// Imagenes Evidencia Fotografica
