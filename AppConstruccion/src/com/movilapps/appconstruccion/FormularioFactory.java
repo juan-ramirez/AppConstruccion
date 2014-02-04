@@ -101,7 +101,7 @@ public class FormularioFactory {
 
 	}
 
-	public ArrayList<DatoFormularioFactory> getFormulario(int tipo) {
+	public ArrayList<DatoFormularioFactory> getFormulario(int tipo, int reps) {
 		formulario = new ArrayList<DatoFormularioFactory>();
 		formulario.add(new DatoFormularioFactory(TIPO_1, "Proyecto",
 				ALFANUMERICO));
@@ -119,7 +119,7 @@ public class FormularioFactory {
 		case 5:
 			return getf5();
 		case 6:
-			return getf6();
+			return getf6(reps);
 		case 7:
 			return getf7();
 		case 8:
@@ -198,8 +198,8 @@ public class FormularioFactory {
 				.add(new DatoFormularioFactory(TIPO_1, "Profundidad", DECIMAL));
 		formulario.add(new DatoFormularioFactory(TIPO_1, "Ancho", DECIMAL));
 		formulario.add(new DatoFormularioFactory(TITULO, "Sección Modificada"));
-		formulario
-				.add(new DatoFormularioFactory(TIPO_1, "Sobre excavación", DECIMAL));
+		formulario.add(new DatoFormularioFactory(TIPO_1, "Sobre excavación",
+				DECIMAL));
 		formulario
 				.add(new DatoFormularioFactory(TIPO_1, "Sobre ancho", DECIMAL));
 		formulario.add(new DatoFormularioFactory(TITULO, "Estrato portante"));
@@ -247,9 +247,11 @@ public class FormularioFactory {
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Homogeneidad de morteros y concretos en estado fresco",
 				cumple_nocumple));
-		formulario.add(new DatoFormularioFactory(TIPO_4,
-				"Definición de juntas en construcción y preparación de las superficies",
-				cumple_nocumple));
+		formulario
+				.add(new DatoFormularioFactory(
+						TIPO_4,
+						"Definición de juntas en construcción y preparación de las superficies",
+						cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Provisiones para el vaciado según el clima", aplica_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
@@ -290,7 +292,7 @@ public class FormularioFactory {
 		return formulario;
 	}
 
-	private ArrayList<DatoFormularioFactory> getf6() {
+	private ArrayList<DatoFormularioFactory> getf6(int reps) {
 
 		formulario.add(new DatoFormularioFactory(TIPO_5, "Fecha"));
 		formulario.add(new DatoFormularioFactory(TIPO_1, "Elemento",
@@ -302,23 +304,31 @@ public class FormularioFactory {
 				.add(new DatoFormularioFactory(TIPO_1, "Plano", ALFANUMERICO));
 		formulario.add(new DatoFormularioFactory(TIPO_1, "Ejes", ALFANUMERICO));
 
-		formulario.add(new DatoFormularioFactory(TITULO, "Grado (Mpa)"));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "Barras", NUMERICO));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "Mallas", NUMERICO));
+		for (int i = 0; i < reps; i++) {
+			formulario.add(new DatoFormularioFactory(TITULO, "Grado (Mpa)"));
+			formulario
+					.add(new DatoFormularioFactory(TIPO_1, "Barras", NUMERICO));
+			formulario
+					.add(new DatoFormularioFactory(TIPO_1, "Mallas", NUMERICO));
 
-		formulario.add(new DatoFormularioFactory(TITULO,
-				"Diametros y/o especificaciones"));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "Barras", NUMERICO));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "Mallas", NUMERICO));
+			formulario.add(new DatoFormularioFactory(TITULO,
+					"Diametros y/o especificaciones"));
+			formulario
+					.add(new DatoFormularioFactory(TIPO_1, "Barras", NUMERICO));
+			formulario
+					.add(new DatoFormularioFactory(TIPO_1, "Mallas", NUMERICO));
 
-		formulario.add(new DatoFormularioFactory(TIPO_1, "No de Barras",
-				NUMERICO));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "Longitud", DECIMAL));
+			formulario.add(new DatoFormularioFactory(TIPO_1, "N° de Barras",
+					NUMERICO));
+			formulario.add(new DatoFormularioFactory(TIPO_1, "Longitud",
+					DECIMAL));
 
-		formulario.add(new DatoFormularioFactory(TITULO, "Ganchos"));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "Cantidad", NUMERICO));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "N° de Barras",
-				NUMERICO));
+			formulario.add(new DatoFormularioFactory(TITULO, "Ganchos"));
+			formulario.add(new DatoFormularioFactory(TIPO_1, "Cantidad",
+					NUMERICO));
+			formulario.add(new DatoFormularioFactory(TIPO_1, "N° de Barras",
+					NUMERICO));
+		}
 
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Empalmes (Traslapos conexiones)", cumple_nocumple));
@@ -327,10 +337,10 @@ public class FormularioFactory {
 		formulario
 				.add(new DatoFormularioFactory(
 						TIPO_4,
-						"Ubicación de refuerzo para ancleje de muros u otros elmentos estructurales",
+						"Ubicación de refuerzo para anclaje de muros u otros elementos estructurales",
 						cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
-				"Limpieza del Refuerzo y de la zona de vaciado",
+				"Limpieza del refuerzo y de la zona de vaciado",
 				cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Tolerancia de colocación del refuerzo", cumple_nocumple));

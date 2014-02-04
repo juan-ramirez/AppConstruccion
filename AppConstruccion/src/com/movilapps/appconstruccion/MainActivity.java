@@ -8,14 +8,18 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,8 +30,13 @@ public class MainActivity extends Activity {
 
 	private ArrayList<String> arrayListMenu;
 	private ListView listViewMenu;
-	MenuPpalAdapter adapter;
+	private FormularioSimpleAdapter adapter;
 	private ArrayList<ArrayList<String>> formularios = null;
+	private Spinner spinnerFormularios;
+	private ArrayList<String> spinnerArray;
+	private int mCurrentPosition;
+	private ArrayList<String> mCurrentForm;
+	private static String m_Text = "1";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +44,18 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main_proyectos_formularios);
 
 		arrayListMenu = new ArrayList<String>();
+
 		ActionBar actionBar = getActionBar();
 
 		setTitle("Formularios");
 
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		adapter = new MenuPpalAdapter(this, arrayListMenu, "Formularios");
+		inicializarObjetos();
+	}
+
+	private void inicializarObjetos() {
+		adapter = new FormularioSimpleAdapter(this, arrayListMenu);
 
 		listViewMenu = (ListView) findViewById(R.id.listViewProyectos_Formularios);
 
@@ -52,24 +66,145 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent generalIntent = new Intent(getApplicationContext(),
-						FormularioActivity.class);
-				generalIntent.putExtra("esCargar", true);
-				generalIntent.putStringArrayListExtra("formulario",
-						formularios.get(position));
+				Intent generalIntent;
 
-				int numeroFormulario = Integer.parseInt(formularios.get(
-						position).get(1));
-				generalIntent.putExtra("numeroFormulario", numeroFormulario);
+				if (mCurrentPosition == spinnerArray.size() - 1) {
+					mCurrentForm = new ArrayList<String>();
+					generalIntent = new Intent(getApplicationContext(),
+							FormularioActivity.class);
+					for (int i = 0; i < formularios.size(); i++) {
+						ArrayList<String> elemento = formularios.get(i);
+						String item = adapter.getItem(position);
+						String dato = elemento.get(0) + " " + elemento.get(1);
+						if (item.equals(dato)) {
+							mCurrentForm = elemento;
+						}
+					}
 
-				String form = formularios.get(position).get(0);
-				String nombreFormulario = form.substring(0, form.length() - 22);
-				generalIntent.putExtra("nombreFormulario", nombreFormulario);
+					generalIntent.putStringArrayListExtra("formulario",
+							mCurrentForm);
+					generalIntent.putExtra("esCargar", true);
 
-				startActivity(generalIntent);
+					formularios.remove(mCurrentForm);
+
+					generalIntent.putExtra("numeroFormulario",
+							(Integer.parseInt(mCurrentForm.get(2))));
+					generalIntent.putExtra("nombreFormulario",
+							mCurrentForm.get(0));
+
+					SharedPreferences mPrefs = getSharedPreferences("my_prefs",
+							MODE_PRIVATE);
+					Gson gson = new Gson();
+					Editor prefsEditor = mPrefs.edit();
+					String json = gson.toJson(formularios);
+
+					// Log.e("JSON: ", json);
+
+					prefsEditor.putString("Formularios", json);
+					Log.e("Commited: ", String.valueOf(prefsEditor.commit()));
+
+					startActivity(generalIntent);
+				} else {
+					generalIntent = new Intent(getApplicationContext(),
+							EnviarFormulariosActivity.class);
+					generalIntent.putExtra("date", arrayListMenu.get(position));
+
+					String code = spinnerArray.get(mCurrentPosition);
+					code = code.substring(code.length() - 7, code.length());
+					generalIntent.putExtra("code", code);
+					Log.e("CODE", code);
+
+					String nombreFormulario = spinnerArray.get(position);
+					generalIntent
+							.putExtra("nombreFormulario", nombreFormulario);
+
+					startActivity(generalIntent);
+				}
 			}
 		});
 
+		spinnerFormularios = (Spinner) findViewById(R.id.spinnerFormularios);
+
+		ArrayAdapter<String> spinnerArrayAdapter;
+		spinnerArray = new ArrayList<String>();
+
+		spinnerArray.add("EMPAQUE Y ROTULADO DE CEMENTO - FST001");
+		spinnerArray.add("EVALUACIÓN CONCRETO - FST002");
+		spinnerArray.add("VERIFICACIÓN CONDICIONES DE CIMENTACIÓN - FST003");
+		spinnerArray
+				.add("MEZCLA, TRANSPORTE, COLOCACIÓN Y CURADO DE CONCRETOS - FST004");
+		spinnerArray
+				.add("CONSTRUCCIÓN Y RETIRO DE FORMALETAS, OBRA FALSA - FST005");
+		spinnerArray.add("COLOCACIÓN ACERO DE REFUERZO - FST006");
+		spinnerArray.add("ACEPTACIÓN DE ELEMENTOS VACIADOS - FST007");
+		spinnerArray
+				.add("REQUISITOS DE EJECUCIÓN - MUROS Y ELEMENTOS DE MAMPOSTERÍA - FST008");
+		spinnerArray.add("LIBERACIÓN DE ELEMENTOS - FST009");
+		spinnerArray.add("INCOMPLETOS");
+
+		spinnerArrayAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_dropdown_item, spinnerArray);
+		spinnerFormularios.setAdapter(spinnerArrayAdapter);
+		spinnerFormularios
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						mCurrentPosition = arg2;
+						refrescarDatos();
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public void refrescarDatos() {
+		arrayListMenu.clear();
+
+		SharedPreferences mPrefs = getSharedPreferences("my_prefs",
+				MODE_PRIVATE);
+		Gson gson = new Gson();
+		String jsonFormularios = mPrefs.getString("Formularios", "");
+
+		if (jsonFormularios.equals("")) {
+			formularios = new ArrayList<ArrayList<String>>();
+		} else {
+			formularios = gson.fromJson(jsonFormularios, ArrayList.class);
+		}
+
+		for (int i = 0; i < formularios.size(); i++) {
+			ArrayList<String> formulario = formularios.get(i);
+			String incompleto = formulario.get(formulario.size() - 4);
+			String element = formulario.get(0);
+			String opcion = spinnerArray.get(mCurrentPosition);
+			if (element.equals(opcion)) {
+				if (!incompleto.equals("Incompleto")) {
+					String now = formulario.get(1);
+					String date = now.substring(0, 10);
+					if (!arrayListMenu.contains(date)) {
+						// arrayListMenu.add(now);
+						arrayListMenu.add(date);
+					}
+				}
+			} else if (opcion.equals("INCOMPLETOS")) {
+				if (incompleto.equals("Incompleto")) {
+					String now = formulario.get(1);
+					if (!arrayListMenu.contains(element + " " + now)) {
+						// arrayListMenu.add(now);
+						arrayListMenu.add(element + " " + now);
+					}
+				}
+			}
+
+		}
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -138,7 +273,6 @@ public class MainActivity extends Activity {
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				Intent generalIntent = null;
 
 				if (input.getSelectedItem().toString().equals("MEMO EXPRES")) {
 					generalIntent = new Intent(getApplicationContext(),
@@ -152,8 +286,45 @@ public class MainActivity extends Activity {
 							.getSelectedItem().toString());
 
 				}
-				startActivity(generalIntent);
+				if ((input.getSelectedItemPosition() + 1) == 6) {
+					showMessageCantidad();
+				} else {
+					startActivity(generalIntent);
+				}
 
+			}
+		});
+		alert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+
+					}
+				});
+		alert.show();
+	}
+
+	Intent generalIntent;
+
+	private void showMessageCantidad() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Cantidad");
+		alert.setMessage("Por favor ingrese el número de barras que desea");
+
+		final EditText input = new EditText(this);
+		input.setInputType(InputType.TYPE_CLASS_NUMBER);
+		alert.setView(input);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				m_Text = input.getText().toString();
+				int reps = 1;
+				try {
+					reps = Integer.parseInt(m_Text);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				generalIntent.putExtra("reps", reps);
+				startActivity(generalIntent);
 			}
 		});
 		alert.setNegativeButton("Cancel",
@@ -170,33 +341,11 @@ public class MainActivity extends Activity {
 				.show();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		Log.e("RESUMED", "Resumed!!!!");
-		arrayListMenu.clear();
-
-		SharedPreferences mPrefs = getSharedPreferences("my_prefs",
-				MODE_PRIVATE);
-		Gson gson = new Gson();
-		String jsonFormularios = mPrefs.getString("Formularios", "");
-
-		if (jsonFormularios.equals("")) {
-			formularios = new ArrayList<ArrayList<String>>();
-		} else {
-			formularios = gson.fromJson(jsonFormularios, ArrayList.class);
-		}
-
-		for (int i = 0; i < formularios.size(); i++) {
-			String element = formularios.get(i).get(0);
-			if (!arrayListMenu.contains(element)) {
-				arrayListMenu.add(element);
-			}
-
-		}
-		adapter.notifyDataSetChanged();
+		refrescarDatos();
 
 	}
 

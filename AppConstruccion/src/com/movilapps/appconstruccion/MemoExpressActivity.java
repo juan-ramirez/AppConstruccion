@@ -1,13 +1,16 @@
 package com.movilapps.appconstruccion;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +19,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -46,6 +50,7 @@ public class MemoExpressActivity extends Activity {
 	private String campoContenido;
 
 	private ArrayList<String> datos;
+	private Uri contentUri;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +98,7 @@ public class MemoExpressActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_formulario, menu);
+		getMenuInflater().inflate(R.menu.menu_memoexpres, menu);
 
 		return true;
 	}
@@ -165,10 +170,27 @@ public class MemoExpressActivity extends Activity {
 		switch (requestCode) {
 		case 0:// Toma foto
 			if (resultCode == RESULT_OK) {
-				fotoBitmapFinal = (Bitmap) imageReturnedIntent.getExtras().get(
-						"data");
+
+				getContentResolver().notifyChange(contentUri, null);
+				ContentResolver cr = getContentResolver();
+
+				try {
+					fotoBitmapFinal = android.provider.MediaStore.Images.Media
+							.getBitmap(cr, contentUri);
+				} catch (Exception e) {
+					Toast.makeText(this, "Failed to load",
+							Toast.LENGTH_SHORT).show();
+					Log.e("ERROR", "Failed to load");
+				}
+				fotoBitmapFinal = Bitmap.createScaledBitmap(fotoBitmapFinal,
+						400, 400, false);
+
+				Log.e("BITMAP", "SIZE:" + fotoBitmapFinal.getWidth() + " - "
+						+ fotoBitmapFinal.getHeight());
+
 				imageViewAdjunto.setImageBitmap(fotoBitmapFinal);
 				isAdjuntoDefault = false;
+
 			}
 
 			break;
@@ -222,7 +244,20 @@ public class MemoExpressActivity extends Activity {
 
 	private void tomarFoto(View v) {
 		Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		startActivityForResult(takePicture, 0);
+
+		// Create the File where the photo should go
+		File photoFile = null;
+		try {
+			photoFile = createImageFile();
+		} catch (IOException ex) {
+			Log.e("ERROR", "NOT CREATED");
+		}
+		// Continue only if the File was successfully created
+		if (photoFile != null) {
+			contentUri = Uri.fromFile(photoFile);
+			takePicture.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+			startActivityForResult(takePicture, 0);
+		}
 
 	}
 
@@ -302,6 +337,25 @@ public class MemoExpressActivity extends Activity {
 		}
 
 		return srcBitmap;
+	}
+
+	private String mCurrentPhotoPath;
+
+	private File createImageFile() throws IOException {
+		// Create an image file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+				.format(new Date());
+		String imageFileName = "JPEG_" + timeStamp + "_";
+		File storageDir = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		File image = File.createTempFile(imageFileName, /* prefix */
+				".jpg", /* suffix */
+				storageDir /* directory */
+		);
+
+		// Save a file: path for use with ACTION_VIEW intents
+		mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+		return image;
 	}
 
 }

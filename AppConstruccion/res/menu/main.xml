@@ -5,16 +5,15 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="Administrar Usuarios"/>
-    
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="Cerrar Aplicación"/>
-    
-    <item android:id="@+id/action_new"
-          android:icon="@drawable/ic_action_new"
-          android:title="@string/app_name"
-          android:showAsAction="ifRoom"  />
+    <item
+        android:id="@+id/action_new"
+        android:icon="@drawable/ic_action_new"
+        android:showAsAction="ifRoom"
+        android:title="@string/app_name"/>
 
 </menu>

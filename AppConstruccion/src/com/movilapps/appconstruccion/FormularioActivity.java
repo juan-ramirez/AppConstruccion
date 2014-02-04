@@ -1,7 +1,7 @@
 package com.movilapps.appconstruccion;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -26,12 +26,12 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -41,7 +41,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -70,6 +69,8 @@ public class FormularioActivity extends FragmentActivity {
 	public static boolean isFoto1Default = true;
 	public static boolean isFoto2Default = true;
 	public static boolean esCargar = false;
+	public static Bitmap pic1 = null;
+	public static Bitmap pic2 = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,119 +110,88 @@ public class FormularioActivity extends FragmentActivity {
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			finish();
 			return (true);
 		case R.id.action_save:
+			// Recoger Encabezado
 			datosPDF = new ArrayList<String>();
-
 			String nombreFormulario = generalIntent
-					.getStringExtra("nombreFormulario") + " " + now();
+					.getStringExtra("nombreFormulario");
 
 			datosPDF.add(nombreFormulario);
+			datosPDF.add(now());
 
 			int numeroFormulario = generalIntent.getIntExtra(
 					"numeroFormulario", 1);
 			datosPDF.add("" + numeroFormulario);
 
-			ArrayList<ArrayList<String>> formularios = null;
-			Gson gson = new Gson();
+			// Recoger datos
 
-			recogerDatos(true);
-
-			SharedPreferences mPrefs = getSharedPreferences("my_prefs",
-					MODE_PRIVATE);
-
-			String jsonFormularios = mPrefs.getString("Formularios", "");
-
-			if (jsonFormularios.equals("")) {
-				formularios = new ArrayList<ArrayList<String>>();
+			if (recogerDatos(false)) {
+				showMessageIncompleto();
 			} else {
-				formularios = gson.fromJson(jsonFormularios, ArrayList.class);
-				ArrayList<String> elemento = generalIntent
-						.getStringArrayListExtra("formulario");
-				Log.e("ELIMINAR", "" + formularios.remove(elemento));
+				datosPDF.add("Completo");
+				obtenerEvidencia();
 			}
 
-			formularios.add(datosPDF);
-
-			Editor prefsEditor = mPrefs.edit();
-			String json = gson.toJson(formularios);
-
-			Log.e("JSON: ", json);
-
-			prefsEditor.putString("Formularios", json);
-			Log.e("Commited: ", String.valueOf(prefsEditor.commit()));
-			finish();
-
-			return (true);
-		case R.id.action_email:
-			datosPDF = new ArrayList<String>();
-			String nombreFormularioEmail = generalIntent
-					.getStringExtra("nombreFormulario");
-			datosPDF.add(nombreFormularioEmail);
-
-			if (!recogerDatos(false)) {
-
-				if (evidenciaEscrita == null) {
-					showMessage();
-				} else {
-					String texto = evidenciaEscrita.getText().toString().trim();
-					if (texto.equals("") && (isFoto1Default && isFoto2Default)) {
-						showMessage();
-					} else {
-						Bitmap pic1 = null;
-						Bitmap pic2 = null;
-						BitmapDrawable bitmapDrawable;
-
-						if (!isFoto1Default) {
-							bitmapDrawable = ((BitmapDrawable) foto1
-									.getDrawable());
-							pic1 = bitmapDrawable.getBitmap();
-							Log.e("PIC1", "Existe");
-						}
-						if (!isFoto2Default) {
-							bitmapDrawable = ((BitmapDrawable) foto2
-									.getDrawable());
-							pic2 = bitmapDrawable.getBitmap();
-							Log.e("PIC2", "Existe");
-						}
-						if (!texto.equals("")) {
-							datosPDF.add("Evidencia escrita: " + texto);
-						}
-						if (pic1 == null) {
-							Log.e("PIC1", "NULL");
-						}
-						enviarMail(fotoBitmapFinal, pic2);
-
-					}
-				}
-
-			} else {
-				Toast.makeText(
-						this,
-						"Alguno de los campos se encuentra vacío, por favor ingréselo",
-						Toast.LENGTH_SHORT).show();
-			}
 			return (true);
 		}
 
 		return (super.onOptionsItemSelected(item));
 	}
 
+	@SuppressWarnings("unchecked")
+	private void guardarFormulario() {
+
+		// Guardar formulario
+		ArrayList<ArrayList<String>> formularios = null;
+		Gson gson = new Gson();
+
+		SharedPreferences mPrefs = getSharedPreferences("my_prefs",
+				MODE_PRIVATE);
+
+		String jsonFormularios = mPrefs.getString("Formularios", "");
+
+		if (jsonFormularios.equals("")) {
+			formularios = new ArrayList<ArrayList<String>>();
+		} else {
+			formularios = gson.fromJson(jsonFormularios, ArrayList.class);
+			if (esCargar) {
+				ArrayList<String> elemento = generalIntent
+						.getStringArrayListExtra("formulario");
+				Log.e("ELIMINAR", "" + formularios.remove(elemento));
+			}
+
+		}
+
+		formularios.add(datosPDF);
+
+		Editor prefsEditor = mPrefs.edit();
+		String json = gson.toJson(formularios);
+
+		// Log.e("JSON: ", json);
+
+		prefsEditor.putString("Formularios", json);
+		Log.e("Commited: ", String.valueOf(prefsEditor.commit()));
+		finish();
+
+	}
+
 	private void showMessage() {
 
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setTitle("Evidencia");
-		alert.setMessage("No ha ingresado ninguna evidencia, ¿desea enviarlo sin evidencia? ");
+		alert.setMessage("No ha ingresado ninguna evidencia, ¿Desea guardarlo sin evidencia? ");
 
 		alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-
-				enviarMail(null, null);
+				datosPDF.add("EMPTY");
+				datosPDF.add("--1");
+				datosPDF.add("--2");
+				guardarFormulario();
 			}
 		});
 		alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -230,6 +200,79 @@ public class FormularioActivity extends FragmentActivity {
 			}
 		});
 		alert.show();
+	}
+
+	private void showMessageIncompleto() {
+
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Formulario Incompleto");
+		alert.setMessage("El formulario se encuentra incompleto, ¿Desea guardarlo así? ");
+
+		alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+
+				datosPDF = new ArrayList<String>(datosPDF.subList(0, 3));
+				recogerDatos(true);
+				datosPDF.add("Incompleto");
+				obtenerEvidencia();
+
+			}
+		});
+		alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+
+			}
+		});
+		alert.show();
+	}
+
+	private void obtenerEvidencia() {
+
+		if (evidenciaEscrita == null) {
+			showMessage();
+		} else {
+			String texto = evidenciaEscrita.getText().toString().trim();
+			if (texto.equals("") && (isFoto1Default && isFoto2Default)) {
+				showMessage();
+			} else {
+				String evidencia1 = "--1";
+				String evidencia2 = "--2";
+				if (!isFoto1Default) {
+					evidencia1 = encodeTobase64(pic1);
+					Log.e("PIC1", "Existe");
+				}
+				if (!isFoto2Default) {
+					evidencia2 = encodeTobase64(pic2);
+					Log.e("PIC2", "Existe");
+				}
+				if (!texto.equals("")) {
+					datosPDF.add("Evidencia escrita: " + texto);
+				} else {
+					datosPDF.add("EMPTY");
+				}
+				datosPDF.add(evidencia1);
+				datosPDF.add(evidencia2);
+				guardarFormulario();
+
+			}
+		}
+
+	}
+
+	public static String encodeTobase64(Bitmap image) {
+		Bitmap immagex = image;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+		byte[] b = baos.toByteArray();
+		String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+
+		return imageEncoded;
+	}
+
+	public static Bitmap decodeBase64(String input) {
+		byte[] decodedByte = Base64.decode(input, 0);
+		return BitmapFactory
+				.decodeByteArray(decodedByte, 0, decodedByte.length);
 	}
 
 	public void enviarMail(Bitmap pic1, Bitmap pic2) {
@@ -243,15 +286,13 @@ public class FormularioActivity extends FragmentActivity {
 			}
 			PDFWriterFormulario.savePDF(datosPDF, pic1, pic2, fileName, this);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		enviarPDfemail(fileName);
 	}
 
 	public static String now() {
 		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy - hh:mm a");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy - hh:mm:ss a");
 		return sdf.format(cal.getTime());
 	}
 
@@ -385,7 +426,7 @@ public class FormularioActivity extends FragmentActivity {
 			}
 		}
 		for (int i = 0; i < datosPDF.size(); i++) {
-			Log.d("Datos :  ", datosPDF.get(i));
+			Log.w("Datos :  ", datosPDF.get(i));
 		}
 		return false;
 	}
@@ -447,13 +488,18 @@ public class FormularioActivity extends FragmentActivity {
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 
+			pic1 = null;
+			pic2 = null;
 			FormularioFactory mFormularioFactory = new FormularioFactory();
 
 			int numeroFormulario = getActivity().getIntent().getIntExtra(
 					"numeroFormulario", 1);
 
-			arrayListFormulario = mFormularioFactory
-					.getFormulario(numeroFormulario);
+			int reps = getActivity().getIntent().getIntExtra("reps", 1);
+
+			Log.e("REPS", "" + reps);
+			arrayListFormulario = mFormularioFactory.getFormulario(
+					numeroFormulario, reps);
 
 			// Inflate the layout for this fragment
 			View rootView = inflater.inflate(R.layout.activity_formulario,
@@ -494,15 +540,15 @@ public class FormularioActivity extends FragmentActivity {
 					EditText editTextFormularios = (EditText) elemento
 							.findViewById(R.id.editTextFormularios);
 
-					if (!form.get(i + 2).equals("EMPTY")) {
-						editTextFormularios.setText(form.get(i + 2));
+					if (!form.get(i + 3).equals("EMPTY")) {
+						editTextFormularios.setText(form.get(i + 3));
 					}
 					break;
 				case 2:
 					TimePicker timePickerFormularios = (TimePicker) elemento
 							.findViewById(R.id.timePickerFormularios);
 
-					String[] time = form.get(i + 2).split(":");
+					String[] time = form.get(i + 3).split(":");
 					timePickerFormularios.setCurrentHour(Integer
 							.parseInt(time[0]));
 					timePickerFormularios.setCurrentMinute(Integer
@@ -516,13 +562,13 @@ public class FormularioActivity extends FragmentActivity {
 					EditText editTextFormulariosCheckbox = (EditText) elemento
 							.findViewById(R.id.editTextFormulariosCheckbox);
 
-					if (form.get(i + 2).equals("No aplica")) {
+					if (form.get(i + 3).equals("No aplica")) {
 						checkBoxFormularios.setChecked(true);
 					} else {
 						checkBoxFormularios.setChecked(false);
-						if (!form.get(i + 2).equals("EMPTY")) {
+						if (!form.get(i + 3).equals("EMPTY")) {
 							editTextFormulariosCheckbox
-									.setText(form.get(i + 2));
+									.setText(form.get(i + 3));
 						}
 					}
 
@@ -534,7 +580,7 @@ public class FormularioActivity extends FragmentActivity {
 
 					ArrayAdapter<String> myAdap = (ArrayAdapter<String>) spinnerFormularios
 							.getAdapter();
-					int spinnerPosition = myAdap.getPosition(form.get(i + 2));
+					int spinnerPosition = myAdap.getPosition(form.get(i + 3));
 
 					// set the default according to value
 					spinnerFormularios.setSelection(spinnerPosition);
@@ -544,10 +590,10 @@ public class FormularioActivity extends FragmentActivity {
 					DatePicker datePickerFecha = (DatePicker) elemento
 							.findViewById(R.id.datePickerFecha);
 
-					String[] date = form.get(i + 2).split("-");
+					String[] date = form.get(i + 3).split("-");
 
 					int day = Integer.parseInt(date[0]);
-					int month = Integer.parseInt(date[1]);
+					int month = Integer.parseInt(date[1]) - 1;
 					int year = Integer.parseInt(date[2]);
 
 					datePickerFecha.updateDate(year, month, day);
@@ -555,6 +601,27 @@ public class FormularioActivity extends FragmentActivity {
 				default:
 					break;
 				}
+			}
+
+			String img1 = form.get(form.size() - 2);
+			String img2 = form.get(form.size() - 1);
+			String evidenciaEscritaForm = form.get(form.size() - 3);
+			Log.e("Evidencia 1", img1);
+			Log.e("Evidencia 2", img2);
+			Log.e("Evidencia 2", evidenciaEscritaForm);
+			if (!img1.equals("--1")) {
+				fotoBitmapFinal = decodeBase64(img1);
+				foto1.setImageBitmap(fotoBitmapFinal);
+				isFoto1Default = false;
+			}
+			if (!img2.equals("--2")) {
+				fotoBitmapFinal = decodeBase64(img2);
+				foto2.setImageBitmap(fotoBitmapFinal);
+				isFoto2Default = false;
+			}
+			if (!evidenciaEscritaForm.equals("EMPTY")) {
+				evidenciaEscrita.setText(evidenciaEscritaForm);
+				Log.e("Evidencia 2", evidenciaEscritaForm);
 			}
 		}
 	}
@@ -598,7 +665,6 @@ public class FormularioActivity extends FragmentActivity {
 						public void onItemSelected(AdapterView<?> arg0,
 								View arg1, int posicion, long arg3) {
 
-							// TODO Auto-generated method stub
 							switch (posicion) {
 							case 0:
 								evidenciaEscrita.setVisibility(View.GONE);
@@ -654,15 +720,12 @@ public class FormularioActivity extends FragmentActivity {
 					} catch (Exception e) {
 						Toast.makeText(getActivity(), "Failed to load",
 								Toast.LENGTH_SHORT).show();
-						Log.e("ERROR", "Failed to load");
 					}
 					fotoBitmapFinal = Bitmap.createScaledBitmap(
 							fotoBitmapFinal, 400, 400, false);
 
-					Log.e("BITMAP", "SIZE:" + fotoBitmapFinal.getWidth()
-							+ " - " + fotoBitmapFinal.getHeight());
-
 					foto1.setImageBitmap(fotoBitmapFinal);
+					pic1 = fotoBitmapFinal;
 					isFoto1Default = false;
 				}
 
@@ -670,23 +733,47 @@ public class FormularioActivity extends FragmentActivity {
 			case 1:// Sube foto
 				if (resultCode == RESULT_OK) {
 					Uri selectedImage = imageReturnedIntent.getData();
-					try {
-						fotoBitmapFinal = getCorrectlyOrientedImage(
-								getActivity(), selectedImage);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+
+					/*
+					 * try { fotoBitmapFinal = getCorrectlyOrientedImage(
+					 * getActivity(), selectedImage); } catch (IOException e) {
+					 * e.printStackTrace(); }
+					 */
+
+					String[] filePathColumn = { MediaStore.Images.Media.DATA };
+					Cursor cursor = getActivity().getContentResolver().query(
+							selectedImage, filePathColumn, null, null, null);
+					cursor.moveToFirst();
+					int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+					String picturePath = cursor.getString(columnIndex);
+					cursor.close();
+					fotoBitmapFinal = BitmapFactory.decodeFile(picturePath);
+					fotoBitmapFinal = Bitmap.createScaledBitmap(
+							fotoBitmapFinal, 400, 400, false);
+
 					foto1.setImageBitmap(fotoBitmapFinal);
+					pic1 = fotoBitmapFinal;
 					isFoto1Default = false;
 				}
 				break;
 			case 2:// Toma foto
 				if (resultCode == RESULT_OK) {
-					fotoBitmapFinal = (Bitmap) imageReturnedIntent.getExtras()
-							.get("data");
+					getActivity().getContentResolver().notifyChange(contentUri,
+							null);
+					ContentResolver cr = getActivity().getContentResolver();
+
+					try {
+						fotoBitmapFinal = android.provider.MediaStore.Images.Media
+								.getBitmap(cr, contentUri);
+					} catch (Exception e) {
+						Toast.makeText(getActivity(), "Failed to load",
+								Toast.LENGTH_SHORT).show();
+					}
+					fotoBitmapFinal = Bitmap.createScaledBitmap(
+							fotoBitmapFinal, 400, 400, false);
 
 					foto2.setImageBitmap(fotoBitmapFinal);
+					pic2 = fotoBitmapFinal;
 					isFoto2Default = false;
 				}
 
@@ -694,14 +781,20 @@ public class FormularioActivity extends FragmentActivity {
 			case 3:// Sube foto
 				if (resultCode == RESULT_OK) {
 					Uri selectedImage = imageReturnedIntent.getData();
-					try {
-						fotoBitmapFinal = getCorrectlyOrientedImage(
-								getActivity(), selectedImage);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+
+					String[] filePathColumn = { MediaStore.Images.Media.DATA };
+					Cursor cursor = getActivity().getContentResolver().query(
+							selectedImage, filePathColumn, null, null, null);
+					cursor.moveToFirst();
+					int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+					String picturePath = cursor.getString(columnIndex);
+					cursor.close();
+					fotoBitmapFinal = BitmapFactory.decodeFile(picturePath);
+					fotoBitmapFinal = Bitmap.createScaledBitmap(
+							fotoBitmapFinal, 400, 400, false);
+
 					foto2.setImageBitmap(fotoBitmapFinal);
+					pic2 = fotoBitmapFinal;
 					isFoto2Default = false;
 
 				}
@@ -783,7 +876,6 @@ public class FormularioActivity extends FragmentActivity {
 		// Creating Context Menu
 		public void onCreateContextMenu(ContextMenu menu, View v,
 				ContextMenuInfo menuInfo) {
-			// TODO Auto-generated method stub
 			super.onCreateContextMenu(menu, v, menuInfo);
 			lastContextMenuButton = v;
 			menu.setHeaderTitle("Opciones de Fotos");
@@ -816,7 +908,6 @@ public class FormularioActivity extends FragmentActivity {
 
 		@Override
 		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-			// TODO Auto-generated method stub
 			super.onCreateOptionsMenu(menu, inflater);
 			inflater.inflate(R.menu.main, menu);
 		}
@@ -841,7 +932,20 @@ public class FormularioActivity extends FragmentActivity {
 
 			} else if (v == foto2) {
 				Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				startActivityForResult(takePicture, 2);
+
+				// Create the File where the photo should go
+				File photoFile = null;
+				try {
+					photoFile = createImageFile();
+				} catch (IOException ex) {
+					Log.e("ERROR", "NOT CREATED");
+				}
+				// Continue only if the File was successfully created
+				if (photoFile != null) {
+					contentUri = Uri.fromFile(photoFile);
+					takePicture.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+					startActivityForResult(takePicture, 2);
+				}
 			}
 		}
 
@@ -891,5 +995,4 @@ public class FormularioActivity extends FragmentActivity {
 		mCurrentPhotoPath = "file:" + image.getAbsolutePath();
 		return image;
 	}
-
 }

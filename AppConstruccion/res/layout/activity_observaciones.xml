@@ -9,8 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="40dp"
-        android:layout_toRightOf="@+id/textViewObservacionesTipo"
- />
+        android:layout_toRightOf="@+id/textViewObservacionesTipo" />
 
     <TextView
         android:id="@+id/textViewObservacionesTipo"
@@ -30,10 +29,9 @@
         android:layout_below="@+id/spinnerObservaciones"
         android:layout_marginTop="22dp"
         android:ems="10"
-        android:inputType="textMultiLine" 
-        >
-
-        
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:maxLength="140" >
     </EditText>
 
     <ImageView
