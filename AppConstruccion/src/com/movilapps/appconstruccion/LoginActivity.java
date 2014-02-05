@@ -2,6 +2,8 @@ package com.movilapps.appconstruccion;
 
 import java.io.IOException;
 
+import com.newrelic.agent.android.NewRelic;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +28,11 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		
+		NewRelic.withApplicationToken(
+				"AA90c236b3d7a1f3358b0246dbb55f0f56c73bd82c"
+				).start(this.getApplication());
+		
 		ActionBar actionBar = getActionBar();
 		actionBar.hide();
 		inicializarBD();
