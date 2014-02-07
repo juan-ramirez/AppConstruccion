@@ -42,6 +42,7 @@ public class MemoExpressActivity extends Activity {
 	private ImageView imageViewAdjunto;
 	private View lastContextMenuButton;
 	private Bitmap fotoBitmapFinal;
+	private Bitmap picEnviar = null;
 
 	private boolean isAdjuntoDefault = true;
 	private String campoDe;
@@ -115,7 +116,7 @@ public class MemoExpressActivity extends Activity {
 				if (isAdjuntoDefault) {
 					enviarMail(null);
 				} else {
-					enviarMail(fotoBitmapFinal);
+					enviarMail(picEnviar);
 				}
 
 			}
@@ -182,6 +183,9 @@ public class MemoExpressActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 					Log.e("ERROR", "Failed to load");
 				}
+				
+				picEnviar = redimensionarImagen(fotoBitmapFinal);
+				
 				fotoBitmapFinal = Bitmap.createScaledBitmap(fotoBitmapFinal,
 						400, 400, false);
 
@@ -203,10 +207,38 @@ public class MemoExpressActivity extends Activity {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				
+				picEnviar = redimensionarImagen(fotoBitmapFinal);
+				fotoBitmapFinal = Bitmap.createScaledBitmap(fotoBitmapFinal,
+						400, 400, false);				
+				
 				imageViewAdjunto.setImageBitmap(fotoBitmapFinal);
+				isAdjuntoDefault = false;
 			}
 			break;
 		}
+	}
+	
+	private Bitmap redimensionarImagen(Bitmap fotoBitmapFinal) {
+
+		Bitmap result = null;
+		int height = fotoBitmapFinal.getHeight();
+		int width = fotoBitmapFinal.getWidth();
+		if (height > width) {
+			int widthFinal = (int) Math.floor((width * 400) / height);
+			result = Bitmap.createScaledBitmap(fotoBitmapFinal, widthFinal,
+					400, false);
+		} else if (width > height) {
+			int heightFinal = (int) Math.floor((height * 400) / width);
+			result = Bitmap.createScaledBitmap(fotoBitmapFinal, 400,
+					heightFinal, false);
+			Log.e("heightFinal", "" + heightFinal);
+		} else {
+			result = Bitmap.createScaledBitmap(fotoBitmapFinal, 400, 400,
+					false);
+		}
+
+		return result;
 	}
 
 	// Creating Context Menu

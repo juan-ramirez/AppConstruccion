@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Contenido"
-        android:lines="15"
+        android:lines="10"
         android:maxLines="15" />
 
     <ImageView

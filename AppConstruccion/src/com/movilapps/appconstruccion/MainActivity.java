@@ -113,7 +113,8 @@ public class MainActivity extends Activity {
 					code = code.substring(code.length() - 7, code.length());
 					generalIntent.putExtra("code", code);
 
-					String nombreFormulario = spinnerArray.get(position);
+					String nombreFormulario = spinnerArray
+							.get(mCurrentPosition);
 					generalIntent
 							.putExtra("nombreFormulario", nombreFormulario);
 

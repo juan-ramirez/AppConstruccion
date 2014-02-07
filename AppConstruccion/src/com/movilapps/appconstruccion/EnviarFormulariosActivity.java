@@ -32,6 +32,7 @@ public class EnviarFormulariosActivity extends Activity {
 	String fecha;
 	String code;
 	private ArrayList<ArrayList<String>> datos = new ArrayList<ArrayList<String>>();
+	private String nombreFormulario;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class EnviarFormulariosActivity extends Activity {
 
 		fecha = getIntent().getStringExtra("date");
 		code = getIntent().getStringExtra("code");
+		nombreFormulario = getIntent().getStringExtra("nombreFormulario");
 
 		setTitle(code + " - " + fecha);
 		refrescarDatos();
@@ -82,15 +84,20 @@ public class EnviarFormulariosActivity extends Activity {
 
 			ArrayList<String> formulario = formularios.get(i);
 			String incompleto = formulario.get(formulario.size() - 4);
-			if (!incompleto.equals("Incompleto")) {
-				String now = formularios.get(i).get(1);
-				String date = now.substring(0, 10);
-				if (date.equals(fecha)) {
-					if (!arrayListMenu.contains(now)) {
-						datos.add(formularios.get(i));
-						arrayListMenu.add(now);
-					}
 
+			String element = formulario.get(0);
+
+			if (element.equals(nombreFormulario)) {
+				if (!incompleto.equals("Incompleto")) {
+					String now = formularios.get(i).get(1);
+					String date = now.substring(0, 10);
+					if (date.equals(fecha)) {
+						if (!arrayListMenu.contains(now)) {
+							datos.add(formularios.get(i));
+							arrayListMenu.add(now);
+						}
+
+					}
 				}
 			}
 

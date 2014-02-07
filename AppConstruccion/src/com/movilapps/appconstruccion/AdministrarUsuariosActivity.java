@@ -56,7 +56,7 @@ public class AdministrarUsuariosActivity extends Activity {
 
 		arrayListMenu = new ArrayList<String>();
 
-		String query = "select * from usuarios where not nombre_usuario = 'admin' ";
+		String query = "select * from usuarios where not nombre_usuario = 'K&JSUPTEC' ";
 		Cursor c = database.rawQuery(query, null);
 		c.moveToFirst();
 		if (c.getCount() > 0) {

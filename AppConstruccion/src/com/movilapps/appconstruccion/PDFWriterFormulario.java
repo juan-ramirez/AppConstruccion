@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,7 +37,6 @@ public class PDFWriterFormulario {
 		try {
 			outputToFile(fileName, pdfcontent, "iso-8859-1");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -75,7 +73,6 @@ public class PDFWriterFormulario {
 		try {
 			outputToFile(fileName, s, "ISO-8859-1");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -151,10 +148,13 @@ public class PDFWriterFormulario {
 		int j = 0;
 
 		for (int i = 6; i < datos.size() - 4; i++) {
-			if (i == 18) {
+			if (i % 18 == 0) {
 				mPDFWriter.newPage();
+				mPDFWriter.setFont(StandardFonts.SUBTYPE,
+						StandardFonts.HELVETICA,
+						StandardFonts.WIN_ANSI_ENCODING);
 				top = PaperSize.LETTER_HEIGHT - 100;
-				j = 12;
+				j = 12 * (i / 18);
 				mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
 						PaperSize.LETTER_HEIGHT - 120);
 			}
@@ -167,8 +167,15 @@ public class PDFWriterFormulario {
 					datos.add(i + k, elemento);
 				}
 			}
-			mPDFWriter.addText(MARGIN_LEFT, (top - (i - (j + 5)) * 25), 14,
-					datos.get(i));
+			if (j == 0) {
+				mPDFWriter.addText(MARGIN_LEFT, (top - (i - (j + 5)) * 25), 14,
+						datos.get(i));
+			} else {
+
+				mPDFWriter.addText(MARGIN_LEFT,
+						(top - (i - (j + (5 * (i / 18)))) * 25), 14,
+						datos.get(i));
+			}
 
 		}
 
@@ -302,7 +309,6 @@ public class PDFWriterFormulario {
 		try {
 			outputToFile(fileName, pdfcontent, "iso-8859-1");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -363,13 +369,17 @@ public class PDFWriterFormulario {
 			Context context) {
 		PDFWriter mPDFWriter = new PDFWriter(PaperSize.LETTER_WIDTH,
 				PaperSize.LETTER_HEIGHT);
-
+		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA,
+				StandardFonts.WIN_ANSI_ENCODING);
 		AssetManager mngr = context.getAssets();
 		try {
 			// LOGO
-			Bitmap xoiPNG = BitmapFactory.decodeStream(mngr.open("kyjing.png"));
-			mPDFWriter.addImage(MARGIN_LEFT, PaperSize.LETTER_HEIGHT - 160,
-					xoiPNG, Transformation.DEGREES_0_ROTATION);
+			Bitmap xoiPNG = BitmapFactory.decodeStream(mngr
+					.open("logo_final_peq.png"));
+
+			mPDFWriter.addImageKeepRatio(MARGIN_LEFT,
+					PaperSize.LETTER_HEIGHT - 160, 220, 90, xoiPNG,
+					Transformation.DEGREES_0_ROTATION);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -398,23 +408,24 @@ public class PDFWriterFormulario {
 
 		mPDFWriter.addLine(60, 530, PaperSize.LETTER_WIDTH - 60, 530);
 
-		mPDFWriter.addText(MARGIN_LEFT, 595, 18, "De: " + datos.get(0),
+		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA,
 				StandardFonts.WIN_ANSI_ENCODING);
-		mPDFWriter.addText(MARGIN_LEFT, 570, 18, "Para: " + datos.get(1),
-				StandardFonts.WIN_ANSI_ENCODING);
-		mPDFWriter.addText(MARGIN_LEFT, 545, 18, "Asunto: " + datos.get(2),
+
+		mPDFWriter.addText(MARGIN_LEFT, 595, 18, "De: " + datos.get(0));
+		mPDFWriter.addText(MARGIN_LEFT, 570, 18, "Para: " + datos.get(1));
+		mPDFWriter.addText(MARGIN_LEFT, 545, 18, "Asunto: " + datos.get(2));
+
+		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA,
 				StandardFonts.WIN_ANSI_ENCODING);
 
 		int top = 500;
 		if (datos.get(3).contains("\n")) {
 			String[] lines = datos.get(3).split("\n");
 			for (int i = 0; i < lines.length; i++) {
-				mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18, lines[i],
-						StandardFonts.WIN_ANSI_ENCODING);
+				mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18, lines[i]);
 			}
 		} else {
-			mPDFWriter.addText(MARGIN_LEFT, 500, 18, datos.get(3),
-					StandardFonts.WIN_ANSI_ENCODING);
+			mPDFWriter.addText(MARGIN_LEFT, 500, 18, datos.get(3));
 		}
 
 		// Imagenes Evidencia Fotografica
@@ -432,11 +443,8 @@ public class PDFWriterFormulario {
 					Transformation.DEGREES_0_ROTATION);
 		}
 
-		String s = Normalizer.normalize(mPDFWriter.asString(),
-				Normalizer.Form.NFD);
-		s = s.replaceAll("[^\\p{ASCII}]", "");
+		String s = mPDFWriter.asString();
 
 		return s;
 	}
-
 }

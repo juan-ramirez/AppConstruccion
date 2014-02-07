@@ -431,10 +431,10 @@ public class FormularioFactory {
 				cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Juntas de control",
 				cumple_nocumple_noaplica));
-		formulario.add(new DatoFormularioFactory(TIPO_4, "Anclajes dovelas",
-				cumple_nocumple));
-		formulario.add(new DatoFormularioFactory(TIPO_4, "Traslapos dovelas",
-				cumple_nocumple));
+		formulario.add(new DatoFormularioFactory(TIPO_4, "Anclaje de dovelas",
+				cumple_nocumple_noaplica));
+		formulario.add(new DatoFormularioFactory(TIPO_4, "Traslapo de dovelas",
+				cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Revite",
 				cumple_nocumple));
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Aseo",
