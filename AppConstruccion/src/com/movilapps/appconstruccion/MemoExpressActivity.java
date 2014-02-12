@@ -155,7 +155,7 @@ public class MemoExpressActivity extends Activity {
 		Intent sendIntent;
 
 		sendIntent = new Intent(Intent.ACTION_SEND);
-		sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Observaciones de obra");
+		sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Cordial saludo");
 		sendIntent.putExtra(Intent.EXTRA_TEXT, "Test Text");
 		sendIntent.putExtra(Intent.EXTRA_STREAM,
 				Uri.parse("file:///mnt/sdcard/" + fileName));
@@ -179,18 +179,17 @@ public class MemoExpressActivity extends Activity {
 					fotoBitmapFinal = android.provider.MediaStore.Images.Media
 							.getBitmap(cr, contentUri);
 				} catch (Exception e) {
-					Toast.makeText(this, "Failed to load",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
+							.show();
 					Log.e("ERROR", "Failed to load");
 				}
-				
+
 				picEnviar = redimensionarImagen(fotoBitmapFinal);
-				
+				Log.e("Size",
+						picEnviar.getWidth() + " x " + picEnviar.getHeight());
+
 				fotoBitmapFinal = Bitmap.createScaledBitmap(fotoBitmapFinal,
 						400, 400, false);
-
-				Log.e("BITMAP", "SIZE:" + fotoBitmapFinal.getWidth() + " - "
-						+ fotoBitmapFinal.getHeight());
 
 				imageViewAdjunto.setImageBitmap(fotoBitmapFinal);
 				isAdjuntoDefault = false;
@@ -207,35 +206,37 @@ public class MemoExpressActivity extends Activity {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 				picEnviar = redimensionarImagen(fotoBitmapFinal);
+				Log.e("Size",
+						picEnviar.getWidth() + " x " + picEnviar.getHeight());
+
 				fotoBitmapFinal = Bitmap.createScaledBitmap(fotoBitmapFinal,
-						400, 400, false);				
-				
+						400, 400, false);
+
 				imageViewAdjunto.setImageBitmap(fotoBitmapFinal);
 				isAdjuntoDefault = false;
 			}
 			break;
 		}
 	}
-	
+
 	private Bitmap redimensionarImagen(Bitmap fotoBitmapFinal) {
 
 		Bitmap result = null;
 		int height = fotoBitmapFinal.getHeight();
 		int width = fotoBitmapFinal.getWidth();
 		if (height > width) {
-			int widthFinal = (int) Math.floor((width * 400) / height);
+			int widthFinal = (int) Math.floor((width * 800) / height);
 			result = Bitmap.createScaledBitmap(fotoBitmapFinal, widthFinal,
-					400, false);
+					800, false);
 		} else if (width > height) {
-			int heightFinal = (int) Math.floor((height * 400) / width);
-			result = Bitmap.createScaledBitmap(fotoBitmapFinal, 400,
+			int heightFinal = (int) Math.floor((height * 800) / width);
+			result = Bitmap.createScaledBitmap(fotoBitmapFinal, 800,
 					heightFinal, false);
-			Log.e("heightFinal", "" + heightFinal);
 		} else {
-			result = Bitmap.createScaledBitmap(fotoBitmapFinal, 400, 400,
-					false);
+			result = Bitmap
+					.createScaledBitmap(fotoBitmapFinal, 800, 800, false);
 		}
 
 		return result;

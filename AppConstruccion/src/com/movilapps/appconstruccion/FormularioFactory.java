@@ -312,33 +312,33 @@ public class FormularioFactory {
 					.add(new DatoFormularioFactory(TIPO_1, "Mallas", NUMERICO));
 
 			formulario.add(new DatoFormularioFactory(TITULO,
-					"Diametros y/o especificaciones"));
+					"Diámetros y/o especificaciones"));
 			formulario
-					.add(new DatoFormularioFactory(TIPO_1, "Barras", NUMERICO));
+					.add(new DatoFormularioFactory(TIPO_1, "Barras (#)", NUMERICO));
 			formulario
-					.add(new DatoFormularioFactory(TIPO_1, "Mallas", NUMERICO));
+					.add(new DatoFormularioFactory(TIPO_1, "Mallas", ALFANUMERICO));
 
 			formulario.add(new DatoFormularioFactory(TIPO_1, "N° de Barras",
 					NUMERICO));
-			formulario.add(new DatoFormularioFactory(TIPO_1, "Longitud",
+			formulario.add(new DatoFormularioFactory(TIPO_1, "Longitud (m)",
 					DECIMAL));
 
 			formulario.add(new DatoFormularioFactory(TITULO, "Ganchos"));
 			formulario.add(new DatoFormularioFactory(TIPO_1, "Cantidad",
 					NUMERICO));
-			formulario.add(new DatoFormularioFactory(TIPO_1, "N° de Barras",
+			formulario.add(new DatoFormularioFactory(TIPO_1, "Barras (#)",
 					NUMERICO));
 		}
 
 		formulario.add(new DatoFormularioFactory(TIPO_4,
-				"Empalmes (Traslapos conexiones)", cumple_nocumple));
+				"Empalmes (Traslapos conexiones)", cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Estribos, disposición y cantidad", cumple_nocumple));
 		formulario
 				.add(new DatoFormularioFactory(
 						TIPO_4,
 						"Ubicación de refuerzo para anclaje de muros u otros elementos estructurales",
-						cumple_nocumple));
+						cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Limpieza del refuerzo y de la zona de vaciado",
 				cumple_nocumple));
@@ -450,15 +450,15 @@ public class FormularioFactory {
 		formulario.add(new DatoFormularioFactory(TIPO_1, "Elemento a revisar",
 				ALFANUMERICO));
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Niveles y ejes",
-				cumple_nocumple));
+				cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Plomos",
-				cumple_nocumple));
+				cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Formaleta",
-				cumple_nocumple));
+				cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Acero de refuerzo",
-				cumple_nocumple));
+				cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TIPO_4, "Aseo",
-				cumple_nocumple));
+				cumple_nocumple_noaplica));
 		formulario.add(new DatoFormularioFactory(TITULO, "Firma constructor"));
 		return formulario;
 	}

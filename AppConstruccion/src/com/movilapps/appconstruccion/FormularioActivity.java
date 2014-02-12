@@ -465,6 +465,7 @@ public class FormularioActivity extends FragmentActivity {
 				// Detach the fragment, because another one is being attached
 				// ft.detach(mFragment);
 				ft.hide(mFragment);
+
 			}
 		}
 
@@ -799,16 +800,15 @@ public class FormularioActivity extends FragmentActivity {
 			int height = fotoBitmapFinal.getHeight();
 			int width = fotoBitmapFinal.getWidth();
 			if (height > width) {
-				int widthFinal = (int) Math.floor((width * 400) / height);
+				int widthFinal = (int) Math.floor((width * 800) / height);
 				result = Bitmap.createScaledBitmap(fotoBitmapFinal, widthFinal,
-						400, false);
+						800, false);
 			} else if (width > height) {
-				int heightFinal = (int) Math.floor((height * 400) / width);
-				result = Bitmap.createScaledBitmap(fotoBitmapFinal, 400,
+				int heightFinal = (int) Math.floor((height * 800) / width);
+				result = Bitmap.createScaledBitmap(fotoBitmapFinal, 800,
 						heightFinal, false);
-				Log.e("heightFinal", "" + heightFinal);
 			} else {
-				result = Bitmap.createScaledBitmap(fotoBitmapFinal, 400, 400,
+				result = Bitmap.createScaledBitmap(fotoBitmapFinal, 800, 800,
 						false);
 			}
 

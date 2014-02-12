@@ -221,13 +221,17 @@ public class PDFWriterFormulario {
 						StandardFonts.WIN_ANSI_ENCODING);
 			}
 
+			int[] dimensiones = redimensionarImagen(pic1);
+
 			mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
 					PaperSize.LETTER_HEIGHT - 120);
 			mPDFWriter
 					.addText(MARGIN_LEFT, sup - 80, 14, "Anexo Fotográfico 1");
-			mPDFWriter.addImage(
-					centrar(PaperSize.LETTER_WIDTH, pic1.getWidth()),
-					centrar(PaperSize.LETTER_HEIGHT, pic1.getHeight()), pic1,
+
+			mPDFWriter.addImageKeepRatio(
+					centrar(PaperSize.LETTER_WIDTH, dimensiones[0]),
+					centrar(PaperSize.LETTER_HEIGHT, dimensiones[1]),
+					dimensiones[0], dimensiones[1], pic1,
 					Transformation.DEGREES_0_ROTATION);
 		}
 		if (pic2 == null) {
@@ -271,9 +275,13 @@ public class PDFWriterFormulario {
 					StandardFonts.WIN_ANSI_ENCODING);
 			mPDFWriter
 					.addText(MARGIN_LEFT, sup - 80, 14, "Anexo Fotográfico 2");
-			mPDFWriter.addImage(
-					centrar(PaperSize.LETTER_WIDTH, pic2.getWidth()),
-					centrar(PaperSize.LETTER_HEIGHT, pic2.getHeight()), pic2,
+
+			int[] dimensiones = redimensionarImagen(pic2);
+
+			mPDFWriter.addImageKeepRatio(
+					centrar(PaperSize.LETTER_WIDTH, dimensiones[0]),
+					centrar(PaperSize.LETTER_HEIGHT, dimensiones[1]),
+					dimensiones[0], dimensiones[1], pic2,
 					Transformation.DEGREES_0_ROTATION);
 		}
 
@@ -299,6 +307,27 @@ public class PDFWriterFormulario {
 			}
 		}
 
+	}
+
+	private static int[] redimensionarImagen(Bitmap fotoBitmapFinal) {
+
+		int[] result = new int[2];
+		int height = fotoBitmapFinal.getHeight();
+		int width = fotoBitmapFinal.getWidth();
+		if (height > width) {
+			int widthFinal = (int) Math.floor((width * 400) / height);
+			result[0] = widthFinal;
+			result[1] = 400;
+		} else if (width > height) {
+			int heightFinal = (int) Math.floor((height * 400) / width);
+			result[0] = 400;
+			result[1] = heightFinal;
+		} else {
+			result[0] = 400;
+			result[1] = 400;
+		}
+
+		return result;
 	}
 
 	public static void savePDF(ArrayList<String> datos, Bitmap pic,
@@ -437,9 +466,15 @@ public class PDFWriterFormulario {
 					PaperSize.LETTER_HEIGHT - 120);
 			mPDFWriter.addText(MARGIN_LEFT, PaperSize.LETTER_HEIGHT - 100, 14,
 					"Anexo Fotografico 1");
-			mPDFWriter.addImage(
-					centrar(PaperSize.LETTER_WIDTH, pic.getWidth()),
-					centrar(PaperSize.LETTER_HEIGHT, pic.getHeight()), pic,
+
+			int[] dimensiones = redimensionarImagen(pic);
+
+			Log.e("Dimensiones", dimensiones[0] + " x " + dimensiones[1]);
+
+			mPDFWriter.addImageKeepRatio(
+					centrar(PaperSize.LETTER_WIDTH, dimensiones[0]),
+					centrar(PaperSize.LETTER_HEIGHT, dimensiones[1]),
+					dimensiones[0], dimensiones[1], pic,
 					Transformation.DEGREES_0_ROTATION);
 		}
 

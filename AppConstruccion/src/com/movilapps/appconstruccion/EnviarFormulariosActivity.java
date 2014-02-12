@@ -187,7 +187,7 @@ public class EnviarFormulariosActivity extends Activity {
 
 		sendIntent = new Intent(Intent.ACTION_SEND);
 		sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Observaciones de obra");
-		sendIntent.putExtra(Intent.EXTRA_TEXT, "Test Text");
+		sendIntent.putExtra(Intent.EXTRA_TEXT, "Cordial saludo");
 		sendIntent.putExtra(Intent.EXTRA_STREAM,
 				Uri.parse("file:///mnt/sdcard/" + fileName));
 		sendIntent.setType("application/pdf");
