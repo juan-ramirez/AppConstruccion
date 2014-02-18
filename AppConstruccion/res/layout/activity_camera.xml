@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="match_parent"
+        android:layout_height="800dp" >
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/buttonTomarFoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="snapIt"
+        android:text="Tomar foto" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/buttonFotoTomada"
+            android:layout_width="264dp"
+            android:layout_height="wrap_content"
+            android:onClick="snapOther"
+            android:text="Tomar otra"
+            android:textAlignment="center"
+            android:visibility="invisible" />
+        <Button
+            android:id="@+id/buttonFotoOK"
+            android:layout_width="264dp"
+            android:layout_height="wrap_content"
+            android:onClick="sendPhoto"
+            android:text="Foto OK"
+            android:textAlignment="center"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+</LinearLayout>

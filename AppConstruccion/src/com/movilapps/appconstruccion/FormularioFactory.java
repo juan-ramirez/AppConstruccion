@@ -172,8 +172,8 @@ public class FormularioFactory {
 		formulario.add(new DatoFormularioFactory(TIPO_2, "Hora carga"));
 		formulario.add(new DatoFormularioFactory(TIPO_2, "Hora descarga"));
 		formulario.add(new DatoFormularioFactory(TITULO, "Asentamiento (CM)"));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "Teórico", NUMERICO));
-		formulario.add(new DatoFormularioFactory(TIPO_1, "Real", NUMERICO));
+		formulario.add(new DatoFormularioFactory(TIPO_1, "Teórico", DECIMAL));
+		formulario.add(new DatoFormularioFactory(TIPO_1, "Real", DECIMAL));
 
 		return formulario;
 	}
@@ -243,7 +243,7 @@ public class FormularioFactory {
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Medio de compactación", vibrador));
 		formulario.add(new DatoFormularioFactory(TIPO_1,
-				"Tiempo entre mezcla y colocación (MIN) ", NUMERICO));
+				"Tiempo entre mezcla y colocación (MIN) ", DECIMAL));
 		formulario.add(new DatoFormularioFactory(TIPO_4,
 				"Homogeneidad de morteros y concretos en estado fresco",
 				cumple_nocumple));
@@ -313,10 +313,10 @@ public class FormularioFactory {
 
 			formulario.add(new DatoFormularioFactory(TITULO,
 					"Diámetros y/o especificaciones"));
-			formulario
-					.add(new DatoFormularioFactory(TIPO_1, "Barras (#)", NUMERICO));
-			formulario
-					.add(new DatoFormularioFactory(TIPO_1, "Mallas", ALFANUMERICO));
+			formulario.add(new DatoFormularioFactory(TIPO_1, "Barras (#)",
+					NUMERICO));
+			formulario.add(new DatoFormularioFactory(TIPO_3, "Mallas",
+					ALFANUMERICO));
 
 			formulario.add(new DatoFormularioFactory(TIPO_1, "N° de Barras",
 					NUMERICO));

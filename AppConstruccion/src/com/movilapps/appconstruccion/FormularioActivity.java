@@ -1,14 +1,12 @@
 package com.movilapps.appconstruccion;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -28,7 +26,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
@@ -428,6 +425,7 @@ public class FormularioActivity extends FragmentActivity {
 		private final Activity mActivity;
 		private final String mTag;
 		private final Class<T> mClass;
+		private final Bundle mArgs;
 
 		/**
 		 * Constructor used each time a new tab is created.
@@ -439,39 +437,50 @@ public class FormularioActivity extends FragmentActivity {
 		 * @param clz
 		 *            The fragment's Class, used to instantiate the fragment
 		 */
+
 		public TabListener(Activity activity, String tag, Class<T> clz) {
+			this(activity, tag, clz, null);
+		}
+
+		public TabListener(Activity activity, String tag, Class<T> clz,
+				Bundle args) {
 			mActivity = activity;
 			mTag = tag;
 			mClass = clz;
+			mArgs = args;
+
+			// Check to see if we already have a fragment for this tab, probably
+			// from a previously saved state. If so, deactivate it, because our
+			// initial state is that a tab isn't shown.
+			mFragment = mActivity.getFragmentManager().findFragmentByTag(mTag);
+			if (mFragment != null && !mFragment.isDetached()) {
+				FragmentTransaction ft = mActivity.getFragmentManager()
+						.beginTransaction();
+				ft.detach(mFragment);
+				ft.commit();
+			}
 		}
 
-		/* The following are each of the ActionBar.TabListener callbacks */
-
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			// Check if the fragment is already initialized
 			if (mFragment == null) {
-				// If not, instantiate and add it to the activity
-				mFragment = Fragment.instantiate(mActivity, mClass.getName());
+				mFragment = Fragment.instantiate(mActivity, mClass.getName(),
+						mArgs);
 				ft.add(android.R.id.content, mFragment, mTag);
 			} else {
-				// If it exists, simply attach it in order to show it
-				// ft.attach(mFragment);
 				ft.show(mFragment);
 			}
 		}
 
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 			if (mFragment != null) {
-				// Detach the fragment, because another one is being attached
-				// ft.detach(mFragment);
 				ft.hide(mFragment);
-
 			}
 		}
 
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-			// User selected the already selected tab. Usually do nothing.
+			Toast.makeText(mActivity, "Reselected!", Toast.LENGTH_SHORT).show();
 		}
+
 	}
 
 	public static class ExampleFragment extends Fragment {
@@ -693,23 +702,21 @@ public class FormularioActivity extends FragmentActivity {
 		public void onActivityResult(int requestCode, int resultCode,
 				Intent imageReturnedIntent) {
 			super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+			Bundle extras = imageReturnedIntent.getExtras();
+
 			switch (requestCode) {
 			case 0:// Toma foto
 				if (resultCode == RESULT_OK) {
 					// fotoBitmapFinal = (Bitmap)
 					// imageReturnedIntent.getExtras().get("data");
 
-					getActivity().getContentResolver().notifyChange(contentUri,
-							null);
-					ContentResolver cr = getActivity().getContentResolver();
 
-					try {
-						fotoBitmapFinal = android.provider.MediaStore.Images.Media
-								.getBitmap(cr, contentUri);
-					} catch (Exception e) {
-						Toast.makeText(getActivity(), "Failed to load",
-								Toast.LENGTH_SHORT).show();
-					}
+					byte[] data = extras.getByteArray("pic");
+
+					fotoBitmapFinal = BitmapFactory.decodeByteArray(data, 0,
+							data.length);
+
 					pic1 = redimensionarImagen(fotoBitmapFinal);
 					fotoBitmapFinal = Bitmap.createScaledBitmap(
 							fotoBitmapFinal, 400, 400, false);
@@ -717,6 +724,7 @@ public class FormularioActivity extends FragmentActivity {
 					foto1.setImageBitmap(fotoBitmapFinal);
 
 					isFoto1Default = false;
+
 				}
 
 				break;
@@ -749,17 +757,13 @@ public class FormularioActivity extends FragmentActivity {
 				break;
 			case 2:// Toma foto
 				if (resultCode == RESULT_OK) {
-					getActivity().getContentResolver().notifyChange(contentUri,
-							null);
-					ContentResolver cr = getActivity().getContentResolver();
 
-					try {
-						fotoBitmapFinal = android.provider.MediaStore.Images.Media
-								.getBitmap(cr, contentUri);
-					} catch (Exception e) {
-						Toast.makeText(getActivity(), "Failed to load",
-								Toast.LENGTH_SHORT).show();
-					}
+
+					byte[] data = extras.getByteArray("pic");
+
+					fotoBitmapFinal = BitmapFactory.decodeByteArray(data, 0,
+							data.length);
+
 					pic2 = redimensionarImagen(fotoBitmapFinal);
 					fotoBitmapFinal = Bitmap.createScaledBitmap(
 							fotoBitmapFinal, 400, 400, false);
@@ -927,38 +931,15 @@ public class FormularioActivity extends FragmentActivity {
 
 		private void tomarFoto(View v) {
 			if (v == foto1) {
-				Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-				// Create the File where the photo should go
-				File photoFile = null;
-				try {
-					photoFile = createImageFile();
-				} catch (IOException ex) {
-					Log.e("ERROR", "NOT CREATED");
-				}
-				// Continue only if the File was successfully created
-				if (photoFile != null) {
-					contentUri = Uri.fromFile(photoFile);
-					takePicture.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
-					startActivityForResult(takePicture, 0);
-				}
+				Intent intent = new Intent(getActivity(), CameraActivity.class);
+				startActivityForResult(intent, 0);
 
 			} else if (v == foto2) {
-				Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-				// Create the File where the photo should go
-				File photoFile = null;
-				try {
-					photoFile = createImageFile();
-				} catch (IOException ex) {
-					Log.e("ERROR", "NOT CREATED");
-				}
-				// Continue only if the File was successfully created
-				if (photoFile != null) {
-					contentUri = Uri.fromFile(photoFile);
-					takePicture.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
-					startActivityForResult(takePicture, 2);
-				}
+				Intent intent = new Intent(getActivity(), CameraActivity.class);
+				startActivityForResult(intent, 2);
+
 			}
 		}
 
@@ -990,22 +971,4 @@ public class FormularioActivity extends FragmentActivity {
 
 	}
 
-	static String mCurrentPhotoPath;
-
-	private static File createImageFile() throws IOException {
-		// Create an image file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-				.format(new Date());
-		String imageFileName = "JPEG_" + timeStamp + "_";
-		File storageDir = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-		File image = File.createTempFile(imageFileName, /* prefix */
-				".jpg", /* suffix */
-				storageDir /* directory */
-		);
-
-		// Save a file: path for use with ACTION_VIEW intents
-		mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-		return image;
-	}
 }
