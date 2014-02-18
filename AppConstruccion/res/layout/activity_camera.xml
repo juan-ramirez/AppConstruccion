@@ -1,43 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="#222">
 
-    <FrameLayout
-        android:id="@+id/camera_preview"
-        android:layout_width="match_parent"
-        android:layout_height="800dp" >
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/camera_preview"
+            android:layout_width="match_parent"
+            android:layout_height="800dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
 
-    <Button
-        android:id="@+id/buttonTomarFoto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="snapIt"
-        android:text="Tomar foto" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+                <Button
+                    android:id="@+id/buttonFotoTomada"
+                    android:layout_width="184dp"
+                    android:layout_height="74dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="23dp"
+                    android:layout_marginLeft="27dp"
+                    android:onClick="snapOther"
+                    android:textAlignment="center"
+                    android:visibility="invisible"
+                    android:background="@drawable/tomar_otra" />
 
-        <Button
-            android:id="@+id/buttonFotoTomada"
-            android:layout_width="264dp"
-            android:layout_height="wrap_content"
-            android:onClick="snapOther"
-            android:text="Tomar otra"
-            android:textAlignment="center"
-            android:visibility="invisible" />
-        <Button
-            android:id="@+id/buttonFotoOK"
-            android:layout_width="264dp"
-            android:layout_height="wrap_content"
-            android:onClick="sendPhoto"
-            android:text="Foto OK"
-            android:textAlignment="center"
-            android:visibility="invisible" />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/buttonFotoOK"
+                    android:layout_width="189dp"
+                    android:layout_height="74dp"
+                    android:layout_alignBaseline="@+id/buttonFotoTomada"
+                    android:layout_alignBottom="@+id/buttonFotoTomada"
+                    android:layout_toRightOf="@+id/buttonTomarFoto"
+                    android:background="@drawable/foto_ok"
+                    android:onClick="sendPhoto"
+                    android:textAlignment="center"
+                    android:visibility="invisible" />
 
-</LinearLayout>
+                <Button
+                    android:id="@+id/buttonTomarFoto"
+                    android:layout_width="189dp"
+                    android:layout_height="74dp"
+                    android:layout_above="@+id/buttonFotoOK"
+                    android:layout_toRightOf="@+id/buttonFotoTomada"
+                    android:background="@drawable/tomar_foto"
+                    android:onClick="snapIt" />
+
+            </RelativeLayout>
+
+        </FrameLayout>
+
+</RelativeLayout>
