@@ -102,6 +102,7 @@ public class CameraActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
+		setResult(4, null);
 		cameraObject.release();
 		super.onBackPressed();
 	}
@@ -109,6 +110,7 @@ public class CameraActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			setResult(4, null);
 			cameraObject.release();
 			finish();
 			return (true);

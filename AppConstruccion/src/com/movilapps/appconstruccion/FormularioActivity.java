@@ -14,7 +14,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,7 +57,6 @@ public class FormularioActivity extends FragmentActivity {
 	static ArrayList<DatoFormularioFactory> arrayListFormulario;
 	ArrayList<String> datosPDF;
 
-	private static Uri contentUri;
 	private static Bitmap fotoBitmapFinal;
 	private static ImageView foto1;
 	private static ImageView foto2;
@@ -702,15 +700,17 @@ public class FormularioActivity extends FragmentActivity {
 		public void onActivityResult(int requestCode, int resultCode,
 				Intent imageReturnedIntent) {
 			super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
-			Bundle extras = imageReturnedIntent.getExtras();
+			Bundle extras = null;
+			if (imageReturnedIntent != null) {
+				extras = imageReturnedIntent.getExtras();
+			}
 
 			switch (requestCode) {
+
 			case 0:// Toma foto
 				if (resultCode == RESULT_OK) {
 					// fotoBitmapFinal = (Bitmap)
 					// imageReturnedIntent.getExtras().get("data");
-
 
 					byte[] data = extras.getByteArray("pic");
 
@@ -758,7 +758,6 @@ public class FormularioActivity extends FragmentActivity {
 			case 2:// Toma foto
 				if (resultCode == RESULT_OK) {
 
-
 					byte[] data = extras.getByteArray("pic");
 
 					fotoBitmapFinal = BitmapFactory.decodeByteArray(data, 0,
@@ -794,6 +793,8 @@ public class FormularioActivity extends FragmentActivity {
 					isFoto2Default = false;
 
 				}
+				break;
+			default:
 				break;
 			}
 		}
