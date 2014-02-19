@@ -22,6 +22,8 @@ public class CameraActivity extends Activity {
 	private Bitmap bitmap;
 	private Intent intent = new Intent();
 	private Button buttonFotoTomada;
+	private Button buttonTomarFoto;
+	private Button buttonFotoOK;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +70,6 @@ public class CameraActivity extends Activity {
 
 				setResult(RESULT_OK, intent);
 				Log.e("Tomada", "empty?" + (bitmap == null));
-				Log.e("Width", "" + bitmap.getWidth());
-				Log.e("Height", "" + bitmap.getHeight());
 
 			}
 			buttonFotoTomada.setVisibility(View.VISIBLE);
@@ -78,8 +78,6 @@ public class CameraActivity extends Activity {
 		}
 
 	};
-	private Button buttonTomarFoto;
-	private Button buttonFotoOK;
 
 	public void snapIt(View view) throws InterruptedException {
 		cameraObject.takePicture(null, null, capturedIt);

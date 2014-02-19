@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -94,7 +95,7 @@ public class MemoExpressActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_memoexpres, menu);
+		getMenuInflater().inflate(R.menu.menu_enviar, menu);
 
 		return true;
 	}
@@ -102,8 +103,6 @@ public class MemoExpressActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			break;
-		case R.id.action_save:
 			break;
 		case R.id.action_email:
 			if (validarDatos()) {
@@ -140,6 +139,7 @@ public class MemoExpressActivity extends Activity {
 		enviarPDfemail(fileName);
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	public static String now() {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy - hh:mm a");

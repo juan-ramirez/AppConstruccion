@@ -33,7 +33,6 @@ public class CrearModificarUsuarioActivity extends Activity {
 	private String password;
 	private String passwordConfirmar;
 
-	private String passwordOld;
 	private String passwordNew;
 	private String passwordConfirmarnew;
 
@@ -177,7 +176,7 @@ public class CrearModificarUsuarioActivity extends Activity {
 						Toast.LENGTH_SHORT).show();
 				editTextUsuariosPasswordNew.setText("");
 				editTextUsuariosPasswordConfirmarNew.setText("");
-			}else{
+			} else {
 				modificarDatos();
 				Intent generalIntent = new Intent(getApplicationContext(),
 						AdministrarUsuariosActivity.class);
@@ -188,34 +187,34 @@ public class CrearModificarUsuarioActivity extends Activity {
 	}
 
 	private void obtenerDatosModificar() {
-		
+
 		passwordNew = editTextUsuariosPasswordNew.getText().toString();
-		passwordConfirmarnew = editTextUsuariosPasswordConfirmarNew.getText().toString();
+		passwordConfirmarnew = editTextUsuariosPasswordConfirmarNew.getText()
+				.toString();
 
 	}
 
 	private boolean verificarVaciosModificar() {
-		return passwordNew.equals("")
-				|| passwordConfirmarnew.equals("");
+		return passwordNew.equals("") || passwordConfirmarnew.equals("");
 	}
 
 	private boolean verificarPasswordMatchModificar() {
 		return passwordNew.equals(passwordConfirmarnew);
 	}
 
-	
 	private void modificarDatos() {
-		String query = "update usuarios set password = '" + passwordNew + "' where nombre_usuario = '" + usuarioNombre + "'";
+		String query = "update usuarios set password = '" + passwordNew
+				+ "' where nombre_usuario = '" + usuarioNombre + "'";
 		database.execSQL(query);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_crear_modificar_usuario, menu);
 		return true;
 	}
-	
+
 	@Override
 	protected void onStop() {
 		database.close();
