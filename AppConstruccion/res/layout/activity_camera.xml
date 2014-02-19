@@ -9,20 +9,14 @@
             android:id="@+id/camera_preview"
             android:layout_width="match_parent"
             android:layout_height="800dp"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/buttonTomarFoto"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true" >
-            
-             <SurfaceView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        	</SurfaceView>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <Button
+        </FrameLayout>
+        
+        
+        <Button
                     android:id="@+id/buttonFotoTomada"
                     android:layout_width="184dp"
                     android:layout_height="74dp"
@@ -55,9 +49,5 @@
                     android:layout_toRightOf="@+id/buttonFotoTomada"
                     android:background="@drawable/tomar_foto"
                     android:onClick="snapIt" />
-
-            </RelativeLayout>
-
-        </FrameLayout>
 
 </RelativeLayout>
