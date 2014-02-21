@@ -69,7 +69,6 @@ public class CameraActivity extends Activity {
 				intent.putExtra("pic", data);
 
 				setResult(RESULT_OK, intent);
-				Log.e("Tomada", "empty?" + (bitmap == null));
 
 			}
 			buttonFotoTomada.setVisibility(View.VISIBLE);

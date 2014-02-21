@@ -30,7 +30,6 @@ public class PDFWriterFormulario {
 			throws UnsupportedEncodingException {
 
 		if (pic1 == null) {
-			Log.e("PIC1", "NULL ---");
 		}
 		generatePDF(datos, pic1, pic2, context);
 		String pdfcontent = "";
@@ -196,7 +195,6 @@ public class PDFWriterFormulario {
 		int sup = PaperSize.LETTER_HEIGHT - 100;
 		// Imagenes Evidencia Fotografica
 		if (pic1 == null) {
-			Log.e("PIC1", "NULL ---");
 		} else {
 			String evidencia = datos.get(datos.size() - 3);
 			if (!evidencia.equals("EMPTY")) {
@@ -235,7 +233,6 @@ public class PDFWriterFormulario {
 					Transformation.DEGREES_0_ROTATION);
 		}
 		if (pic2 == null) {
-			Log.e("PIC2", "NULL ---");
 		} else {
 			if (!hasEvidenciaEscrita) {
 				String evidencia = datos.get(datos.size() - 3);
@@ -381,10 +378,8 @@ public class PDFWriterFormulario {
 				pdfFile.close();
 
 			} catch (FileNotFoundException e) {
-				Log.e("ERROR", " - IO");
 			}
 		} catch (IOException e) {
-			Log.e("ERROR", " - IO");
 		}
 	}
 
@@ -459,7 +454,6 @@ public class PDFWriterFormulario {
 
 		// Imagenes Evidencia Fotografica
 		if (pic == null) {
-			Log.e("PIC1", "NULL ---");
 		} else {
 			mPDFWriter.newPage();
 			mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
@@ -469,7 +463,6 @@ public class PDFWriterFormulario {
 
 			int[] dimensiones = redimensionarImagen(pic);
 
-			Log.e("Dimensiones", dimensiones[0] + " x " + dimensiones[1]);
 
 			mPDFWriter.addImageKeepRatio(
 					centrar(PaperSize.LETTER_WIDTH, dimensiones[0]),

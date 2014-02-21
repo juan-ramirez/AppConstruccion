@@ -124,7 +124,6 @@ public class EnviarFormulariosActivity extends Activity {
 		case R.id.action_email:
 			if (arrayListMenu.size() > 0) {
 				ArrayList<ArrayList<String>> enviar = new ArrayList<ArrayList<String>>();
-				Log.e("CHECKED", "" + Arrays.toString(adapter.getChecked()));
 				for (int i = 0; i < adapter.getChecked().length; i++) {
 					if (adapter.getChecked()[i]) {
 						enviar.add(datos.get(i));

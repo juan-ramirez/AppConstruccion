@@ -195,8 +195,6 @@ public class MemoExpressActivity extends Activity {
 				}
 
 				picEnviar = redimensionarImagen(fotoBitmapFinal);
-				Log.e("Size",
-						picEnviar.getWidth() + " x " + picEnviar.getHeight());
 
 				fotoBitmapFinal = Bitmap.createScaledBitmap(fotoBitmapFinal,
 						400, 400, false);

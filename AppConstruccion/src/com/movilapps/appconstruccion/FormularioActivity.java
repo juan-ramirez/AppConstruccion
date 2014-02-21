@@ -47,7 +47,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -104,7 +103,6 @@ public class FormularioActivity extends FragmentActivity {
 			for (int i = 0; i < formularios.size(); i++) {
 				ArrayList<String> elemento = formularios.get(i);
 				String dato = elemento.get(0) + " " + elemento.get(1);
-				Log.e("FORM ", dato);
 				if (item.equals(dato)) {
 					form = elemento;
 				}
@@ -198,7 +196,6 @@ public class FormularioActivity extends FragmentActivity {
 		} else {
 			formularios = gson.fromJson(jsonFormularios, ArrayList.class);
 		}
-		Log.e("Datos Size", "" + datosPDF.size());
 		formularios.add(datosPDF);
 
 		Editor prefsEditor = mPrefs.edit();
@@ -519,7 +516,6 @@ public class FormularioActivity extends FragmentActivity {
 		}
 
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-			Toast.makeText(mActivity, "Reselected!", Toast.LENGTH_SHORT).show();
 		}
 
 	}
@@ -671,9 +667,6 @@ public class FormularioActivity extends FragmentActivity {
 				evidenciaEscritaCargar = form.get(form.size() - 3);
 				pic1Cargar = form.get(form.size() - 2);
 				pic2Cargar = form.get(form.size() - 1);
-
-				Log.e("pic1Cargar", "" + pic1Cargar);
-				Log.e("pic2Cargar", "" + pic2Cargar);
 
 				if (!pic1Cargar.equals("--1")) {
 					pic1 = decodeBase64(pic1Cargar);
