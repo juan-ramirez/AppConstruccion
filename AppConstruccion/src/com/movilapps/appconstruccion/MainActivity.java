@@ -8,10 +8,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,36 +70,24 @@ public class MainActivity extends Activity {
 					mCurrentForm = new ArrayList<String>();
 					generalIntent = new Intent(getApplicationContext(),
 							FormularioActivity.class);
+					String item = adapter.getItem(position);
+
 					for (int i = 0; i < formularios.size(); i++) {
 						ArrayList<String> elemento = formularios.get(i);
-						String item = adapter.getItem(position);
 						String dato = elemento.get(0) + " " + elemento.get(1);
 						if (item.equals(dato)) {
 							mCurrentForm = elemento;
 						}
 					}
-
-					generalIntent.putStringArrayListExtra("formulario",
-							mCurrentForm);
 					generalIntent.putExtra("esCargar", true);
-
-					formularios.remove(mCurrentForm);
 
 					generalIntent.putExtra("numeroFormulario",
 							(Integer.parseInt(mCurrentForm.get(2))));
+
 					generalIntent.putExtra("nombreFormulario",
 							mCurrentForm.get(0));
 
-					SharedPreferences mPrefs = getSharedPreferences("my_prefs",
-							MODE_PRIVATE);
-					Gson gson = new Gson();
-					Editor prefsEditor = mPrefs.edit();
-					String json = gson.toJson(formularios);
-
-					// Log.e("JSON: ", json);
-
-					prefsEditor.putString("Formularios", json);
-					Log.e("Commited: ", String.valueOf(prefsEditor.commit()));
+					generalIntent.putExtra("id_formulario", item);
 
 					startActivity(generalIntent);
 				} else {

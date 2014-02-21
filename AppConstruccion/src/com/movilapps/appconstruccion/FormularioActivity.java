@@ -52,10 +52,11 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 public class FormularioActivity extends FragmentActivity {
-	Intent generalIntent;
+	static Intent generalIntent;
 	static ArrayList<View> arrayListElementosFormulario;
 	static ArrayList<DatoFormularioFactory> arrayListFormulario;
 	ArrayList<String> datosPDF;
+	static ArrayList<String> form;
 
 	private static Bitmap fotoBitmapFinal;
 	private static ImageView foto1;
@@ -66,7 +67,11 @@ public class FormularioActivity extends FragmentActivity {
 	public static boolean esCargar = false;
 	public static Bitmap pic1 = null;
 	public static Bitmap pic2 = null;
+	public static String pic1Cargar;
+	public static String pic2Cargar;
+	public static String evidenciaEscritaCargar;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,6 +82,44 @@ public class FormularioActivity extends FragmentActivity {
 		generalIntent = getIntent();
 
 		esCargar = generalIntent.getBooleanExtra("esCargar", false);
+		if (esCargar) {
+
+			ArrayList<ArrayList<String>> formularios = null;
+			Gson gson = new Gson();
+
+			SharedPreferences mPrefs = getSharedPreferences("my_prefs",
+					MODE_PRIVATE);
+
+			String jsonFormularios = mPrefs.getString("Formularios", "");
+
+			if (jsonFormularios.equals("")) {
+				formularios = new ArrayList<ArrayList<String>>();
+			} else {
+				formularios = gson.fromJson(jsonFormularios, ArrayList.class);
+			}
+
+			String item = generalIntent.getStringExtra("id_formulario");
+			form = generalIntent.getStringArrayListExtra("formulario");
+
+			for (int i = 0; i < formularios.size(); i++) {
+				ArrayList<String> elemento = formularios.get(i);
+				String dato = elemento.get(0) + " " + elemento.get(1);
+				Log.e("FORM ", dato);
+				if (item.equals(dato)) {
+					form = elemento;
+				}
+			}
+
+			formularios.remove(form);
+			Editor prefsEditor = mPrefs.edit();
+			String json = gson.toJson(formularios);
+
+			// Log.e("JSON: ", json);
+
+			prefsEditor.putString("Formularios", json);
+			Log.e("Commited: ", String.valueOf(prefsEditor.commit()));
+
+		}
 
 		setTitle(generalIntent.getStringExtra("nombreFormulario"));
 
@@ -155,7 +198,7 @@ public class FormularioActivity extends FragmentActivity {
 		} else {
 			formularios = gson.fromJson(jsonFormularios, ArrayList.class);
 		}
-
+		Log.e("Datos Size", "" + datosPDF.size());
 		formularios.add(datosPDF);
 
 		Editor prefsEditor = mPrefs.edit();
@@ -209,7 +252,7 @@ public class FormularioActivity extends FragmentActivity {
 		});
 		alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-
+				showMessageDescartar();
 			}
 		});
 		alert.show();
@@ -521,8 +564,6 @@ public class FormularioActivity extends FragmentActivity {
 			}
 
 			if (esCargar) {
-				ArrayList<String> form = getActivity().getIntent()
-						.getStringArrayListExtra("formulario");
 				cargarDatos(form);
 			}
 
@@ -603,22 +644,6 @@ public class FormularioActivity extends FragmentActivity {
 				}
 			}
 
-			String img1 = form.get(form.size() - 2);
-			String img2 = form.get(form.size() - 1);
-			String evidenciaEscritaForm = form.get(form.size() - 3);
-			if (!img1.equals("--1")) {
-				fotoBitmapFinal = decodeBase64(img1);
-				foto1.setImageBitmap(fotoBitmapFinal);
-				isFoto1Default = false;
-			}
-			if (!img2.equals("--2")) {
-				fotoBitmapFinal = decodeBase64(img2);
-				foto2.setImageBitmap(fotoBitmapFinal);
-				isFoto2Default = false;
-			}
-			if (!evidenciaEscritaForm.equals("EMPTY")) {
-				evidenciaEscrita.setText(evidenciaEscritaForm);
-			}
 		}
 	}
 
@@ -637,6 +662,44 @@ public class FormularioActivity extends FragmentActivity {
 					container, false);
 			inicializarSpinner(rootView);
 			inicializarObjetos(rootView);
+			pic1 = null;
+			pic2 = null;
+			isFoto1Default = true;
+			isFoto2Default = true;
+
+			if (esCargar) {
+				evidenciaEscritaCargar = form.get(form.size() - 3);
+				pic1Cargar = form.get(form.size() - 2);
+				pic2Cargar = form.get(form.size() - 1);
+
+				Log.e("pic1Cargar", "" + pic1Cargar);
+				Log.e("pic2Cargar", "" + pic2Cargar);
+
+				if (!pic1Cargar.equals("--1")) {
+					pic1 = decodeBase64(pic1Cargar);
+
+					fotoBitmapFinal = Bitmap.createScaledBitmap(pic1, 400, 400,
+							false);
+
+					foto1.setImageBitmap(fotoBitmapFinal);
+
+					isFoto1Default = false;
+				}
+				if (!pic2Cargar.equals("--2")) {
+					pic2 = decodeBase64(pic2Cargar);
+
+					fotoBitmapFinal = Bitmap.createScaledBitmap(pic2, 400, 400,
+							false);
+
+					foto2.setImageBitmap(fotoBitmapFinal);
+					isFoto2Default = false;
+				}
+				if (!evidenciaEscritaCargar.equals("EMPTY")) {
+					evidenciaEscrita.setText(evidenciaEscritaCargar
+							.substring(19));
+				}
+
+			}
 
 			return rootView;
 		}
@@ -969,6 +1032,50 @@ public class FormularioActivity extends FragmentActivity {
 				isFoto2Default = true;
 			}
 		}
+
+	}
+
+	@Override
+	public void onBackPressed() {
+		// Recoger Encabezado
+		datosPDF = new ArrayList<String>();
+		String nombreFormulario = generalIntent
+				.getStringExtra("nombreFormulario");
+
+		datosPDF.add(nombreFormulario);
+		datosPDF.add(now());
+
+		int numeroFormulario = generalIntent.getIntExtra("numeroFormulario", 1);
+		datosPDF.add("" + numeroFormulario);
+
+		// Recoger datos
+
+		if (recogerDatos(false)) {
+			showMessageIncompleto();
+		} else {
+			datosPDF.add("Completo");
+			obtenerEvidencia();
+			showMessageDescartar();
+		}
+
+	}
+
+	private void showMessageDescartar() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Descartar");
+		alert.setMessage("¿Desea descartarlo? ");
+
+		alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				finish();
+			}
+		});
+		alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+
+			}
+		});
+		alert.show();
 
 	}
 
