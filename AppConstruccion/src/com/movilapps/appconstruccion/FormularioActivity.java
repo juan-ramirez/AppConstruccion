@@ -117,6 +117,11 @@ public class FormularioActivity extends FragmentActivity {
 			prefsEditor.putString("Formularios", json);
 			Log.e("Commited: ", String.valueOf(prefsEditor.commit()));
 
+		} else {
+			if (evidenciaEscrita != null) {
+				evidenciaEscrita.setText("");
+			}
+
 		}
 
 		setTitle(generalIntent.getStringExtra("nombreFormulario"));
@@ -273,6 +278,7 @@ public class FormularioActivity extends FragmentActivity {
 					evidencia2 = encodeTobase64(pic2);
 				}
 				if (!texto.equals("")) {
+					Log.e("Texto", texto);
 					datosPDF.add("Evidencia escrita: " + texto);
 				} else {
 					datosPDF.add("EMPTY");
@@ -662,6 +668,7 @@ public class FormularioActivity extends FragmentActivity {
 			pic2 = null;
 			isFoto1Default = true;
 			isFoto2Default = true;
+			evidenciaEscrita.setText("");
 
 			if (esCargar) {
 				evidenciaEscritaCargar = form.get(form.size() - 3);
@@ -690,8 +697,6 @@ public class FormularioActivity extends FragmentActivity {
 				if (!evidenciaEscritaCargar.equals("EMPTY")) {
 					evidenciaEscrita.setText(evidenciaEscritaCargar
 							.substring(19));
-				} else {
-					evidenciaEscrita.setText("");
 				}
 
 			}
@@ -751,6 +756,7 @@ public class FormularioActivity extends FragmentActivity {
 					.findViewById(R.id.imageViewObservaciones2);
 			evidenciaEscrita = (EditText) rootView
 					.findViewById(R.id.editTextObservaciones);
+			evidenciaEscrita.setText("");
 			registerForContextMenu(foto1);
 			registerForContextMenu(foto2);
 		}
