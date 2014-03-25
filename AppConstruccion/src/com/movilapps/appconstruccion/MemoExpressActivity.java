@@ -163,7 +163,10 @@ public class MemoExpressActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent imageReturnedIntent) {
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-		Bundle extras = imageReturnedIntent.getExtras();
+		Bundle extras = null;
+		if (imageReturnedIntent != null) {
+			extras = imageReturnedIntent.getExtras();
+		}
 		switch (requestCode) {
 		case 0:// Toma foto
 			if (resultCode == RESULT_OK) {
@@ -187,15 +190,18 @@ public class MemoExpressActivity extends Activity {
 		case 1:// Sube foto
 			if (resultCode == RESULT_OK) {
 				Uri selectedImage = imageReturnedIntent.getData();
-				try {
-					fotoBitmapFinal = getCorrectlyOrientedImage(this,
-							selectedImage);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+
+				String[] filePathColumn = { MediaStore.Images.Media.DATA };
+				Cursor cursor = getContentResolver().query(selectedImage,
+						filePathColumn, null, null, null);
+				cursor.moveToFirst();
+				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+				String picturePath = cursor.getString(columnIndex);
+				cursor.close();
+
+				fotoBitmapFinal = BitmapFactory.decodeFile(picturePath);
 
 				picEnviar = redimensionarImagen(fotoBitmapFinal);
-
 				fotoBitmapFinal = Bitmap.createScaledBitmap(fotoBitmapFinal,
 						400, 400, false);
 

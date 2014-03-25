@@ -149,7 +149,7 @@ public class FormularioActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			finish();
+			prevenirPerdidaDatos();
 			return (true);
 		case R.id.action_save:
 			// Recoger Encabezado
@@ -690,6 +690,8 @@ public class FormularioActivity extends FragmentActivity {
 				if (!evidenciaEscritaCargar.equals("EMPTY")) {
 					evidenciaEscrita.setText(evidenciaEscritaCargar
 							.substring(19));
+				} else {
+					evidenciaEscrita.setText("");
 				}
 
 			}
@@ -1030,6 +1032,11 @@ public class FormularioActivity extends FragmentActivity {
 
 	@Override
 	public void onBackPressed() {
+		prevenirPerdidaDatos();
+
+	}
+
+	private void prevenirPerdidaDatos() {
 		// Recoger Encabezado
 		datosPDF = new ArrayList<String>();
 		String nombreFormulario = generalIntent
@@ -1050,7 +1057,6 @@ public class FormularioActivity extends FragmentActivity {
 			obtenerEvidencia();
 			showMessageDescartar();
 		}
-
 	}
 
 	private void showMessageDescartar() {
