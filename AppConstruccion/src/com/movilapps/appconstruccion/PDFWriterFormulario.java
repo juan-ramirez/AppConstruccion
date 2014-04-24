@@ -443,13 +443,9 @@ public class PDFWriterFormulario {
 				StandardFonts.WIN_ANSI_ENCODING);
 
 		int top = 500;
-		if (datos.get(3).contains("\n")) {
-			String[] lines = datos.get(3).split("\n");
-			for (int i = 0; i < lines.length; i++) {
-				mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18, lines[i]);
-			}
-		} else {
-			mPDFWriter.addText(MARGIN_LEFT, 500, 18, datos.get(3));
+		String[] lines = datos.get(3).split("(?<=\\G.{60})");
+		for (int i = 0; i < lines.length; i++) {
+			mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18, lines[i]);
 		}
 
 		// Imagenes Evidencia Fotografica
@@ -462,7 +458,6 @@ public class PDFWriterFormulario {
 					"Anexo Fotografico 1");
 
 			int[] dimensiones = redimensionarImagen(pic);
-
 
 			mPDFWriter.addImageKeepRatio(
 					centrar(PaperSize.LETTER_WIDTH, dimensiones[0]),
