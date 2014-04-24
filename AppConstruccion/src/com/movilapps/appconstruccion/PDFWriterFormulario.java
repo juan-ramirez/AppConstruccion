@@ -443,7 +443,7 @@ public class PDFWriterFormulario {
 				StandardFonts.WIN_ANSI_ENCODING);
 
 		int top = 500;
-		String[] lines = datos.get(3).split("(?<=\\G.{60})");
+		String[] lines = datos.get(3).split(".{1,60}");
 		for (int i = 0; i < lines.length; i++) {
 			mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18, lines[i]);
 		}
