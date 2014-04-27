@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -443,9 +445,45 @@ public class PDFWriterFormulario {
 				StandardFonts.WIN_ANSI_ENCODING);
 
 		int top = 500;
-		String[] lines = datos.get(3).split(".{1,60}");
-		for (int i = 0; i < lines.length; i++) {
-			mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18, lines[i]);
+		Pattern p = Pattern.compile(".{1,60}");
+		Matcher m = null;
+
+		int i = 0;
+		if (datos.get(3).contains("\n")) {
+			String[] lines = datos.get(3).split("\n");
+			for (int j = 0; j < lines.length; j++) {
+				if (lines[j].length() > 60) {
+					m = p.matcher(datos.get(3));
+					while (m.find()) { // Find each match in turn; String can't
+										// do this.
+						String name = m.group(0); // Access a submatch group;
+													// String can't
+													// do this.
+						Log.e("REGEX", name);
+						mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18,
+								name);
+						i++;
+					}
+				} else {
+					mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18,
+							lines[j]);
+				}
+			}
+		} else {
+			if (datos.get(3).length() > 60) {
+				m = p.matcher(datos.get(3));
+				while (m.find()) { // Find each match in turn; String can't
+									// do this.
+					String name = m.group(0); // Access a submatch group;
+												// String can't
+												// do this.
+					Log.e("REGEX", name);
+					mPDFWriter.addText(MARGIN_LEFT, top - (i * 25), 18, name);
+					i++;
+				}
+			} else {
+				mPDFWriter.addText(MARGIN_LEFT, 500, 18, datos.get(3));
+			}
 		}
 
 		// Imagenes Evidencia Fotografica
