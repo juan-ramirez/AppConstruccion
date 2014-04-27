@@ -445,15 +445,15 @@ public class PDFWriterFormulario {
 				StandardFonts.WIN_ANSI_ENCODING);
 
 		int top = 500;
-		Pattern p = Pattern.compile(".{1,60}");
+		Pattern p = Pattern.compile(".{1,40}");
 		Matcher m = null;
 
 		int i = 0;
 		if (datos.get(3).contains("\n")) {
 			String[] lines = datos.get(3).split("\n");
 			for (int j = 0; j < lines.length; j++) {
-				if (lines[j].length() > 60) {
-					m = p.matcher(datos.get(3));
+				if (lines[j].length() > 40) {
+					m = p.matcher(lines[j]);
 					while (m.find()) { // Find each match in turn; String can't
 										// do this.
 						String name = m.group(0); // Access a submatch group;
@@ -470,7 +470,7 @@ public class PDFWriterFormulario {
 				}
 			}
 		} else {
-			if (datos.get(3).length() > 60) {
+			if (datos.get(3).length() > 40) {
 				m = p.matcher(datos.get(3));
 				while (m.find()) { // Find each match in turn; String can't
 									// do this.
