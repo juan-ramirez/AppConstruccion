@@ -445,14 +445,14 @@ public class PDFWriterFormulario {
 				StandardFonts.WIN_ANSI_ENCODING);
 
 		int top = 500;
-		Pattern p = Pattern.compile(".{1,40}");
+		Pattern p = Pattern.compile(".{1,50}");
 		Matcher m = null;
 
 		int i = 0;
 		if (datos.get(3).contains("\n")) {
 			String[] lines = datos.get(3).split("\n");
 			for (int j = 0; j < lines.length; j++) {
-				if (lines[j].length() > 40) {
+				if (lines[j].length() > 50) {
 					m = p.matcher(lines[j]);
 					while (m.find()) { // Find each match in turn; String can't
 										// do this.
@@ -470,7 +470,7 @@ public class PDFWriterFormulario {
 				}
 			}
 		} else {
-			if (datos.get(3).length() > 40) {
+			if (datos.get(3).length() > 50) {
 				m = p.matcher(datos.get(3));
 				while (m.find()) { // Find each match in turn; String can't
 									// do this.
