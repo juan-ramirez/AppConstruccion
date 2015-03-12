@@ -112,7 +112,7 @@ public class PDFWriterFormulario {
 		mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA_BOLD,
 				StandardFonts.WIN_ANSI_ENCODING);
 
-		mPDFWriter.addText(MARGIN_LEFT, 595, 18, "De: Interventoría");
+		mPDFWriter.addText(MARGIN_LEFT, 595, 18, "De: InterventorÃ­a");
 		mPDFWriter.addText(MARGIN_LEFT, 570, 18, "Para: Obra");
 		mPDFWriter.addText(MARGIN_LEFT, 545, 18, "Asunto: Observaciones obra");
 
@@ -226,7 +226,7 @@ public class PDFWriterFormulario {
 			mPDFWriter.addRectangle(60, 60, PaperSize.LETTER_WIDTH - 120,
 					PaperSize.LETTER_HEIGHT - 120);
 			mPDFWriter
-					.addText(MARGIN_LEFT, sup - 80, 14, "Anexo Fotográfico 1");
+					.addText(MARGIN_LEFT, sup - 80, 14, "Anexo Fotogrï¿½fico 1");
 
 			mPDFWriter.addImageKeepRatio(
 					centrar(PaperSize.LETTER_WIDTH, dimensiones[0]),
@@ -273,7 +273,7 @@ public class PDFWriterFormulario {
 			mPDFWriter.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA,
 					StandardFonts.WIN_ANSI_ENCODING);
 			mPDFWriter
-					.addText(MARGIN_LEFT, sup - 80, 14, "Anexo Fotográfico 2");
+					.addText(MARGIN_LEFT, sup - 80, 14, "Anexo Fotogrï¿½fico 2");
 
 			int[] dimensiones = redimensionarImagen(pic2);
 
@@ -352,8 +352,8 @@ public class PDFWriterFormulario {
 		return strings;
 	}
 
-	private static int centrar(int tamañoPapel, int tamañoImagen) {
-		int margen = (tamañoPapel - tamañoImagen) / 2;
+	private static int centrar(int tamaÃ±oPapel, int tamaÃ±oImagen) {
+		int margen = (tamaÃ±oPapel - tamaÃ±oImagen) / 2;
 		return margen;
 	}
 
